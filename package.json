@@ -1,0 +1,29 @@
+{
+  "name": "firstproject",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start" : "nodemon --inspect index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dantocthang/Node-blog.git"
+  },
+  "keywords": [
+    "blog"
+  ],
+  "author": "dantocthang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dantocthang/Node-blog/issues"
+  },
+  "homepage": "https://github.com/dantocthang/Node-blog#readme",
+  "dependencies": {
+    "express": "^4.17.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
