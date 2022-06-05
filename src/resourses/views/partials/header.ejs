@@ -1,0 +1,60 @@
+<nav
+  class="navbar navbar-expand-lg navbar-dark bg-dark position-fixed custom-navbar"
+>
+  <div class="container">
+    <a class="navbar-brand link-light" href="/">F8 Courses</a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle link-light"
+            href="#"
+            id="navbarDropdown"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/147/147142.png"
+              alt="avatar"
+              class="user-avatar"
+            />
+            <span id="header__user-name">Guest</span>
+              
+          </a>
+          <ul
+            class="dropdown-menu dropdown-menu-end"
+            aria-labelledby="navbarDropdown"
+          >
+            <li>
+              <form action="/logout?_method=DELETE" method="POST">
+                  <button type="submit">Logout</button>
+              </form>
+            </li>
+            <li><hr class="dropdown-divider" /></li>
+            <li><a class="dropdown-item" href="/login">Login</a></li>
+            <li><hr class="dropdown-divider" /></li>
+            <li><a class="dropdown-item" href="/courses/create">Đăng khóa học</a></li>
+            <li><hr class="dropdown-divider" /></li>
+            <li><a class="dropdown-item" href="/me/stored/courses">Khóa học của
+                tôi</a></li>
+
+          </ul>
+        </li>
+      </ul>
+
+    </div>
+  </div>
+</nav>

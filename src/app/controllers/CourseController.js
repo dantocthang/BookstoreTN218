@@ -1,9 +1,16 @@
 
 import Course from '../models/Course.js'
-import { nanoid } from 'nanoid'
+import {validationResult} from 'express-validator'
 import { multipleMongooseToObject, mongooseToObject } from '../../util/mongoose.js'
 
 class CourseController {
+    async getCourses(req, res, next) {
+        const courses = await Course.find({})
+        return res.json(courses)
+    }
+
+
+
     index(req, res, next) {
         Course.find({})
             .then(courses => {
@@ -24,21 +31,74 @@ class CourseController {
 
     create(req, res, next) {
         res.render('courses/create')
-
     }
 
     store(req, res, next) {
-
-        const formData = req.body
-        
-
-        formData.image = `https://img.youtube.com/vi/${formData.videoId}/sddefault.jpg`
-        // formData.slug = nanoid(10)
-        const course = new Course(formData)
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        req.body.image = `https://img.youtube.com/vi/${req.body.videoId}/sddefault.jpg`
+        // req.body.slug = nanoid(10)
+        const course = new Course(req.body)
         course.save()
-            .then(()=>res.redirect('/courses'))
+            .then(() => res.redirect('/me/stored/courses'))
             .catch(next)
-    
+
+    }
+
+
+    // [GET] /course/:id/edit
+    edit(req, res, next) {
+        Course.findById(req.params.id)
+            .then(course => res.render('courses/edit', { course: mongooseToObject(course) }))
+            .catch(next)
+    }
+
+    // [PUT] /courses/:id
+    update(req, res, next) {
+        Course.findByIdAndUpdate(req.params.id, req.body)
+            .then(() => res.redirect('/me/stored/courses'))
+            .catch(next)
+    }
+
+    //[DELETE] /courses/:id
+    delete(req, res, next) {
+        Course.delete({ _id: req.params.id })
+            .then(() => res.redirect('back'))
+            .catch(next)
+    }
+
+
+    // [PATCH] /courses/:id/restore
+    restore(req, res, next) {
+        Course.restore({ _id: req.params.id })
+            .then(() => res.redirect('back'))
+            .catch(next)
+    }
+
+    // [DELETE] /courses/:id/permanent
+    destroy(req, res, next) {
+        Course.deleteOne({ _id: req.params.id })
+            .then(() => res.redirect('back'))
+            .catch(next)
+    }
+
+
+    // [POST] /courses/handle-action
+    action(req, res, next) {
+        console.log(req.body.action)
+        switch (req.body.action) {
+            case 'delete':
+                Course.delete({ _id: { $in: req.body.courseIds } })
+                    .then(() => res.redirect('back'))
+                    .catch(next)
+                break
+                res.json(req.body)
+            default:
+                res.json({ message: 'Error' })
+        }
+        // return res.json(req.body)
     }
 }
 

@@ -1,0 +1,45 @@
+<script>
+    toastr.options = {
+  "closeButton": false,
+  "debug": false,
+  "newestOnTop": false,
+  "progressBar": false,
+  "positionClass": "toast-top-right",
+  "preventDuplicates": false,
+  "onclick": null,
+  "showDuration": "15000",
+  "hideDuration": "3000",
+  "timeOut": "15000",
+  "extendedTimeOut": "10000", // Thời gian từ khi bỏ hover cho đến khi nó ẩn đi
+  "showEasing": "swing",
+  "hideEasing": "linear",
+  "showMethod": "fadeIn",
+  "hideMethod": "fadeOut"
+}
+</script>
+
+<% if (message.success) { %>
+    <script>
+        toastr.success('<%=message.success%>',"Success")
+    </script>
+<% } %>
+
+<% if (message.warning) { %>
+    <script>
+        toastr.warning('<%=message.warning%>',"Warning")
+    </script>
+<% } %>
+<% if (message.info) { %>
+    <script>
+        toastr.warning('<%=message.info%>',"Info")
+    </script>
+<% } %>
+<% if (message.error) { %>
+    <script>
+        toastr.error('<%=message.error%>',"Error")
+    </script>
+<% } %>
+
+
+
+

@@ -1,0 +1,38 @@
+<div class="mt-4">
+  <% if (username) { %>
+    <script>
+      window.addEventListener('DOMContentLoaded', (event) => {
+        const name = document.getElementById('header__user-name')
+        name.innerText = '<%=username %>'
+      });
+    </script>
+    <% } %>
+
+      <div class="row">
+        
+      </div>
+      <div class="row">
+        <% courses.forEach(course=>{ %>
+          <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
+            <div class="card" style="width: 18rem;">
+              <a href="/courses/<%=course.slug %>">
+                <img src="<%=course.image %>" class="card-img-top" alt="..." />
+              </a>
+              <div class="card-body">
+                <a href="/courses/<%=course.slug %>">
+                  <h5 class="card-title">
+                    <%=course.name %>
+                  </h5>
+                </a>
+                <p class="card-text">
+                  <%=course.description %>
+                </p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+              </div>
+            </div>
+          </div>
+          <% }) %>
+      </div>
+</div>
+
+<%- include('./partials/pagination.ejs') %>

@@ -1,0 +1,35 @@
+<div class="col-lg-6 m-auto mt-4">
+  <h1>Register</h1>
+  <form action="/register" method="POST">
+    <div class="mb-3 mt-4">
+      <label for="username" class="form-label">Username</label>
+      <input
+        type="text"
+        class="form-control"
+        id="username"
+        name="username"
+        aria-describedby="emailHelp"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input
+        type="password"
+        class="form-control"
+        id="password"
+        name="password"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="confirmPassword" class="form-label">Confirm password</label>
+      <input
+        type="password"
+        class="form-control"
+        id="confirmPassword"
+        name="confirmPassword"
+      />
+    </div>
+
+    <div class="d-flex"><button type="submit" class="btn btn-primary" style="margin-inline: auto">Register</button></div>
+  </form>
+</div>

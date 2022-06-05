@@ -1,0 +1,26 @@
+<div class="pagination-wrapper mt-4">
+  <nav aria-label="Page navigation example">
+    <ul class="pagination">
+      <% if (courseSibling.previous) { %>
+        <li class="page-item">
+          <a
+            class="page-link"
+            href="?page=<%= courseSibling.previous.page %>&limit=<%= courseSibling.previous.limit %><% if (courseSibling.currentPage.sort.enable){ %>&_sort&type=<%= courseSibling.currentPage.sort.type %>&column=<%=courseSibling.currentPage.sort.column %><% } %>"
+          >Previous</a>
+        </li>
+      <% } %>
+      <% for (var i = 1; i<= courseSibling.pages ; i++){ %>
+        <li class="page-item">
+          <a class="page-link" href="?page=<%= i %>&limit=<%=courseSibling.currentPage.limit %><% if (courseSibling.currentPage.sort.enable) { %>&_sort&type=<%=courseSibling.currentPage.sort.type %>&column=<%=courseSibling.currentPage.sort.column %><% } %>"><%= i %></a>
+        </li>
+      <% } %>
+     
+      <% if (courseSibling.next) { %>
+        <li class="page-item"><a
+            class="page-link"
+            href="?page=<%= courseSibling.next.page%>&limit=<%= courseSibling.next.limit %><% if (courseSibling.currentPage.sort.enable){ %>&_sort&type=<%= courseSibling.currentPage.sort.type %>&column=<%=courseSibling.currentPage.sort.column %><% } %>"
+          >Next</a></li>
+      <% } %>
+    </ul>
+  </nav>
+</div>
