@@ -13,3 +13,9 @@ export function checkNotAuthenticated(req, res, next) {
 
     return res.redirect('/')
 }
+
+export function fetchUserInfo(req, res, next) {
+    if (req?.user?.username)
+        res.locals.username = req.user.username;
+    return next();
+}

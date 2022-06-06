@@ -32,7 +32,9 @@ function paginate(model, perPage = 12) {
             page,
             limit,
             sort: res.locals._sort,
-            
+            offset: 2,
+            startOffset: page - 2 >= 1 ? page -2 : 1,
+            endOffset: page + 2 <= result.pages ? page + 2 : result.pages
         }
         
 

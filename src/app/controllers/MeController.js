@@ -4,10 +4,12 @@ import { multipleMongooseToObject, mongooseToObject } from '../../util/mongoose.
 // [GET] /me/stored/courses 
 class MeController {
     async storedCourses(req, res, next) {
+       
         try {
             
             const deletedCount = await Course.countDocumentsDeleted()
             const courses = res.paginatedResult
+            // res.json(courses)
             res.render('me/stored-courses', { courses: multipleMongooseToObject(courses.data), courseSibling: courses, deletedCount })
         }
         catch (err) {

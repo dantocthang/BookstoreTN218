@@ -9,9 +9,19 @@
           >Previous</a>
         </li>
       <% } %>
-      <% for (var i = 1; i<= courseSibling.pages ; i++){ %>
+      <% if (courseSibling.currentPage.startOffset > 1){ %>
         <li class="page-item">
-          <a class="page-link" href="?page=<%= i %>&limit=<%=courseSibling.currentPage.limit %><% if (courseSibling.currentPage.sort.enable) { %>&_sort&type=<%=courseSibling.currentPage.sort.type %>&column=<%=courseSibling.currentPage.sort.column %><% } %>"><%= i %></a>
+          <a class="page-link " href="">...</a>
+        </li>
+      <% } %>
+      <% for (var i = courseSibling.currentPage.startOffset; i<= courseSibling.currentPage.endOffset ; i++){ %>
+        <li class="page-item <% if (courseSibling.currentPage.page == i){ %>active<% } %>">
+          <a class="page-link " href="?page=<%= i %>&limit=<%=courseSibling.currentPage.limit %><% if (courseSibling.currentPage.sort.enable) { %>&_sort&type=<%=courseSibling.currentPage.sort.type %>&column=<%=courseSibling.currentPage.sort.column %><% } %>"><%= i %></a>
+        </li>
+      <% } %>
+      <% if (courseSibling.currentPage.endOffset < courseSibling.pages){ %>
+        <li class="page-item">
+          <a class="page-link " href="">...</a>
         </li>
       <% } %>
      

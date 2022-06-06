@@ -14,11 +14,10 @@ import expressLayouts from 'express-ejs-layouts'
 import passport from 'passport'
 import dotenv from 'dotenv'
 
-
-
 import route from './routes/index.js'
 import db from './config/db/index.js'
 import initializePassport from './config/passport.js'
+import { fetchUserInfo } from './util/checkAuthenticated.js'
 
 const app = express()
 const port = 3003
@@ -118,6 +117,9 @@ app.get('/get_session', (req, res) => {
   }
   return res.status(200).json({ status: 'error', session: 'No session' })
 })
+// Global middlewares
+app.use(fetchUserInfo)
+
 
 
 route(app)
