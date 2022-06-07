@@ -7,8 +7,8 @@ import morgan from 'morgan'
 import methodOverride from 'method-override'
 import cookieParser from 'cookie-parser'
 import path from 'path'
-import flash from 'connect-flash'
 import { dirname } from 'path';
+import flash from 'connect-flash'
 import ejs from 'ejs'
 import expressLayouts from 'express-ejs-layouts'
 import passport from 'passport'
@@ -74,17 +74,6 @@ app.set('views', path.join(__dirname, 'resourses/views'));
 
 app.use(express.static(path.join(__dirname, 'public')))
 
-
-app.get('/set_session', (req, res) => {
-  //set a object to session
-  req.session.User = {
-    website: 'anonystick.com',
-    type: 'blog javascript',
-    like: '4550'
-  }
-
-  return res.status(200).json({ status: 'success' })
-})
 
 // Custom helpers
 app.locals.sortable = (field, sort) => {

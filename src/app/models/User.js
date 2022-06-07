@@ -8,8 +8,6 @@ const User = new Schema({
     password: { type: String, required: true },
     image: { type: String },
     role: { type: String },
-    createdAt: { type: Date, default: Date.now },
-    updatedAt: { type: Date, default: Date.now },
     deletedAt: { type: Date },
 }, { timeStamp: true });
 

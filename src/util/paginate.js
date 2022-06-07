@@ -28,13 +28,13 @@ function paginate(model, perPage = 12) {
         const result = {}
         const pageCount = await model.countDocuments()
         result.pages = Math.ceil(pageCount / limit)
+        result.offset = 2; 
         result.currentPage = {
             page,
             limit,
             sort: res.locals._sort,
-            offset: 2,
-            startOffset: page - 2 >= 1 ? page -2 : 1,
-            endOffset: page + 2 <= result.pages ? page + 2 : result.pages
+            startOffset: page - result.offset >= 1 ? page -result.offset : 1,
+            endOffset: page + result.offset <= result.pages ? page + result.offset : result.pages
         }
         
 

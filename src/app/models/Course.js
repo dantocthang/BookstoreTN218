@@ -11,8 +11,6 @@ const Course = new Schema({
     slug: {type: String, slug: 'name', unique: true},
     videoId: {type: String},
     level: {type: String},
-    createdAt: {type: Date, default: Date.now},
-    updatedAt: {type: Date, default: Date.now},
     deletedAt: {type: Date},
   },{ timeStamp: true});
 
