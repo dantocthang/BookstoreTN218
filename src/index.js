@@ -14,6 +14,7 @@ import expressLayouts from 'express-ejs-layouts'
 import passport from 'passport'
 import dotenv from 'dotenv'
 
+
 import route from './routes/index.js'
 import db from './config/db/index.js'
 import initializePassport from './config/passport.js'
@@ -36,6 +37,7 @@ app.use(express.urlencoded({ extended: false }))
 
 
 // Load config passport user validation
+
 initializePassport(passport)
 
 
@@ -44,12 +46,15 @@ app.use(cors())
 
 // Use session
 app.use(cookieParser('keyboard cat'));
+
 app.use(session({
   resave: false,
   saveUninitialized: false,
   secret: process.env.SESSION_SECRET,
-  cookie: { maxAge: 60000 }
+  cookie: { maxAge: 30*24*60*60*1000 }
 }));
+
+
 // Flash message
 app.use(flash());
 
