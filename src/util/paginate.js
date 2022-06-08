@@ -19,6 +19,8 @@ function paginate(model, perPage = 12) {
         }
 
 
+
+
         if (isNaN(page)) page = 1;
         if (isNaN(limit)) limit = perPage;
 
@@ -28,22 +30,22 @@ function paginate(model, perPage = 12) {
         const result = {}
         const pageCount = await model.countDocuments()
         result.pages = Math.ceil(pageCount / limit)
-        result.offset = 2; 
+        result.offset = 2;
         result.currentPage = {
             page,
             limit,
             sort: res.locals._sort,
-            startOffset: page - result.offset >= 1 ? page -result.offset : 1,
+            startOffset: page - result.offset >= 1 ? page - result.offset : 1,
             endOffset: page + result.offset <= result.pages ? page + result.offset : result.pages
         }
-        
+
 
         if (endIndex < pageCount) {
             result.next = {
                 page: page + 1,
                 limit,
                 sort: res.locals._sort,
-                
+
             }
         }
 
@@ -52,12 +54,17 @@ function paginate(model, perPage = 12) {
                 page: page - 1,
                 limit,
                 sort: res.locals._sort,
-                
+
             }
         }
 
         try {
-            if (req.query.hasOwnProperty('_sort'))
+            //Search
+            if (req.query.hasOwnProperty('_search')) {
+                result.data = await model.find({name: { $regex: new RegExp(req.query.v, 'i') }}).limit(limit).skip(startIndex)
+                result.v=req.query.v
+            }
+            else if (req.query.hasOwnProperty('_sort'))
                 result.data = await model.find().sort({
                     [req.query.column]: req.query.type
                 }).limit(limit).skip(startIndex)
