@@ -10,6 +10,7 @@ const User = new Schema({
     // password: { type: String},
     email: {type: String},
     googleId: {type: String},
+    facebookId: {type: String},
     image: { type: String },
     role: { type: String },
     deletedAt: { type: Date },

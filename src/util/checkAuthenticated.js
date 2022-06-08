@@ -15,7 +15,9 @@ export function checkNotAuthenticated(req, res, next) {
 }
 
 export function fetchUserInfo(req, res, next) {
-    if (req?.user?.username)
+    if (req?.user?.username){
         res.locals.username = req.user.username;
+        res.locals.image = req.user.image;
+    }
     return next();
 }

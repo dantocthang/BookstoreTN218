@@ -26,11 +26,19 @@
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
-            <img
+            <% if (locals.image) { %>
+              <img
+              src="<%= locals.image %>"
+              alt="avatar"
+              class="user-avatar"
+            />
+            <% } else { %>
+              <img
               src="https://cdn-icons-png.flaticon.com/512/147/147142.png"
               alt="avatar"
               class="user-avatar"
             />
+            <% } %>
             <span id="header__user-name"><%=locals.username %></span>
               
           </a>

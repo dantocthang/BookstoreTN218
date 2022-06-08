@@ -16,13 +16,26 @@ router.post('/login', checkNotAuthenticated, passport.authenticate('local', {
     failureFlash: true
 }))
 
+
+// Login with Google
 router.get('/auth/google', passport.authenticate('google', {
     scope: ['profile', 'email'],
 }))
-router.get('/auth/auth/google/callback', passport.authenticate('google'), (req, res)=>{return res.redirect('/')});
+router.get('/auth/auth/google/callback', passport.authenticate('google'), (req, res) => { return res.redirect('/') });
 router.get('/get-user', (req, res) => {
     res.json(req.user);
 })
+
+// Login with Facebook
+router.get('/auth/facebook', passport.authenticate('facebook', { scope: 'email' }));
+
+router.get('/auth/facebook/callback',
+    passport.authenticate('facebook', { successRedirect: '/', failureRedirect: '/login' }),
+    function (req, res) {
+        res.redirect('/');
+    });
+
+
 
 router.get('/register', homeController.register)
 router.post('/register', homeController.addUser)

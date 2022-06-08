@@ -1,20 +1,37 @@
 <form action="/login" method="POST" class="mt-4">
-<% if (error) { %>
-  <h1><%=error %></h1>
-<% } %>
-  <div class="mb-3 mt-4">
-    <label for="username" class="form-label">Username</label>
-    <input type="text" class="form-control" id="username" name="username" aria-describedby="emailHelp">
-  </div>
-  <div class="mb-3">
-    <label for="password" class="form-label">Password</label>
-    <input type="password" class="form-control" id="password" name="password">
-  </div>
-  <div class="mb-3 form-check">
-    <input type="checkbox" class="form-check-input" id="exampleCheck1">
-    <label class="form-check-label" for="exampleCheck1">Check me out</label>
-  </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
+  <% if (error) { %>
+    <h1>
+      <%=error %>
+    </h1>
+    <% } %>
+      <div class="mb-3 mt-4">
+        <label for="username" class="form-label">Username</label>
+        <input type="text" class="form-control" id="username" name="username" aria-describedby="emailHelp">
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" class="form-control" id="password" name="password">
+      </div>
+      <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" id="exampleCheck1">
+        <label class="form-check-label" for="exampleCheck1">Check me out</label>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+
+      <div class="social__login">
+        <h1>Hoặc</h1>
+        <ul class="social__list">
+          <li class="social__item">
+            <a href="/auth/facebook" class="social__link" data-bs-toggle="tooltip" data-bs-original-title="Log In with Facebook">
+              <span>Đăng nhập với Facebook</span> <i class="fab fa-facebook-f"></i>
+            </a>
+          </li>
+          <li class="social__item">
+            <a href="/auth/google" class="social__link" data-bs-toggle="tooltip" data-bs-original-title="Log In with Google">
+              <span>Đăng nhập với Google</span> <i class="fab fa-google"></i>
+            </a>
+          </li>
+          
+        </ul>
+      </div>
 </form>
-
-
