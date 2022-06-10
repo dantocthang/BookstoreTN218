@@ -36,7 +36,7 @@
           <% if (courses.length>0){ %>
             <% courses.forEach((course, index)=> { %>
               <tr>
-                <td><input type="checkbox" name="courseIds" value="{{this._id}}" class="course-check" /></td>
+                <td><input type="checkbox" name="courseIds" value="<%-course._id %>" class="course-check" /></td>
                 <th scope="row">
                   <%= index+1 %>
                 </th>

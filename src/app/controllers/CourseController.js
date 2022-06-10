@@ -30,13 +30,14 @@ class CourseController {
     }
 
     create(req, res, next) {
-        res.render('courses/create')
+        res.render('courses/create',{data: {}, errors: {}},)
     }
 
     store(req, res, next) {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
+            console.log(errors.array())
+            return res.render('courses/create',{data: req.body, errors: errors.array() });
         }
         req.body.image = `https://img.youtube.com/vi/${req.body.videoId}/sddefault.jpg`
         // req.body.slug = nanoid(10)
@@ -94,7 +95,7 @@ class CourseController {
                     .then(() => res.redirect('back'))
                     .catch(next)
                 break
-                res.json(req.body)
+                // res.json(req.body)
             default:
                 res.json({ message: 'Error' })
         }

@@ -1,8 +1,6 @@
-import { check } from 'express-validator'
+import { body } from 'express-validator'
 
-const validator = {
-    createCourse: check('description').matches(/\d/).withMessage('must contain a number'),
-    
-}
-
-export default validator
+export const courseValidator = [
+    body('name').matches(/^[A-Za-z0-9 ]+$/).withMessage('Tên khóa học không chứa ký tự đặc biệt và dài 1 - 100 ký tự'),
+    body('description').escape()    
+]

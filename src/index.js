@@ -19,6 +19,7 @@ import route from './routes/index.js'
 import db from './config/db/index.js'
 import initializePassport from './config/passport.js'
 import { fetchUserInfo } from './util/checkAuthenticated.js'
+import { cartSession } from './util/cartSession.js'
 
 const app = express()
 const port = 3003
@@ -51,7 +52,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   secret: process.env.SESSION_SECRET,
-  cookie: { maxAge: 30*24*60*60*1000 }
+  cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 }
 }));
 
 
@@ -102,6 +103,9 @@ app.locals.sortable = (field, sort) => {
   )
 }
 
+app.locals.findErrorByParam = (errors,paramName) => {
+  return errors.find(x=>x.param==paramName)
+}
 
 
 app.get('/get_session', (req, res) => {
@@ -113,6 +117,7 @@ app.get('/get_session', (req, res) => {
 })
 // Global middlewares
 app.use(fetchUserInfo)
+app.use(cartSession)
 
 
 

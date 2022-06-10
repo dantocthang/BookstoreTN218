@@ -1,37 +1,43 @@
 <form action="" id="search-form" method="POST" style="padding-block: 2rem;">
-    <label for="search">Search courses:</label>
-    <input type="text" id="search" value="<% if (courseSibling.v) { %><% var isSearching=true %><%=courseSibling.v%><% } %>">
-    <button type="submit" id="search-btn">Tim</button>
+    <div class="input-group" style="width: 600px">
+        <label for="search">Search courses:</label>
+        <input type="text" id="search" class="form-control"
+            value="<% if (courseSibling.v) { %><% var isSearching=true %><%=courseSibling.v%><% } %>">
+        <button type="submit" id="search-btn" class="btn btn-primary">Tim</button>
+    </div>
 </form>
-<% if (courseSibling.v) { %><% var isSearching=true %><script>const searchInput = document.querySelector('#search'); searchInput.focus(); searchInput.selectionStart = searchInput.selectionEnd = searchInput.value.length;</script><% } %>
+<% if (courseSibling.v) { %>
+    <% var isSearching=true %>
+        <script>const searchInput = document.querySelector('#search'); searchInput.focus(); searchInput.selectionStart = searchInput.selectionEnd = searchInput.value.length;</script>
+        <% } %>
 
 
-<script>
-    const search = document.querySelector('#search')
-    const searchForm = document.querySelector('#search-form')
-    const searchBtn = document.querySelector('#search-btn')
+            <script>
+                const search = document.querySelector('#search')
+                const searchForm = document.querySelector('#search-form')
+                const searchBtn = document.querySelector('#search-btn')
 
-    
-    let timerId
-    search.addEventListener('keydown', (e) => {
-        if (timerId) clearTimeout(timerId)
-        timerId = setTimeout(() => {
-            const value = e.target.value
-            console.log(e.target.value)
-            searchForm.action = `?_search&v=${value}`
-            searchForm.submit()
-        }, 800)
-    })
 
-    searchForm.addEventListener('submit', (e) => {
-        e.preventDefault()
-        search.removeEventListener('keydown', (e) => {
-            if (timerId) clearTimeout(timerId)
-        })
+                let timerId
+                search.addEventListener('keydown', (e) => {
+                    if (timerId) clearTimeout(timerId)
+                    timerId = setTimeout(() => {
+                        const value = e.target.value
+                        console.log(e.target.value)
+                        searchForm.action = `?_search&v=${value}`
+                        searchForm.submit()
+                    }, 800)
+                })
 
-        const value = search.value
-        searchForm.action = `?_search&v=${value}`
-        searchForm.submit()
-    })
+                searchForm.addEventListener('submit', (e) => {
+                    e.preventDefault()
+                    search.removeEventListener('keydown', (e) => {
+                        if (timerId) clearTimeout(timerId)
+                    })
 
-</script>
+                    const value = search.value
+                    searchForm.action = `?_search&v=${value}`
+                    searchForm.submit()
+                })
+
+            </script>

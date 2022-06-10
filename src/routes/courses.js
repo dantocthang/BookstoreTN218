@@ -3,12 +3,12 @@ import express from 'express'
 const router = express.Router()
 
 import courseController from '../app/controllers/CourseController.js'
-import validator from '../util/dataValidator.js'
+import {courseValidator} from '../util/dataValidator.js'
 
 
 router.get('/get-courses',courseController.getCourses)
 router.get('/create', courseController.create)
-router.post('/store',validator.createCourse, courseController.store)
+router.post('/store',...courseValidator, courseController.store)
 router.post('/handle-action',courseController.action)
 router.get('/:slug', courseController.show)
 router.get('/:id/edit', courseController.edit)
