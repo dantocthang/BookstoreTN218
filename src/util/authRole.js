@@ -1,8 +1,8 @@
 function authRole(req, res, next) {
-    if (req.session.User.role == "Admin") {
+    if (req.user.role == "Admin") {
         return next()
     }
-    return res.json({ error: 'Access denied' })
+    return req.flash('error','Bạn không có quyền truy cập trang này.')
 }
 
 export default authRole

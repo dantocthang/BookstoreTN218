@@ -15,19 +15,15 @@ const __dirname = dirname(__filename);
 // [GET] /me/stored/courses 
 class MeController {
   async storedCourses(req, res, next) {
-
     try {
-
       const deletedCount = await Course.countDocumentsDeleted()
       const courses = res.paginatedResult
-      // res.json(courses)
       res.render('me/stored-courses', { courses: multipleMongooseToObject(courses.data), courseSibling: courses, deletedCount })
     }
     catch (err) {
       next()
     }
   }
-
 
   // [GET] /me/trash/courses
   trashCourses(req, res, next) {
@@ -38,13 +34,10 @@ class MeController {
       .catch(next)
   }
 
-
   // [GET] /me/upload
   uploadForm(req, res, next) {
-    console.log('>>>' + req.user)
     return res.render('me/upload')
   }
-
 
   // [POST] /me/upload
   async upload(req, res, next) {
@@ -69,15 +62,11 @@ class MeController {
 
       if (!files.myFile.length) {
         //Single file
-
         const file = files.myFile;
-
         // checks if the file is valid
         const isValid = isFileValid(file);
-
         // creates a valid name by removing spaces
         const fileName = encodeURIComponent(file.originalFilename);
-
         if (!isValid) {
           // throes error if file isn't valid
           return res.status(400).json({
@@ -114,7 +103,6 @@ class MeController {
     });
   }
 
-
   // [GET] /me/images
   async showImages(req, res, next) {
     const images = await UploadFile.find({ userId: req.user._id })
@@ -141,7 +129,6 @@ class MeController {
     res.redirect('back')
   }
 
-
   // [GET] /me/cart-minimized (for Ajax call)
   async cartMinimized(req, res, next) {
     var cart = req.session.cart || []
@@ -154,7 +141,6 @@ class MeController {
     }
     return res.json(detailCart)
   }
-
 
 }
 const a = new MeController()

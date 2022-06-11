@@ -7,6 +7,7 @@ import User from '../app/models/User.js'
 import { facebookKeys, googleKeys } from '../config/keys.js'
 
 function initializePassport(passport) {
+    // Xác thực user đăng nhập bình thường
     const authenticateUser = async (username, password, done) => {
         const user = await User.findOne({ username: username })
         if (user == null) {
@@ -14,7 +15,7 @@ function initializePassport(passport) {
         }
         try {
             if (await bcrypt.compare(password, user.password)) {
-                return done(null, user)
+                return done(null, user, { message: 'Đăng nhập thành công' })
             }
             else {
                 return done(null, false, { message: 'Mật khẩu không đúng' })
@@ -26,6 +27,8 @@ function initializePassport(passport) {
 
 
     passport.use(new LocalStrategy.Strategy({ usernameField: 'username' }, authenticateUser))
+
+    // Xác thực user đăng nhập bằng Google
     passport.use(new GoogleStrategy.Strategy({
         clientID: googleKeys.clientID,
         clientSecret: googleKeys.clientSecret,
@@ -55,6 +58,9 @@ function initializePassport(passport) {
         }
     }
     ))
+
+
+    // Xác thực user đăng nhập bằng Facebook
     passport.use(new FacebookStrategy.Strategy({
         clientID: facebookKeys.facebook_key,
         clientSecret: facebookKeys.facebook_secret,
@@ -73,8 +79,6 @@ function initializePassport(passport) {
                                 const hashedPassword = await bcrypt.hash(profile.id, 10)
                                 new User({
                                     facebookId: profile.id,
-                                    // email: profile.emails[0].value,
-                                    // name: profile.name.familyName + ' ' + profile.name.givenName,
                                     username: profile.displayName,
                                     password: hashedPassword,
                                     image: profile.photos[0].value

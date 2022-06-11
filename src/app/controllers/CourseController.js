@@ -4,12 +4,6 @@ import {validationResult} from 'express-validator'
 import { multipleMongooseToObject, mongooseToObject } from '../../util/mongoose.js'
 
 class CourseController {
-    async getCourses(req, res, next) {
-        const courses = await Course.find({})
-        return res.json(courses)
-    }
-
-
 
     index(req, res, next) {
         Course.find({})
@@ -26,13 +20,14 @@ class CourseController {
                 course => res.render('courses/show', { course: mongooseToObject(course) })
             )
             .catch(next)
-
     }
 
+    // [GET] /courses/create
     create(req, res, next) {
         res.render('courses/create',{data: {}, errors: {}},)
     }
 
+    // [POST] /courses/create
     store(req, res, next) {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -45,9 +40,7 @@ class CourseController {
         course.save()
             .then(() => res.redirect('/me/stored/courses'))
             .catch(next)
-
     }
-
 
     // [GET] /course/:id/edit
     edit(req, res, next) {
@@ -70,7 +63,6 @@ class CourseController {
             .catch(next)
     }
 
-
     // [PATCH] /courses/:id/restore
     restore(req, res, next) {
         Course.restore({ _id: req.params.id })
@@ -85,7 +77,6 @@ class CourseController {
             .catch(next)
     }
 
-
     // [POST] /courses/handle-action
     action(req, res, next) {
         console.log(req.body.action)
@@ -95,11 +86,9 @@ class CourseController {
                     .then(() => res.redirect('back'))
                     .catch(next)
                 break
-                // res.json(req.body)
             default:
                 res.json({ message: 'Error' })
         }
-        // return res.json(req.body)
     }
 }
 

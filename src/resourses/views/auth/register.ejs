@@ -6,28 +6,61 @@
       <input
         type="text"
         class="form-control"
+        value="<%= data.username ?? ''%>"
         id="username"
         name="username"
         aria-describedby="emailHelp"
       />
+      <small>
+        <% if (errors.length>0) { %>
+        <%=findErrorByParam(errors, 'username')?.msg ?? '' %>
+        <% } %>
+      </small>
+    </div>
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input
+        type="text"
+        class="form-control"
+        value="<%= data.email ?? ''%>"
+        id="email"
+        name="email"
+      />
+      <small>
+        <% if (errors.length>0) { %>
+        <%=findErrorByParam(errors, 'email')?.msg ?? '' %>
+        <% } %>
+      </small>
     </div>
     <div class="mb-3">
       <label for="password" class="form-label">Password</label>
       <input
         type="password"
         class="form-control"
+        value="<%= data.password ?? ''%>"
         id="password"
         name="password"
       />
+      <small>
+        <% if (errors.length>0) { %>
+        <%=findErrorByParam(errors, 'password')?.msg ?? '' %>
+        <% } %>
+      </small>
     </div>
     <div class="mb-3">
       <label for="confirmPassword" class="form-label">Confirm password</label>
       <input
         type="password"
         class="form-control"
+        value="<%= data.confirmPassword ?? ''%>"
         id="confirmPassword"
         name="confirmPassword"
       />
+      <small>
+        <% if (errors.length>0) { %>
+        <%=findErrorByParam(errors, 'confirmPassword')?.msg ?? '' %>
+        <% } %>
+      </small>
     </div>
 
     <div class="d-flex"><button type="submit" class="btn btn-primary" style="margin-inline: auto">Register</button></div>

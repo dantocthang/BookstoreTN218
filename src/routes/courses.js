@@ -6,7 +6,6 @@ import courseController from '../app/controllers/CourseController.js'
 import {courseValidator} from '../util/dataValidator.js'
 
 
-router.get('/get-courses',courseController.getCourses)
 router.get('/create', courseController.create)
 router.post('/store',...courseValidator, courseController.store)
 router.post('/handle-action',courseController.action)

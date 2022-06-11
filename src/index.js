@@ -1,17 +1,15 @@
 import express from 'express'
-import session from 'express-session'
-import bodyParser from 'body-parser'
-import { fileURLToPath } from 'url';
-import cors from 'cors'
-import morgan from 'morgan'
-import methodOverride from 'method-override'
+import session from 'express-session' // Session, cookie chính cho dự án
+import { fileURLToPath } from 'url' // Sử dụng để upload vào thư mục
+import cors from 'cors' // Cho phép cấp api cho các tên miền khác (khác port cũng vậy)
+import morgan from 'morgan' // Log request ở terminal
+import methodOverride from 'method-override' // Ghi đè phương thức POST của Form với PUT, PATCH, DELETE
 import cookieParser from 'cookie-parser'
 import path from 'path'
 import { dirname } from 'path';
-import flash from 'connect-flash'
-import ejs from 'ejs'
-import expressLayouts from 'express-ejs-layouts'
-import passport from 'passport'
+import flash from 'connect-flash' // Flash message, hoạt động với toastr ở giao diện
+import expressLayouts from 'express-ejs-layouts' // Thêm layout cho ejs, gán layout mặc định, có thể tùy biến cho mỗi view
+import passport from 'passport' // Xác thực người dùng, chiến thuật login với Google, Facebook
 import dotenv from 'dotenv'
 
 
@@ -20,11 +18,12 @@ import db from './config/db/index.js'
 import initializePassport from './config/passport.js'
 import { fetchUserInfo } from './util/checkAuthenticated.js'
 import { cartSession } from './util/cartSession.js'
+import helpers from './util/helpers.js'
 
 const app = express()
 const port = 3003
 
-// Load env config
+// Cấu hình để express nhận .env
 dotenv.config()
 
 // View engines
@@ -37,92 +36,52 @@ app.use(express.urlencoded({ extended: false }))
 
 
 
-// Load config passport user validation
-
+// Khởi tạo passport
 initializePassport(passport)
 
-
-// Use Cors for API call from other project
+// Sử dụng cors để gọi api từ dự án khác
 app.use(cors())
 
-// Use session
+// Cấu hình session-cookie-flash
 app.use(cookieParser('keyboard cat'));
-
 app.use(session({
   resave: false,
   saveUninitialized: false,
   secret: process.env.SESSION_SECRET,
-  cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 }
+  cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 } // 30 ngày
 }));
-
-
-// Flash message
 app.use(flash());
-
-
 
 // Passport validate data
 app.use(passport.initialize())
 app.use(passport.session());
 
-// Connect DB
+// Kết nối mongoDB
 db()
 
+// Cấu hình morgan
 app.use(morgan('combined'))
 app.use(methodOverride('_method'))
 
+// Cấu hình thư mục để upload file
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 
 app.set('views', path.join(__dirname, 'resourses/views'));
-
-
 app.use(express.static(path.join(__dirname, 'public')))
 
 
 // Custom helpers
-app.locals.sortable = (field, sort) => {
-  const sortType = field === sort.column ? sort.type : 'default'
-  const icons = {
-    default: 'oi oi-elevator',
-    asc: 'oi oi-sort-ascending',
-    desc: 'oi oi-sort-descending'
-  }
-  const types = {
-    default: 'desc',
-    asc: 'desc',
-    desc: 'asc'
-  }
-
-  const icon = icons[sortType]
-  const type = types[sortType]
-
-  return (
-    `<a href="?_sort&type=${type}&column=${field}"><span class="${icon}"></span></a>`
-  )
-}
-
-app.locals.findErrorByParam = (errors,paramName) => {
-  return errors.find(x=>x.param==paramName)
-}
+helpers(app);
 
 
-app.get('/get_session', (req, res) => {
-  //check session
-  if (req.session.User) {
-    return res.status(200).json({ status: 'success', session: req.session.User })
-  }
-  return res.status(200).json({ status: 'error', session: 'No session' })
-})
 // Global middlewares
-app.use(fetchUserInfo)
-app.use(cartSession)
+app.use(fetchUserInfo) // Lấy tên và hình ảnh của user pass cho layout
+app.use(cartSession) // Quản lý giỏ hàng
 
-
-
+// Định tuyến
 route(app)
-
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)

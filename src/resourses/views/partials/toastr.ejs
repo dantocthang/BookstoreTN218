@@ -18,26 +18,39 @@
 }
 </script>
 
-<% if (message.success) { %>
-    <script>
-        toastr.success('<%=message.success%>',"Success")
-    </script>
-<% } %>
+<% if (locals.messages){ %>
+    <% if (messages.hasOwnProperty('success')) { %>
+        <h1>HI</h1>
+        <% messages.success.map((mes=>{   %>
+            <script>
+                toastr.success('<%=mes%>',"Success")
+            </script>
+        <% })).join('') %>
+    <% } %>
 
-<% if (message.warning) { %>
-    <script>
-        toastr.warning('<%=message.warning%>',"Warning")
-    </script>
-<% } %>
-<% if (message.info) { %>
-    <script>
-        toastr.warning('<%=message.info%>',"Info")
-    </script>
-<% } %>
-<% if (message.error) { %>
-    <script>
-        toastr.error('<%=message.error%>',"Error")
-    </script>
+    <% if (messages.hasOwnProperty('warning')) { %>
+        <% messages.warning.forEach((mes=>{   %>
+            <script>
+                toastr.warning('<%=mes%>',"Warning")
+            </script>
+        <% })) %>
+    <% } %>
+
+    <% if (messages.hasOwnProperty('info')) { %>
+        <% messages.info.forEach((mes=>{   %>
+            <script>
+                toastr.warning('<%=mes%>',"Info")
+            </script>
+        <% })) %>
+    <% } %>
+    
+    <% if (messages.hasOwnProperty('error')) { %>
+        <% messages.error.forEach((mes=>{   %>
+            <script>
+                toastr.error('<%=mes%>',"Error")
+            </script>
+        <% })) %>
+    <% } %>
 <% } %>
 
 
