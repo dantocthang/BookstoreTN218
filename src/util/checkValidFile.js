@@ -1,4 +1,4 @@
-function isFileValid(file) {
+function isValidImage(file) {
     const type = file.mimetype.split("/").pop();
     const validTypes = ["jpg", "jpeg", "png", "pdf", "csv"];
     if (validTypes.indexOf(type) === -1) {
@@ -7,5 +7,13 @@ function isFileValid(file) {
     return true;
 };
 
-export default isFileValid
+function isCsvFile(file){
+    const type = file.mimetype.split("/").pop();
+    if (type!=='csv') {
+        return false;
+    }
+    return true;
+}
+
+export {isValidImage, isCsvFile}
 

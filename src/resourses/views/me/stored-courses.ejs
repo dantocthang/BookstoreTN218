@@ -1,72 +1,86 @@
 <h1>Danh sách khóa học</h1>
 <form action="/courses/handle-action" method="POST">
   <table class="table mt-4">
-    <% if (deletedCount) { %>
-      <a href="/me/trash/courses">Thùng rác (<%- deletedCount %>)</a>
-      <% } %>
-        <div class="row g-3">
-          <div class="col-auto">
-            <label for="all-courses">Chọn tất cả</label>
-            <input type="checkbox" id="all-courses" />
-          </div>
-          <div class="col-auto">
-            <select name="action" required class="form-select" aria-label="Default select example" id="action-select">
-              <option value="" selected>-- Chọn hành động --</option>
-              <option value="delete">Xóa</option>
-              <option value="restore">Phục hồi</option>
-            </select>
-          </div>
-          <div class="col-auto">
-            <button type="submit" id="action-submit" class="btn btn-primary disabled mb-3">Thực hiện</button>
-          </div>
-        </div>
+    <div class="d-flex justify-content-between">
+      <% if (deletedCount) { %>
+        <a href="/me/trash/courses">Thùng rác (<%- deletedCount %>)</a>
+        <% } %>
+          <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+              data-bs-toggle="dropdown" aria-expanded="false">
+              Nhập xuất
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+              <li><a class="dropdown-item" href="/me/upload">Nhập dữ liệu từ csv</a></li>
+              <li><a class="dropdown-item" href="/me/toCsv">Xuất ra csv</a></li>
+            </ul>
+          </div>  
+    </div>
+    <div class="row g-3">
+      <div class="col-auto">
+        <label for="all-courses">Chọn tất cả</label>
+        <input type="checkbox" id="all-courses" />
+      </div>
+      <div class="col-auto">
+        <select name="action" required class="form-select" aria-label="Default select example" id="action-select">
+          <option value="" selected>-- Chọn hành động --</option>
+          <option value="delete">Xóa</option>
+          <option value="restore">Phục hồi</option>
+        </select>
+      </div>
+      <div class="col-auto">
+        <button type="submit" id="action-submit" class="btn btn-primary disabled mb-3">Thực hiện</button>
+      </div>
+    </div>
 
-        <thead>
+    <thead>
+      <tr>
+        <th colspan="2" scope="col">#</th>
+        <th scope="col">Tên khóa học
+          <%-locals.sortable('name', locals._sort) %>
+        </th>
+        <th scope="col">Trình độ<%-locals.sortable('level', locals._sort) %>
+        </th>
+        <th scope="col">Thời gian tạo<%-locals.sortable('createdAt', locals._sort) %>
+        </th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (courses.length>0){ %>
+        <% courses.forEach((course, index)=> { %>
           <tr>
-            <th colspan="2" scope="col">#</th>
-            <th scope="col">Tên khóa học
-              <%-locals.sortable('name', locals._sort) %>
+            <td><input type="checkbox" name="courseIds" value="<%-course._id %>" class="course-check" /></td>
+            <th scope="row">
+              <%= index+1 %>
             </th>
-            <th scope="col">Trình độ<%-locals.sortable('level', locals._sort) %></th>
-            <th scope="col">Thời gian tạo<%-locals.sortable('createdAt', locals._sort) %></th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <% if (courses.length>0){ %>
-            <% courses.forEach((course, index)=> { %>
-              <tr>
-                <td><input type="checkbox" name="courseIds" value="<%-course._id %>" class="course-check" /></td>
-                <th scope="row">
-                  <%= index+1 %>
-                </th>
-                <td>
-                  <%-course.name %>
-                </td>
-                <td>
-                  <%-course.level %>
-                </td>
-                <td>
-                  <%-course.createdAt %>
-                </td>
-                <td class="d-flex justify-contents-center gap-3">
-                  <a class="table__btn table__edit-btn" href="/courses/<%-course._id %>/edit"><i
-                      class="fa-solid fa-pen table__icon table__edit-icon"></i></a>
-
-                  <a data-id="<%-course._id %>" data-display="" class="table__btn table__delete-btn"
-                    data-bs-toggle="modal" data-bs-target="#delete-course-modal"><i data-id="<%-course._id %>"
-                      class="fa-solid fa-xmark table__icon table__delete-icon"></i></a>
-                </td>
-              </tr>
-            <% }) %>
-          <% }else { %>
-            <td colspan="5" class="text-center">Bạn chưa đăng khóa học nào
-              <a href="/courses/create">Đăng khóa học</a>
+            <td>
+              <%-course.name %>
             </td>
-          <% } %>
+            <td>
+              <%-course.level %>
+            </td>
+            <td>
+              <%-course.createdAt %>
+            </td>
+            <td class="d-flex justify-contents-center gap-3">
+              <a class="table__btn table__edit-btn" href="/courses/<%-course._id %>/edit"><i
+                  class="fa-solid fa-pen table__icon table__edit-icon"></i></a>
+
+              <a data-id="<%-course._id %>" data-display="" class="table__btn table__delete-btn" data-bs-toggle="modal"
+                data-bs-target="#delete-course-modal"><i data-id="<%-course._id %>"
+                  class="fa-solid fa-xmark table__icon table__delete-icon"></i></a>
+            </td>
+          </tr>
+          <% }) %>
+            <% }else { %>
+              <td colspan="5" class="text-center">Bạn chưa đăng khóa học nào
+                <a href="/courses/create">Đăng khóa học</a>
+              </td>
+              <% } %>
 
 
-        </tbody>
+    </tbody>
   </table>
 </form>
 
@@ -90,55 +104,44 @@
 
 <%- include('../partials/pagination.ejs') %>
 
-<form id="submit-form" method="POST" hidden></form>
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    var courseId;
-    var deleteForm = document.forms['submit-form'];
-    var btnDelete = document.getElementById('btn-delete-course'); console.log(deleteForm);
-    const deleteBtns = document.querySelectorAll('.table__delete-btn');
-    const submitAction = $('#action-submit')
+  <form id="submit-form" method="POST" hidden></form>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var courseId;
+      var deleteForm = document.forms['submit-form'];
+      var btnDelete = document.getElementById('btn-delete-course'); console.log(deleteForm);
+      const deleteBtns = document.querySelectorAll('.table__delete-btn');
+      const submitAction = $('#action-submit')
 
-    deleteBtns.forEach(btn => {
-      btn.addEventListener('click', function (e) {
-        courseId = e.target.dataset.id
+      deleteBtns.forEach(btn => {
+        btn.addEventListener('click', function (e) {
+          courseId = e.target.dataset.id
+        })
+      })
+
+      btnDelete.onclick = function () {
+        deleteForm.action = `/courses/${courseId}?_method=DELETE`
+        deleteForm.submit()
+      }
+
+      const checkAll = $('#all-courses')
+      const courseChecks = $('.course-check')
+
+      checkAll.change(() => {
+        courseChecks.prop('checked', checkAll.get(0).checked)
+        if (checkAll.get(0).checked) {
+          submitAction.removeClass('disabled')
+        }
+        else submitAction.addClass('disabled')
+      })
+
+      courseChecks.change(() => {
+        const inputChecked = $('input[name="courseIds"]:checked').length
+        console.log(inputChecked)
+        if (inputChecked == 0) submitAction.addClass('disabled')
+        else submitAction.removeClass('disabled')
+        const isCheckAll = courseChecks.length == inputChecked
+        checkAll.prop('checked', isCheckAll)
       })
     })
-
-    btnDelete.onclick = function () {
-      deleteForm.action = `/courses/${courseId}?_method=DELETE`
-      deleteForm.submit()
-    }
-
-    const checkAll = $('#all-courses')
-    const courseChecks = $('.course-check')
-
-    checkAll.change(() => {
-      courseChecks.prop('checked', checkAll.get(0).checked)
-      if (checkAll.get(0).checked) {
-        submitAction.removeClass('disabled')
-      }
-      else submitAction.addClass('disabled')
-    })
-
-    courseChecks.change(() => {
-      const inputChecked = $('input[name="courseIds"]:checked').length
-      console.log(inputChecked)
-      if (inputChecked == 0) submitAction.addClass('disabled')
-      else submitAction.removeClass('disabled')
-      const isCheckAll = courseChecks.length == inputChecked
-      checkAll.prop('checked', isCheckAll)
-    })
-
-    // {
-    //   {
-    //     !--submitAction.on('submit', function (e) {
-    //       const isSubmitable = !$(this).hasClass('disabled')
-    //       if (!isSubmitable) e.preventDefault()
-    //     }) --}
-    // }
-
-
-
-  })
-</script>
+  </script>
