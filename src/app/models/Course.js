@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import slug from 'mongoose-slug-generator'
-import mongooseDelete from 'mongoose-delete'
+import mongooseDelete from 'mongoose-delete' // Soft delete
 const Schema = mongoose.Schema;
 mongoose.plugin(slug)
 

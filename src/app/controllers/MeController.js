@@ -4,6 +4,12 @@ import { fileURLToPath } from 'url';
 import formidable from 'formidable';
 import fs from 'fs'
 
+
+
+// Chuyển đổi svc -> json và ngược lại
+import csv from 'csvtojson'
+import { Parser } from 'json2csv'
+
 import Course from '../models/Course.js'
 import { multipleMongooseToObject, mongooseToObject } from '../../util/mongoose.js'
 import isFileValid from '../../util/checkValidFile.js'
@@ -41,7 +47,11 @@ class MeController {
 
   // [POST] /me/upload
   async upload(req, res, next) {
-    const uploadFolder = path.join(__dirname, "..", "..", "public", "files");
+    const uploadFolder = path.join(__dirname, "..", "..", "public", "files", req.user.username);
+    console.log(uploadFolder)
+    if (!fs.existsSync(uploadFolder)) {
+      fs.mkdirSync(uploadFolder, { recursive: true });
+    }
     const form = new formidable.IncomingForm({
       multiplesL: true,
       maxFileSize: 50 * 1024 * 1024,
@@ -66,7 +76,7 @@ class MeController {
         // checks if the file is valid
         const isValid = isFileValid(file);
         // creates a valid name by removing spaces
-        const fileName = encodeURIComponent(file.originalFilename);
+        const fileName = file.originalFilename;
         if (!isValid) {
           // throes error if file isn't valid
           return res.status(400).json({
@@ -84,7 +94,7 @@ class MeController {
         try {
           // stores the fileName in the database
           const newFile = await UploadFile.create({
-            name: `files/${fileName}`,
+            name: `files/${req.user.username}/${fileName}`,
             userId: req.user._id
           });
           newFile.save()
@@ -134,13 +144,59 @@ class MeController {
     var cart = req.session.cart || []
     var detailCart = []
     if (cart != []) {
-      for (let i=0; i<cart.length; i++){
+      for (let i = 0; i < cart.length; i++) {
         const course = await Course.findById(cart[i].id)
-        detailCart.push({id: course._id, name: course.name, image: course.image, count: cart[i].count})
+        detailCart.push({ id: course._id, name: course.name, image: course.image, count: cart[i].count })
       }
     }
     return res.json(detailCart)
   }
+
+  async readCsvFile(req, res, next) {
+    const uploadFolder = path.join(__dirname, "..", "..", "public", "files", req.user.username, 'Book1.csv');
+    const jsonArray = await csv().fromFile(uploadFolder);
+    res.json(jsonArray)
+  }
+
+  async toCsv(req, res, next) {
+    const uploadFolder = path.join(__dirname, "..", "..", "public", "files", req.user.username);
+    const jsonArray = [
+      {
+        id: 1,
+        name: 'Dan'
+      },
+      {
+        id: 2,
+        name: 'Thang'
+      }
+    ];
+
+    const fields = ['id', 'name'];
+    const opts = { fields };
+
+    try {
+      const parser = new Parser(opts);
+      const csv = parser.parse(jsonArray);
+      fs.writeFile(`${uploadFolder}/demo.csv`, csv, (err) => {
+        if (err)
+          console.log(err);
+        else {
+          console.log("File written successfully\n");
+          console.log("The written has the following contents:");
+          console.log(fs.readFileSync(`${uploadFolder}/demo.csv`, "utf8"));
+
+          // Download
+          const currentUrl = req.path
+          res.redirect(`/files/${req.user.username}/demo.csv`)
+        }
+      });
+    } catch (err) {
+      console.error(err);
+    }
+
+
+  }
+
 
 }
 const a = new MeController()
