@@ -1,9 +1,9 @@
 <form action="" id="search-form" method="POST" style="padding-block: 2rem;">
-    <div class="input-group" style="width: 600px">
-        <label for="search">Search courses:</label>
+    <div class="input-group search-group">
+        <label for="search">Tìm kiếm khóa học:</label>
         <input type="text" id="search" class="form-control"
             value="<% if (courseSibling.v) { %><% var isSearching=true %><%=courseSibling.v%><% } %>">
-        <button type="submit" id="search-btn" class="btn btn-primary">Tim</button>
+        <button type="submit" id="search-btn" class="btn btn-primary">Tìm</button>
     </div>
 </form>
 <% if (courseSibling.v) { %>

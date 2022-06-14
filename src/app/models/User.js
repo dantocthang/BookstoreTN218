@@ -12,7 +12,7 @@ const User = new Schema({
     image: { type: String },
     role: { type: String },
     deletedAt: { type: Date },
-}, { timeStamp: true });
+}, { timestamps: true });
 
 // Plugin
 User.plugin(mongooseDelete, {

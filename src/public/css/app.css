@@ -1,5 +1,5 @@
-body {
-  height: 2000px; }
+html * {
+  box-sizing: border-box; }
 
 .body-content {
   margin-top: 64px; }
@@ -11,12 +11,29 @@ body {
   z-index: 10;
   box-shadow: 3px 4px 28px 4px rgba(0, 0, 0, 0.3); }
 
+.login__label {
+  font-size: 2rem;
+  font-weight: 600;
+  text-align: center; }
+
+.login-wrapper {
+  width: Min(90%, 600px);
+  margin-inline: auto; }
+
 .user-avatar {
   width: 32px;
   height: 32px;
   border-radius: 50%;
   object-fit: cover;
   margin-right: 0.5rem; }
+
+.logout-btn {
+  border: none;
+  outline: none;
+  background-color: #fff;
+  padding: 4px 16px;
+  width: 100%;
+  text-align: left; }
 
 .table__btn {
   width: 32px;
@@ -103,6 +120,19 @@ body {
 .social__link i {
   margin-left: 1rem; }
 
+.search-group {
+  width: Min(600px, 90%);
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1rem; }
+  .search-group > label {
+    min-width: fit-content; }
+  .search-group > input {
+    flex: 1; }
+  .search-group > button {
+    min-width: fit-content; }
+
 .cart__link {
   position: relative; }
 
@@ -143,9 +173,14 @@ body {
 
 .cart__name {
   font-weight: 600;
-  font-size: 1.3rem;
   color: #1a38c2; }
 
 .cart__count {
   font-size: 1.3rem;
   color: #333; }
+
+.footer {
+  margin-top: 40px;
+  background-color: #ccc;
+  text-align: center;
+  padding: 4px 20px; }

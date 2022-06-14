@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark position-fixed custom-navbar">
   <div class="container">
-    <a class="navbar-brand link-light" href="/">F8 Courses</a>
+    <a class="navbar-brand link-light" href="/">DD Courses</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
       aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -22,48 +22,55 @@
 
           </a>
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-            <li>
-              <form action="/auth/logout?_method=DELETE" method="POST">
-                <button type="submit">Logout</button>
-              </form>
-            </li>
-            <li>
-              <hr class="dropdown-divider" />
-            </li>
-            <li><a class="dropdown-item" href="/auth/login">Login</a></li>
-            <li>
-              <hr class="dropdown-divider" />
-            </li>
-            <li><a class="dropdown-item" href="/courses/create">Đăng khóa học</a></li>
-            <li>
-              <hr class="dropdown-divider" />
-            </li>
-            <li><a class="dropdown-item" href="/me/stored/courses">Khóa học của
-                tôi</a></li>
-            <li>
-              <hr class="dropdown-divider" />
-            </li>
-            <li id="cart__link">
-              <a class="dropdown-item" id="header__cart" href="/me/cart">Giỏ hàng</a>
-              <div class="cart__minimized">
-                <ul class="cart__list">
-                  <% if (locals.cartItems) { %>
-                    <% cartItems.forEach(item=> { %>
-                      <li class="cart__item">
-                        <img src="<%=item.image %>" alt="" class="cart__img">
-                        <h4 class="cart__name">
-                          <%=item.name %>
-                        </h4>
-                        <span class="cart__count">
-                          <%=item.count%>
-                        </span>
-                      </li>
-                    <% }) %>
-                  <% } %>
-                </ul>
-              </div>
-            </li>
+            <% if (locals.username){ %>
+              <li>
+                <form action="/auth/logout?_method=DELETE" method="POST">
+                  <button type="submit" class="logout-btn">Logout</button>
+                </form>
+              </li>
 
+              <li>
+                <hr class="dropdown-divider" />
+              </li>
+
+              <li><a class="dropdown-item" href="/courses/create">Đăng khóa học</a></li>
+
+              <li>
+                <hr class="dropdown-divider" />
+              </li>
+
+              <li>
+                <a class="dropdown-item" href="/me/stored/courses">Khóa học của
+                  tôi</a>
+              </li>
+
+              <li>
+                <hr class="dropdown-divider" />
+              </li>
+              <li id="cart__link">
+                <a class="dropdown-item" id="header__cart" href="/me/cart">Giỏ hàng</a>
+                <div class="cart__minimized">
+                  <ul class="cart__list">
+              <% } %>
+              <% if (!locals.username){ %>
+                <li><a class="dropdown-item" href="/auth/login">Login</a></li>
+              <% } %>
+              <% if (locals.cartItems) { %>
+                <% cartItems.forEach(item=> { %>
+                  <li class="cart__item">
+                    <img src="<%=item.image %>" alt="" class="cart__img">
+                      <div class="cart__name">
+                        <%=item.name %>
+                      </div>
+                      <span class="cart__count">
+                        <%=item.count%>
+                      </span>
+                  </li>
+                <% }) %>
+              <% } %>
+                  </ul>
+                </div>
+              </li>
           </ul>
         </li>
       </ul>

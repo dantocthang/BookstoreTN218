@@ -1,20 +1,20 @@
 <h1>Danh sách khóa học</h1>
 <form action="/courses/handle-action" method="POST">
   <table class="table mt-4">
-    <div class="d-flex justify-content-between">
-      <% if (deletedCount) { %>
-        <a href="/me/trash/courses">Thùng rác (<%- deletedCount %>)</a>
-        <% } %>
-          <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
-              data-bs-toggle="dropdown" aria-expanded="false">
-              Nhập xuất
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-              <li><a class="dropdown-item" href="/me/upload">Nhập dữ liệu từ csv</a></li>
-              <li><a class="dropdown-item" href="/me/toCsv">Xuất ra csv</a></li>
-            </ul>
-          </div>  
+    <% if (deletedCount) { %>
+      <a href="/me/trash/courses">Thùng rác (<%- deletedCount %>)</a>
+      <% } %>
+    <div class="d-flex justify-content-end">
+      <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+          data-bs-toggle="dropdown" aria-expanded="false">
+          Nhập xuất
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+          <li><a class="dropdown-item" href="/me/upload">Nhập dữ liệu từ csv</a></li>
+          <li><a class="dropdown-item" href="/me/toCsv">Xuất ra csv</a></li>
+        </ul>
+      </div>  
     </div>
     <div class="row g-3">
       <div class="col-auto">

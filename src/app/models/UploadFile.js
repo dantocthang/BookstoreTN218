@@ -6,7 +6,7 @@ const UploadFile = new Schema({
     name: { type: String, required: true },
     userId: { type: String, required: true },
     deletedAt: { type: Date },
-}, { timeStamp: true });
+}, { timestamps: true });
 
 // Plugin
 UploadFile.plugin(mongooseDelete, {

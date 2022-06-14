@@ -12,7 +12,7 @@ const Course = new Schema({
     videoId: {type: String},
     level: {type: String},
     deletedAt: {type: Date},
-  },{ timeStamp: true});
+  },{ timestamps: true});
 
   // Plugin
   Course.plugin(mongooseDelete, {
