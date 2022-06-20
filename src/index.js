@@ -21,7 +21,7 @@ import { cartSession } from './util/cartSession.js'
 import helpers from './util/helpers.js'
 
 const app = express()
-const port = 3003
+const port = process.env.PORT || 3003
 
 // Cấu hình để express nhận .env
 dotenv.config()
