@@ -44,8 +44,8 @@ router.get('/facebook/callback',
     });
 
 
-router.get('/register', authController.register)
-router.post('/register', ...userValidator, authController.addUser)
+router.get('/register',checkNotAuthenticated, authController.register)
+router.post('/register',checkNotAuthenticated, ...userValidator, authController.addUser)
 router.delete('/logout', authController.logout)
 
 export default router

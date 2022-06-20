@@ -2,6 +2,7 @@ import express from 'express'
 import session from 'express-session' // Session, cookie chính cho dự án
 import { fileURLToPath } from 'url' // Sử dụng để upload vào thư mục
 import cors from 'cors' // Cho phép cấp api cho các tên miền khác (khác port cũng vậy)
+import mongoose from 'mongoose';
 
 // Log request ở terminal
 // import morgan from 'morgan' 
@@ -60,7 +61,18 @@ app.use(passport.initialize())
 app.use(passport.session());
 
 // Kết nối mongoDB
-db()
+const URI='mongodb+srv://admin:Conkhikho12345@cluster0.t0bbx.mongodb.net/blog?retryWrites=true&w=majority'
+mongoose.connect(URI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => {
+        console.log("Connected to DB")
+        // app.listen(port, () => {
+        //     console.log(`Server is running on port ${port}`)
+        // })
+    })
+    .catch((err) => {
+        console.log('err: ', err)
+    })
+//db()
 
 // Cấu hình morgan
 // app.use(morgan('combined'))

@@ -16,7 +16,7 @@ class AuthController{
     // [POST] /register
     async addUser(req, res, next) {
         const errors = validationResult(req);
-        // console.log(errors.array(), req.body)
+        console.log("ok")
         if (errors.isEmpty()) {
             const hashedPassword = await bcrypt.hash(req.body.password, 10)
             const user = new User({ username: req.body.username, email: req.body.email, password: hashedPassword })
