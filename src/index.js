@@ -2,7 +2,10 @@ import express from 'express'
 import session from 'express-session' // Session, cookie chính cho dự án
 import { fileURLToPath } from 'url' // Sử dụng để upload vào thư mục
 import cors from 'cors' // Cho phép cấp api cho các tên miền khác (khác port cũng vậy)
-import morgan from 'morgan' // Log request ở terminal
+
+// Log request ở terminal
+// import morgan from 'morgan' 
+
 import methodOverride from 'method-override' // Ghi đè phương thức POST của Form với PUT, PATCH, DELETE
 import cookieParser from 'cookie-parser'
 import path from 'path'
@@ -60,7 +63,7 @@ app.use(passport.session());
 db()
 
 // Cấu hình morgan
-app.use(morgan('combined'))
+// app.use(morgan('combined'))
 app.use(methodOverride('_method'))
 
 // Cấu hình thư mục để upload file
