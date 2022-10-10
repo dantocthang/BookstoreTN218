@@ -1,23 +1,18 @@
-import mongoose from 'mongoose';
-import mongooseDelete from 'mongoose-delete'
+import {DataTypes} from 'sequelize'
+import sequelize from '../../config/db.js';
 
-const Schema = mongoose.Schema;
+const User = sequelize.define('User', {
+    fullName: {
+        type: DataTypes.STRING,
+    },
+    email: { type: DataTypes.STRING },
+    password: { type: DataTypes.STRING },
+    role: { type: DataTypes.STRING, defaultValue: 'user' },
+    googleId: { type: DataTypes.STRING },
+    facebookId: { type: DataTypes.STRING },
+    token: { type: DataTypes.STRING }
+}, {
+    // Other model options go here
+});
 
-const User = new Schema({
-    username: { type: String, required: true },
-    password: { type: String, required: true },
-    email: {type: String},
-    googleId: {type: String},
-    facebookId: {type: String},
-    image: { type: String },
-    role: { type: String },
-    deletedAt: { type: Date },
-}, { timestamps: true });
-
-// Plugin
-User.plugin(mongooseDelete, {
-    deletedAt: true,
-    overrideMethods: 'all'
-})
-
-export default mongoose.model('User', User);
+export default User

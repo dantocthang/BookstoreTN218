@@ -2,22 +2,6 @@
   <div class="login__label">Đăng ký</div>
   <form action="/auth/register" method="POST">
     <div class="mb-3 mt-4">
-      <label for="username" class="form-label">Tên đăng nhập</label>
-      <input
-        type="text"
-        class="form-control"
-        value="<%= data.username ?? ''%>"
-        id="username"
-        name="username"
-        aria-describedby="emailHelp"
-      />
-      <small>
-        <% if (errors.length>0) { %>
-        <%=findErrorByParam(errors, 'username')?.msg ?? '' %>
-        <% } %>
-      </small>
-    </div>
-    <div class="mb-3">
       <label for="email" class="form-label">Email</label>
       <input
         type="text"

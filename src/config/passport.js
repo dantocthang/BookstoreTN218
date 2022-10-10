@@ -3,30 +3,11 @@ import bcrypt from 'bcrypt'
 import GoogleStrategy from 'passport-google-oauth20'
 import FacebookStrategy from 'passport-facebook'
 
-import User from '../app/models/User.js'
+import User from '../app/models/user.js'
 import { facebookKeys, googleKeys } from '../config/keys.js'
 
 function initializePassport(passport) {
-    // Xác thực user đăng nhập bình thường
-    const authenticateUser = async (username, password, done) => {
-        const user = await User.findOne({ username: username })
-        if (user == null) {
-            return done(null, false, { message: 'Tên người dùng không tồn tại' })
-        }
-        try {
-            if (await bcrypt.compare(password, user.password)) {
-                return done(null, user, { message: 'Đăng nhập thành công' })
-            }
-            else {
-                return done(null, false, { message: 'Mật khẩu không đúng' })
-            }
-        } catch (e) {
-            return done(e)
-        }
-    }
 
-
-    passport.use(new LocalStrategy.Strategy({ usernameField: 'username' }, authenticateUser))
 
     // Xác thực user đăng nhập bằng Google
     passport.use(new GoogleStrategy.Strategy({
@@ -42,14 +23,10 @@ function initializePassport(passport) {
                     if (existingUser) {
                         done(null, existingUser);
                     } else {
-                        const hashedPassword = await bcrypt.hash(profile.emails[0].value, 10)
                         new User({
                             googleId: profile.id,
                             email: profile.emails[0].value,
-                            name: profile.name.familyName + ' ' + profile.name.givenName,
-                            username: profile.name.familyName + ' ' + profile.name.givenName,
-                            password: hashedPassword,
-                            image: profile.photos[0].value
+                            fullName: profile.name.familyName + ' ' + profile.name.givenName,
                         })
                             .save()
                             .then(user => done(null, user));

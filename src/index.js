@@ -1,38 +1,37 @@
 import express from 'express'
 import session from 'express-session' // Session, cookie chính cho dự án
-import { fileURLToPath } from 'url' // Sử dụng để upload vào thư mục
-import cors from 'cors' // Cho phép cấp api cho các tên miền khác (khác port cũng vậy)
-import mongoose from 'mongoose';
+import path from 'path'
+import {fileURLToPath} from 'url'
 
-// Log request ở terminal
-// import morgan from 'morgan' 
 
 import methodOverride from 'method-override' // Ghi đè phương thức POST của Form với PUT, PATCH, DELETE
 import cookieParser from 'cookie-parser'
-import path from 'path'
-import { dirname } from 'path';
 import flash from 'connect-flash' // Flash message, hoạt động với toastr ở giao diện
 import expressLayouts from 'express-ejs-layouts' // Thêm layout cho ejs, gán layout mặc định, có thể tùy biến cho mỗi view
 import passport from 'passport' // Xác thực người dùng, chiến thuật login với Google, Facebook
 import dotenv from 'dotenv'
+import sequelize from './config/db.js'
+import associationDefiner from './app/models/index.js'
+
 
 
 import route from './routes/index.js'
-import db from './config/db/index.js'
 import initializePassport from './config/passport.js'
-import { fetchUserInfo } from './util/checkAuthenticated.js'
-import { cartSession } from './util/cartSession.js'
 import helpers from './util/helpers.js'
+// Cấu hình để express nhận .env
+dotenv.config()
 
 const app = express()
 const port = process.env.PORT || 3003
 
-// Cấu hình để express nhận .env
-dotenv.config()
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
 
 // View engines
 app.use(expressLayouts)
-app.set('layout', '../../resourses/views/layouts/main.ejs')
+app.set('views', path.join(__dirname, '/resources/views'))
+app.set('layout', path.join(__dirname, '/resources/views/layouts/main.ejs'))
 app.set('view engine', 'ejs');
 
 
@@ -43,8 +42,6 @@ app.use(express.urlencoded({ extended: false }))
 // Khởi tạo passport
 initializePassport(passport)
 
-// Sử dụng cors để gọi api từ dự án khác
-app.use(cors())
 
 // Cấu hình session-cookie-flash
 app.use(cookieParser('keyboard cat'));
@@ -60,40 +57,23 @@ app.use(flash());
 app.use(passport.initialize())
 app.use(passport.session());
 
-// Kết nối mongoDB
-const URI='mongodb+srv://admin:Conkhikho12345@cluster0.t0bbx.mongodb.net/blog?retryWrites=true&w=majority'
-mongoose.connect(URI, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => {
-        console.log("Connected to DB")
-        // app.listen(port, () => {
-        //     console.log(`Server is running on port ${port}`)
-        // })
-    })
-    .catch((err) => {
-        console.log('err: ', err)
-    })
-//db()
+// Kết nối Mysql
+try {
+  await sequelize.authenticate()
+  associationDefiner()
+  // await sequelize.sync({ force: true })
+  await sequelize.sync()
+  console.log('Connection has been established successfully.');
+} catch (error) {
+  console.error('Unable to connect to the database:', error);
+}
 
-// Cấu hình morgan
-// app.use(morgan('combined'))
 app.use(methodOverride('_method'))
-
-// Cấu hình thư mục để upload file
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-
-app.set('views', path.join(__dirname, 'resourses/views'));
-app.use(express.static(path.join(__dirname, 'public')))
 
 
 // Custom helpers
 helpers(app);
 
-
-// Global middlewares
-app.use(fetchUserInfo) // Lấy tên và hình ảnh của user pass cho layout
-app.use(cartSession) // Quản lý giỏ hàng
 
 // Định tuyến
 route(app)

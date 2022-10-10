@@ -1,9 +1,8 @@
 import express from 'express'
 
 import homeController from '../app/controllers/HomeController.js'
-import Course from '../app/models/Course.js'
 import paginator from '../util/paginate.js'
-import { checkAuthenticated, checkNotAuthenticated } from '../util/checkAuthenticated.js'
+// import { checkAuthenticated, checkNotAuthenticated } from '../util/checkAuthenticated.js'
 
 const router = express.Router()
 
@@ -18,6 +17,6 @@ router.get('/get_session', (req, res) => {
   })
 // END FOR TESTING
 
-router.use('/', checkAuthenticated, paginator(Course, 12), homeController.index)
+router.use('/', homeController.index)
 
 export default router

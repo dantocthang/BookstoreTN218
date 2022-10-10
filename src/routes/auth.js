@@ -8,12 +8,8 @@ import authController from '../app/controllers/AuthController.js'
 const router = express.Router()
 
 
-router.get('/login', checkNotAuthenticated, authController.login)
-router.post('/login', checkNotAuthenticated, passport.authenticate('local', {
-    // successRedirect: '/',
-    failureRedirect: '/auth/login',
-    failureFlash: true,
-}), (req, res) => { req.flash('success', 'Đăng nhập thành công'); res.redirect('/') })
+router.get('/login', authController.login)
+router.post('/login', authController.authenticate)
 
 
 // Login with Google
