@@ -64,26 +64,26 @@
 								<div class="shop-bx-title clearfix">
 									<h5 class="text-uppercase">Basic Information</h5>
 								</div>
-								<form>
+								<form method="POST" action="/user/profile">
 									<div class="row m-b30">
-										<input type="text" class="form-control" id="formcontrolinput1" placeholder="id"  value="<%= user.id %>" hidden>
+										<input type="text" class="form-control" id="id" placeholder="id" name="id"  value="<%= user.id %>" hidden>
 
 										<div class="col-lg-6 col-md-6">
 											<div class="mb-3">
 												<label for="formcontrolinput1" class="form-label">Your Name:</label>
-												<input type="text" class="form-control" id="formcontrolinput1" placeholder="Full Name"  value="<%= user.fullName %>">
+												<input type="text" class="form-control" id="name" name="name" placeholder="Full Name"  value="<%= user.fullName %>">
 											</div>
 										</div>
 										<div class="col-lg-6 col-md-6">
 											<div class="mb-3">
 												<label for="formcontrolinput2" class="form-label">Email:</label>
-												<input type="text" class="form-control" id="formcontrolinput2" placeholder="Email"  value="<%= user.email %>">
+												<input type="text" class="form-control" id="email" name="email" placeholder="Email"  value="<%= user.email %>">
 											</div>
 										</div>
 										<div class="col-lg-6 col-md-6">
 											<div class="mb-3">
 												<label for="formcontrolinput2" class="form-label">Phone number:</label>
-												<input type="text" class="form-control" id="formcontrolinput2" placeholder="Phone number"  value="<%= user.phone %>">
+												<input type="text" class="form-control" id="phone" name="phone" placeholder="Phone number"  value="<%= user.phone %>">
 											</div>
 										</div>
 									</div>
@@ -94,13 +94,13 @@
 										<div class="col-lg-6 col-md-6">
 											<div class="mb-3">
 												<label for="formcontrolinput5" class="form-label">Apartment Name:</label>
-												<input type="text" class="form-control" id="formcontrolinput5" placeholder="Apartment Name"  value="<%= user.name %>">
+												<input type="text" class="form-control" id="address_name" name="address_name" placeholder="Apartment Name"  value="<%= address.name %>">
 											</div>
 										</div>
 										<div class="col-lg-6 col-md-6">
 											<div class="mb-3">
 												<label for="formcontrolinput6" class="form-label">Address:</label>
-												<input type="text" class="form-control" id="formcontrolinput6" placeholder="address"  value="<%= user.address %>">
+												<input type="text" class="form-control" id="address" name="address" placeholder="Address"  value="<%= address.address %>">
 											</div>
 										</div>
 									</div>

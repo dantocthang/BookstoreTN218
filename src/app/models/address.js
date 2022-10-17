@@ -7,9 +7,9 @@ const Address = sequelize.define('Address', {
         type: DataTypes.STRING,
     },
     address: { type: DataTypes.STRING },
+    user_id: { type: DataTypes.INTEGER},
 }, {
     // Other model options go here
 });
-Address.belongsTo(User, { foreignKey: 'user_id' });
 
 export default Address
