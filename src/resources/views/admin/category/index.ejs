@@ -27,6 +27,12 @@
                 </thead>
 
                 <tbody>
+                    <% if (categories.length === 0) { %>
+                        <tr>
+                            <td colspan="3"><h3 class="text-center">Không có thể loại sách</h3></td>
+                        </tr>
+                    <% } %>
+
                     <% categories.forEach((category) => { %>
                         <% if (category.id % 2 === 0) { %>
                         <tr class="even">

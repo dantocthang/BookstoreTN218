@@ -27,6 +27,12 @@
                 </thead>
 
                 <tbody>
+                    <% if (publishers.length === 0) { %>
+                        <tr>
+                            <td colspan="3"><h3 class="text-center">Không có nhà xuất bản</h3></td>
+                        </tr>
+                    <% } %>
+
                     <% publishers.forEach((publisher) => { %>
                         <% if (publisher.id % 2 === 0) { %>
                         <tr class="even">

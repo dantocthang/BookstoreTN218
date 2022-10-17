@@ -6,12 +6,13 @@
         </div>
         <div class="content-body">
             <h1>Edit publisher</h1>
-            <form action="/admin/publishers/<%= publisher.id %>/edit?_method=PUT" method="POST">
+            <form action="/admin/publishers/<%= publisher.id %>/edit?_method=PUT" method="POST" id="edit-form">
                 <div class="form-group">
                   <label for="name">Name</label>
-                  <input type="text" name="name" class="form-control" id="name" placeholder="Enter name..."
+                  <input type="text" rules="required|max:255" name="name" class="form-control" id="name" placeholder="Enter name..."
                     value="<%= publisher.name %>"
                   />
+                  <span class="form-message"></span>
                 </div>
                 <button type="submit" class="btn btn-primary mt-1">Edit</button>
             </form>
@@ -20,4 +21,7 @@
     </div>
 </div>
 
+<script>
+    const form = new Validator('#edit-form');
+</script>
 

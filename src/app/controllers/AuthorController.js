@@ -11,7 +11,7 @@ class AuthorController {
         const authors = await Author.findAll({
             attributes: ['id', 'name', 'description']
         });
-
+        
         res.render('admin/author', {
             layout: 'admin/layouts/main',
             authors
