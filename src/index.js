@@ -31,7 +31,7 @@ const __dirname = path.dirname(__filename)
 // View engines
 app.use(expressLayouts)
 app.set('views', path.join(__dirname, '/resources/views'))
-app.set('layout', path.join(__dirname, '/resources/views/layouts/main.ejs'))
+app.set('layout', path.join(__dirname, '/resources/views/guest/layouts/main.ejs'))
 app.set('view engine', 'ejs');
 
 
@@ -70,6 +70,8 @@ try {
 
 app.use(methodOverride('_method'))
 
+// set static folder
+app.use(express.static(path.join(__dirname, 'public')))
 
 // Custom helpers
 helpers(app);

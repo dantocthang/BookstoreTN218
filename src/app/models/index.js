@@ -30,7 +30,7 @@ const associationDefiner = () => {
     Book.belongsTo(Publisher, { foreignKey: 'publisherId', as: 'publisher' })
 
     // User x Addresss: One to Many 
-    User.hasMany(Address, { foreignKey: 'userId', as: 'addresses' })
+    User.hasMany(Address, { foreignKey: 'userId', as: 'addresses'})
     Address.belongsTo(User, { foreignKey: 'userId', as: 'user' })
 
     // User x Order: One to Many 

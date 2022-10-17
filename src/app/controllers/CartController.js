@@ -5,7 +5,7 @@ class CartController {
         const user = req.session.user || req.user
         try {
             const cartDetails = await CartDetail.findAll({ where: { userId: user.id }, include: ['book'] })
-            return res.render('cart/cart', { cartDetails })
+            return res.render('guest/cart/cart', {layout: null, cartDetails })
         } catch (error) {
             next(error)
         }

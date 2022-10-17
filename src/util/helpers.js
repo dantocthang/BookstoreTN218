@@ -21,7 +21,7 @@ function helpers(app) {
     }
 
     app.locals.findErrorByParam = (errors, paramName) => {
-        return errors.find(x => x.param == paramName)
+        return errors?.find(x => x.param == paramName)
     }
 }
 
