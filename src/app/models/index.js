@@ -15,7 +15,7 @@ import Review from './review.js'
 const associationDefiner = () => {
     // Author x Book: One to Many
     Author.hasMany(Book, { foreignKey: 'authorId', as: 'books' })
-    Book.belongsTo(Author, { foreignKey: 'bookId', as: 'author' })
+    Book.belongsTo(Author, { foreignKey: 'authorId', as: 'author' })
 
     // Category x Book: One to Many 
     Category.hasMany(Book, { foreignKey: 'categoryId', as: 'books' })

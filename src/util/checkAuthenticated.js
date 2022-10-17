@@ -1,13 +1,12 @@
 export function checkAuthenticated(req, res, next) {
-    if (req.isAuthenticated()) {
+    if (req.session.user || req.user) {
         return next()
     }
-
     return res.redirect('/auth/login')
 }
 
 export function checkNotAuthenticated(req, res, next) {
-    if (!req.isAuthenticated()) {
+    if (!req.session.user && !req.user) {
         return next()
     }
 
@@ -15,7 +14,7 @@ export function checkNotAuthenticated(req, res, next) {
 }
 
 export function fetchUserInfo(req, res, next) {
-    if (req?.user?.username){
+    if (req?.user?.username) {
         res.locals.username = req.user.username;
         res.locals.image = req.user.image;
     }

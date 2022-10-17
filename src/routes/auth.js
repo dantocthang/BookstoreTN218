@@ -16,7 +16,7 @@ router.post('/login', authController.authenticate)
 router.get('/google', passport.authenticate('google', {
     scope: ['profile', 'email'],
 }))
-router.get('/auth/google/callback', passport.authenticate('google'), (req, res) => {
+router.get('/google/callback', passport.authenticate('google'), (req, res) => {
     // return res.redirect('/')
     req.flash('success','Đăng nhập thành công'); 
     res.redirect('/')
@@ -42,6 +42,6 @@ router.get('/facebook/callback',
 
 router.get('/register',checkNotAuthenticated, authController.register)
 router.post('/register',checkNotAuthenticated, ...userValidator, authController.addUser)
-router.delete('/logout', authController.logout)
+router.get('/logout', authController.logout)
 
 export default router

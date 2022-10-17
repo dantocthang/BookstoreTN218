@@ -1,4 +1,4 @@
-import {DataTypes} from 'sequelize'
+import { DataTypes } from 'sequelize'
 import sequelize from '../../config/db.js';
 
 const User = sequelize.define('User', {
@@ -10,7 +10,8 @@ const User = sequelize.define('User', {
     role: { type: DataTypes.STRING, defaultValue: 'user' },
     googleId: { type: DataTypes.STRING },
     facebookId: { type: DataTypes.STRING },
-    token: { type: DataTypes.STRING }
+    token: { type: DataTypes.STRING },
+    image: { type: DataTypes.STRING },
 }, {
     // Other model options go here
 });

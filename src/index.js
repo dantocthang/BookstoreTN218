@@ -1,7 +1,7 @@
 import express from 'express'
 import session from 'express-session' // Session, cookie chính cho dự án
 import path from 'path'
-import {fileURLToPath} from 'url'
+import { fileURLToPath } from 'url'
 
 
 import methodOverride from 'method-override' // Ghi đè phương thức POST của Form với PUT, PATCH, DELETE
@@ -76,6 +76,10 @@ helpers(app);
 
 
 // Định tuyến
+app.use(function (req, res, next) {
+  res.locals.user = req.session.user || req.user;
+  next();
+});
 route(app)
 
 app.listen(port, () => {

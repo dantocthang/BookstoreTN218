@@ -15,21 +15,26 @@ function initializePassport(passport) {
         clientSecret: googleKeys.clientSecret,
         callbackURL: googleKeys.callbackURL
     }, (request, accessToken, refreshToken, profile, done) => {
-        console.log(profile)
         // Check if google profile exist.
         if (profile.id) {
-            User.findOne({ googleId: profile.id })
+            User.findOne({ where: { googleId: profile.id } })
                 .then(async (existingUser) => {
                     if (existingUser) {
                         done(null, existingUser);
                     } else {
-                        new User({
+                        const user = await User.create({
                             googleId: profile.id,
                             email: profile.emails[0].value,
                             fullName: profile.name.familyName + ' ' + profile.name.givenName,
                         })
-                            .save()
-                            .then(user => done(null, user));
+                        done(null, user)
+                        // new User({
+                        //     googleId: profile.id,
+                        //     email: profile.emails[0].value,
+                        //     fullName: profile.name.familyName + ' ' + profile.name.givenName,
+                        // })
+                        //     .save()
+                        //     .then(user => done(null, user));
                     }
                 })
         }
@@ -45,26 +50,31 @@ function initializePassport(passport) {
         profileFields: ['id', 'displayName', 'photos']
     },
         function (accessToken, refreshToken, profile, done) {
+            console.log(profile)
             process.nextTick(function () {
-                console.log(profile)
                 if (profile.id) {
-                    User.findOne({ facebookId: profile.id })
+                    User.findOne({ where: { facebookId: profile.id } })
                         .then(async (existingUser) => {
                             if (existingUser) {
                                 done(null, existingUser);
                             } else {
-                                const hashedPassword = await bcrypt.hash(profile.id, 10)
-                                new User({
+                                const user = await User.create({
                                     facebookId: profile.id,
-                                    username: profile.displayName,
-                                    password: hashedPassword,
+                                    email: profile.emails[0].value,
+                                    fullName: profile.displayName,
                                     image: profile.photos[0].value
                                 })
-                                    .save()
-                                    .then(user => done(null, user));
+                                // new User({
+                                //     facebookId: profile.id,
+                                //     username: profile.displayName,
+                                //     password: hashedPassword,
+                                //     image: profile.photos[0].value
+                                // })
+                                //     .save()
+                                //     .then(user => done(null, user));
                             }
                         })
-                }          
+                }
             });
         }
     ));
@@ -76,17 +86,11 @@ function initializePassport(passport) {
 
     // Cach dung
     passport.serializeUser((user, done) => {
-        done(null, user._id);
+        done(null, user);
     });
 
-    passport.deserializeUser((_id, done) => {
-        User.findById(_id, (err, user) => {
-            if (err) {
-                done(null, false, { error: err });
-            } else {
-                done(null, user);
-            }
-        });
+    passport.deserializeUser((user, done) => {
+        done(null, user);
     });
 }
 

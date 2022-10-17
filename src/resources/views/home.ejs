@@ -1,5 +1,8 @@
 <div class="mt-4">
   <div class="courses__sort">
+    <% if (user) { %>
+      <a href="/auth/logout">Log out</a>
+    <% } %>
     <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
       aria-expanded="false">Thứ tự</button>
     <ul class="dropdown-menu courses__sort-dropdown">
