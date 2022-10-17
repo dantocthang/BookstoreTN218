@@ -50,11 +50,10 @@ class AuthController {
     async authenticate(req, res, next) {
         try {
             const user = await User.findOne({ where: { email: req.body.email } })
-            console.log(req.body)
             if (!user) return res.render('guest/auth/login', { errors: { email: 'User with that email does not exist' }, data: req.body })
             const isCorrectPassword = await bcrypt.compare(req.body.password, user.password)
             if (!isCorrectPassword) return res.render('auth/login', { errors: { password: 'Password is not correct' }, data: req.body })
-            if (user.email_verified == 0) return res.render("guest/auth/login", { errors: { verified: 'This account is not verified' }, data: {} });
+            if (user.email_verified < 1) return res.render("guest/auth/login", { errors: { verified: 'This account is not verified' }, data: {} });
             req.session.user = user.dataValues
             return res.redirect('/')
         } catch (error) {

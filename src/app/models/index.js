@@ -19,7 +19,7 @@ const associationDefiner = () => {
 
     // Category x Book: One to Many 
     Category.hasMany(Book, { foreignKey: 'categoryId', as: 'books' })
-    Book.belongsTo(Category, { foreignKey: 'categoryId', as: 'books' })
+    Book.belongsTo(Category, { foreignKey: 'categoryId', as: 'category' })
 
     // Book x Image: One to Many 
     Book.hasMany(Image, { foreignKey: 'bookId', as: 'images' })

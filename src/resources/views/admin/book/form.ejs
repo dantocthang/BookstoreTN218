@@ -1,0 +1,84 @@
+
+
+<div class="app-content content ">
+    <div class="content-overlay"></div>
+    <div class="header-navbar-shadow"></div>
+    <div class="content-wrapper container-xxl p-0">
+        <div class="content-header row">
+        </div>
+        <div class="content-body">
+            <h1><%= values.id ? 'Update Book' : 'Add new book' %></h1>
+            <form action=<%= values.id ? `/admin/book/${values.id}?_method=PUT` : '/admin/book/create' %> method="POST">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" name="name" class="form-control" id="name" value="<%=values?.name %>" placeholder="Enter name...">
+                    <div class="error">
+                        <%= findErrorByParam(errors, 'name' )?.msg %>
+                    </div>
+                </div>
+                <div class="form-group mt-2">
+                    <label for="description">Description</label>
+                    <input type="text" name="description" value="<%=values?.description %>" class="form-control" id="description"
+                        placeholder="Enter description...">
+                    <div class="error">
+                        <%= findErrorByParam(errors, 'description' )?.msg %>
+                    </div>
+                </div>
+                <div class="form-group mt-2">
+                    <label for="categoryId">Category</label>
+                    <select name="categoryId" id="categoryId" class="form-control">
+                        <option value="0">---Choose category---</option>
+                        <% categories.forEach(category=>{ %>
+                            <option <%= values?.categoryId==category.id && 'selected="selected"' %> value="<%= category.id %> ">
+                                <%= category.name %>
+                            </option>
+                            <% }) %>
+                    </select>
+                    <div class="error">
+                        <%= findErrorByParam(errors, 'categoryId' )?.msg %>
+                    </div>
+                </div>
+                <div class="form-group mt-2">
+                    <label for="authorId">Author</label>
+                    <select name="authorId" id="authorId" class="form-control">
+                        <option value="0">---Choose author---</option>
+                        <% authors.forEach(author=>{ %>
+                            <option <%= values?.authorId==author.id && 'selected="selected"' %>  value="<%= author.id %> ">
+                                <%= author.name %>
+                            </option>
+                            <% }) %>
+                    </select>
+                    <div class="error">
+                        <%= findErrorByParam(errors, 'authorId' )?.msg %>
+                    </div>
+                </div>
+                <div class="form-group mt-2">
+                    <label for="price">Price</label>
+                    <input type="number" min="0" name="price" value="<%=values?.price %>" class="form-control" id="price"
+                        placeholder="Enter price...">
+                    <div class="error">
+                        <%= findErrorByParam(errors, 'price' )?.msg %>
+                    </div>
+                </div>
+                <div class="form-group mt-2">
+                    <label for="stock">Stock</label>
+                    <input type="number" min="1" name="stock" value="<%=values?.stock %>" class="form-control" id="stock"
+                        placeholder="Enter stock...">
+                    <div class="error">
+                        <%= findErrorByParam(errors, 'stock' )?.msg %>
+                    </div>
+                </div>
+                <div class="form-group mt-2">
+                    <label for="year">Publish year</label>
+                    <input type="number" min="0" name="year" value="<%=values?.year %>" class="form-control" id="year"
+                        placeholder="Enter publish year...">
+                    <div class="error">
+                        <%= findErrorByParam(errors, 'year' )?.msg %>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary mt-1"><%= values.id ? 'Update' : 'Create' %></button>
+            </form>
+        </div>
+    </div>
+</div>

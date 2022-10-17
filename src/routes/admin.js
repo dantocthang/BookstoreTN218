@@ -4,6 +4,9 @@ import adminController from '../app/controllers/AdminController.js';
 import authorController from '../app/controllers/AuthorController.js';
 import categoryController from '../app/controllers/CategoryController.js';
 import publisherController from '../app/controllers/PublisherController.js';
+import BookController from '../app/controllers/BookController.js';
+
+import { bookValidator } from '../util/dataValidator.js';
 
 const router = express.Router();
 
@@ -43,5 +46,12 @@ router.put('/publishers/:id/edit', publisherController.editPut);
 
 router.delete('/publishers/:id/delete', publisherController.delete);
 
+// Book
+router.get('/book', BookController.adminBooks)
+router.get('/book/create', BookController.createBookForm)
+router.post('/book/create', ...bookValidator, BookController.createBook)
+router.get('/book/:bookId', BookController.updateBookForm)
+router.put('/book/:bookId', ...bookValidator, BookController.updateBook)
+router.delete('/book/:bookId', BookController.deleteBook)
 
 export default router;

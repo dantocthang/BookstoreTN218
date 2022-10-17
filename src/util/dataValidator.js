@@ -1,11 +1,6 @@
 import { check, body } from 'express-validator'
 import User from '../app/models/user.js'
 
-export const courseValidator = [
-    body('name').matches(/^[a-z0-9A-Z ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễếệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]{1,100}$/).withMessage('Tên khóa học không chứa ký tự đặc biệt và dài 1 - 100 ký tự'),
-    body('description').escape()
-]
-
 export const userValidator = [
     body('email').isEmail().withMessage('Email không hợp lệ').custom(async (value) => {
         const user = await User.findOne({ where: { email: value } })
@@ -20,4 +15,18 @@ export const userValidator = [
         }
         return true
     }).withMessage('Mật khẩu xác nhận không khớp')
+]
+
+export const bookValidator = [
+    body('name').isLength({ min: 5, max: 100 }).withMessage('Book name length must be between 5 - 100 characters'),
+    body('authorId').customSanitizer(value => {
+        return parseInt(value);
+    }).isInt({ min: 1 }).withMessage('Invalid author'),
+    body('categoryId').customSanitizer(value => {
+        return parseInt(value);
+    }).isInt({ min: 1 }).withMessage('Invalid category'),
+    body('price').isInt({ min: 1 }).withMessage('Price must greater than 0'),
+    body('stock').isInt({ min: 1 }).withMessage('Invalid stock value'),
+    body('description').not().isEmpty().withMessage('Please provide book description'),
+    body('year').isInt({ min: 1000, max: new Date().getFullYear }).withMessage('Invalid year')
 ]
