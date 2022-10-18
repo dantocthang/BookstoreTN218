@@ -1,6 +1,7 @@
 import { Op } from 'sequelize';
 
 import Publisher from '../models/publisher.js';
+import Book from '../models/book.js';
 
 class PublisherController {
 
@@ -83,20 +84,37 @@ class PublisherController {
 
     // [DELETE] /admin/publishers/:id/delete
     async delete(req, res, next) {
+        var book;
         try {
-            const publisher = await Publisher.destroy({
+            book = await Book.findOne({
                 where: {
-                    id: {
+                    publisherId: {
                         [Op.eq]: req.params.id,
                     },
                 },
             });
 
-            res.redirect('/admin/publishers');
-            
         } catch(error) {
             next(error);
         }
+
+        if (!book) {
+            try {
+                const publisher = await Publisher.destroy({
+                    where: {
+                        id: {
+                            [Op.eq]: req.params.id,
+                        },
+                    },
+                });
+            } catch(error) {
+                next(error);
+            }
+        } else {
+            console.log('da co sach');
+        }
+
+        res.redirect('/admin/publishers');
     }
 }
 

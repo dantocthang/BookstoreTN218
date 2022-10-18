@@ -2,6 +2,7 @@
 import { Op } from 'sequelize';
 
 import Category from '../models/category.js';
+import Book from '../models/book.js';
 
 class CategoryController {
 
@@ -84,20 +85,37 @@ class CategoryController {
 
     // [DELETE] /admin/categories/:id/delete
     async delete(req, res, next) {
+        var book;
         try {
-            const category = await Category.destroy({
+            book = await Book.findOne({
                 where: {
-                    id: {
+                    categoryId: {
                         [Op.eq]: req.params.id,
                     },
                 },
             });
 
-            res.redirect('/admin/categories');
-            
         } catch(error) {
             next(error);
         }
+
+        if (!book) {
+            try {
+                const category = await Category.destroy({
+                    where: {
+                        id: {
+                            [Op.eq]: req.params.id,
+                        },
+                    },
+                });
+            } catch(error) {
+                next(error);
+            }
+        } else {
+            console.log('da co sach');
+        }
+
+        res.redirect('/admin/categories');
     }
 }
 

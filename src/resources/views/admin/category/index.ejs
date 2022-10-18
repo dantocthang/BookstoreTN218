@@ -33,11 +33,11 @@
                         </tr>
                     <% } %>
 
-                    <% categories.forEach((category) => { %>
+                    <% categories.forEach((category, index) => { %>
                         <% if (category.id % 2 === 0) { %>
                         <tr class="even">
                             <td class=" control" tabindex="0" style="display: none;"></td>
-                            <td class="sorting_1"><%= category.id%></td>
+                            <td class="sorting_1"><%= index + 1 %></td>
     
                             <td>
                                 <h6 class="user-name text-truncate mb-0"><%= category.name %>
@@ -79,7 +79,7 @@
                         <% } else { %>
                             <tr class="odd">
                                 <td class=" control" tabindex="0" style="display: none;"></td>
-                                <td class="sorting_1"><%= category.id%></td>
+                                <td class="sorting_1"><%= index + 1 %></td>
         
                                 <td>
                                     <h6 class="user-name text-truncate mb-0"><%= category.name %>

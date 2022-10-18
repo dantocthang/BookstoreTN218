@@ -33,11 +33,11 @@
                         </tr>
                     <% } %>
 
-                    <% publishers.forEach((publisher) => { %>
+                    <% publishers.forEach((publisher, index) => { %>
                         <% if (publisher.id % 2 === 0) { %>
                         <tr class="even">
                             <td class=" control" tabindex="0" style="display: none;"></td>
-                            <td class="sorting_1"><%= publisher.id%></td>
+                            <td class="sorting_1"><%= index + 1 %></td>
     
                             <td>
                                 <h6 class="user-name text-truncate mb-0"><%= publisher.name %>
@@ -79,7 +79,7 @@
                         <% } else { %>
                             <tr class="odd">
                                 <td class=" control" tabindex="0" style="display: none;"></td>
-                                <td class="sorting_1"><%= publisher.id%></td>
+                                <td class="sorting_1"><%= index + 1 %></td>
         
                                 <td>
                                     <h6 class="user-name text-truncate mb-0"><%= publisher.name %>

@@ -2,6 +2,7 @@
 import { Op } from 'sequelize';
 
 import Author from '../models/author.js';
+import Book from '../models/book.js';
 
 class AuthorController {
 
@@ -59,6 +60,7 @@ class AuthorController {
             next(error);
         }
     }
+
     // [PUT] /admin/authors/:id/edit
     async editPut(req, res, next) {
         try {
@@ -82,20 +84,37 @@ class AuthorController {
 
     // [DELETE] /admin/authors/:id/delete
     async delete(req, res, next) {
+        var book;
         try {
-            const author = await Author.destroy({
+            book = await Book.findOne({
                 where: {
-                    id: {
+                    authorId: {
                         [Op.eq]: req.params.id,
                     },
                 },
             });
 
-            res.redirect('/admin/authors');
-            
         } catch(error) {
             next(error);
         }
+
+        if (!book) {
+            try {
+                const author = await Author.destroy({
+                    where: {
+                        id: {
+                            [Op.eq]: req.params.id,
+                        },
+                    },
+                });
+            } catch(error) {
+                next(error);
+            }
+        } else {
+            console.log('da co sach');
+        }
+
+        res.redirect('/admin/authors');
     }
 
 }
