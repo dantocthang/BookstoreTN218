@@ -1,4 +1,7 @@
 import { validationResult } from 'express-validator';
+import fs from 'fs'
+import { promisify } from 'util'
+const unlinkAsync = promisify(fs.unlink)
 
 import Book from '../models/book.js';
 import Category from '../models/category.js';
@@ -38,8 +41,6 @@ class BookController {
         const categories = await Category.findAll()
         const authors = await Author.findAll()
         const errors = validationResult(req)
-        // console.log(errors)
-        console.log(req.files)
         if (!errors.isEmpty()) return res.render('admin/book/form', { layout: 'admin/layouts/main', errors: errors.array(), categories, authors, values: req.body });
         try {
             const book = await Book.create(req.body)
@@ -58,7 +59,7 @@ class BookController {
     // [PUT] /admin/book/:bookId
     async updateBookForm(req, res, next) {
         try {
-            const book = await Book.findByPk(req.params.bookId)
+            const book = await Book.findByPk(req.params.bookId, { include: ['images'] })
             if (!book) return res.status(404).render('404', { layout: '404' })
             const categories = await Category.findAll()
             const authors = await Author.findAll()
@@ -70,12 +71,18 @@ class BookController {
 
     // [PUT] /admin/book/:bookId 
     async updateBook(req, res, next) {
+        console.log(req.body)
         const categories = await Category.findAll()
         const authors = await Author.findAll()
         const errors = validationResult(req)
         if (!errors.isEmpty()) return res.render('admin/book/form', { layout: 'admin/layouts/main', errors: errors.array(), categories, authors, values: req.body });
         try {
             await Book.update(req.body, { where: { id: req.params.bookId } })
+            for (const image of req.files) {
+                // const tail = image.originalname.split('.')[1]
+                const fileName = image.filename
+                await Image.create({ path: `files/${fileName}`, bookId: req.params.bookId })
+            }
             return res.redirect('/admin/book')
         } catch (error) {
             next(error)
@@ -87,6 +94,19 @@ class BookController {
         try {
             await Book.destroy({ where: { id: req.params.bookId } })
             return res.redirect('/admin/book')
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    // [DELETE] /admin/book/:bookId/image/:imageId
+    async deleteImage(req, res, next) {
+        try {
+            const image = await Image.findByPk(req.params.imageId)
+            await Image.destroy({ where: { id: req.params.imageId } })
+            await unlinkAsync(`src/public/${image.path}`)
+            return res.json({ success: true, message: 'Deleted' })
+            // return res.redirect(`/admin/book/${req.params.bookId}`)
         } catch (error) {
             next(error)
         }

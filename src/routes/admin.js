@@ -53,9 +53,9 @@ router.delete('/publishers/:id/delete', publisherController.delete);
 router.get('/book', BookController.adminBooks)
 router.get('/book/create', BookController.createBookForm)
 router.post('/book/create', upload.array('images[]', 10), ...bookValidator, BookController.createBook)
-// router.post('/book/create', BookController.createBook)
 router.get('/book/:bookId', BookController.updateBookForm)
-router.put('/book/:bookId', ...bookValidator, BookController.updateBook)
+router.put('/book/:bookId', upload.array('images[]', 10), ...bookValidator, BookController.updateBook)
 router.delete('/book/:bookId', BookController.deleteBook)
+router.delete('/book/:bookId/image/:imageId', BookController.deleteImage)
 
 export default router;
