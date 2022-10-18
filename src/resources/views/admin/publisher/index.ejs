@@ -27,11 +27,17 @@
                 </thead>
 
                 <tbody>
-                    <% publishers.forEach((publisher) => { %>
+                    <% if (publishers.length === 0) { %>
+                        <tr>
+                            <td colspan="3"><h3 class="text-center">Không có nhà xuất bản</h3></td>
+                        </tr>
+                    <% } %>
+
+                    <% publishers.forEach((publisher, index) => { %>
                         <% if (publisher.id % 2 === 0) { %>
                         <tr class="even">
                             <td class=" control" tabindex="0" style="display: none;"></td>
-                            <td class="sorting_1"><%= publisher.id%></td>
+                            <td class="sorting_1"><%= index + 1 %></td>
     
                             <td>
                                 <h6 class="user-name text-truncate mb-0"><%= publisher.name %>
@@ -73,7 +79,7 @@
                         <% } else { %>
                             <tr class="odd">
                                 <td class=" control" tabindex="0" style="display: none;"></td>
-                                <td class="sorting_1"><%= publisher.id%></td>
+                                <td class="sorting_1"><%= index + 1 %></td>
         
                                 <td>
                                     <h6 class="user-name text-truncate mb-0"><%= publisher.name %>
@@ -145,6 +151,14 @@
   </div>
 
 <form name="delete-form" method="POST"></form>
+
+<!-- toast message -->
+<script>
+    <% if (message) { %>
+        toastr['<%= Object.keys(message)[0] %>']('<%= message[Object.keys(message)[0]] %>', 'Thông báo');
+        toastr.clear(4000);
+    <% } %>
+</script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {

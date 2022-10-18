@@ -29,11 +29,16 @@
                 </thead>
 
                 <tbody>
-                    <% authors.forEach((author) => { %>
+                    <% if (authors.length === 0) { %>
+                        <tr>
+                            <td colspan="4"><h3 class="text-center">Không có tác giả</h3></td>
+                        </tr>
+                    <% } %>
+                    <% authors.forEach((author, index) => { %>
                         <% if (author.id % 2 === 0) { %>
                         <tr class="even">
                             <td class=" control" tabindex="0" style="display: none;"></td>
-                            <td class="sorting_1"><%= author.id%></td>
+                            <td class="sorting_1"><%= index + 1 %></td>
     
                             <td>
                                 <h6 class="user-name text-truncate mb-0"><%= author.name %>
@@ -76,7 +81,7 @@
                         <% } else { %>
                             <tr class="odd">
                                 <td class=" control" tabindex="0" style="display: none;"></td>
-                                <td class="sorting_1"><%= author.id%></td>
+                                <td class="sorting_1"><%= index + 1 %></td>
         
                                 <td>
                                     <h6 class="user-name text-truncate mb-0"><%= author.name %>
@@ -151,6 +156,14 @@
 
 <form name="delete-form" method="POST"></form>
 
+<!-- toast message -->
+<script>
+    <% if (message) { %>
+        toastr['<%= Object.keys(message)[0] %>']('<%= message[Object.keys(message)[0]] %>', 'Thông báo');
+        toastr.clear(4000);
+    <% } %>
+</script>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var authorId;
@@ -168,7 +181,9 @@
             deleteForm.action = '/admin/authors/' + authorId + '/delete?_method=DELETE';
             deleteForm.submit();
         }
+        
     });
+    
 </script>
 
 
