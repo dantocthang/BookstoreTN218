@@ -13,7 +13,7 @@ const __dirname = dirname(__filename);
 
 async function uploadFile(req, res, next) {
 
-    const uploadFolder = path.join(__dirname, "..", "public", "files", req.user.username);
+    const uploadFolder = path.join(__dirname, "..", "public", "files", "books");
     if (!fs.existsSync(uploadFolder)) {
         fs.mkdirSync(uploadFolder, { recursive: true });
     }

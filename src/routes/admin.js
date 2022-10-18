@@ -1,4 +1,7 @@
 import express from 'express';
+import multer from 'multer'
+const upload = multer({ dest: 'src/public/files' })
+
 
 import adminController from '../app/controllers/AdminController.js';
 import authorController from '../app/controllers/AuthorController.js';
@@ -49,7 +52,8 @@ router.delete('/publishers/:id/delete', publisherController.delete);
 // Book
 router.get('/book', BookController.adminBooks)
 router.get('/book/create', BookController.createBookForm)
-router.post('/book/create', ...bookValidator, BookController.createBook)
+router.post('/book/create', upload.array('images[]', 10), ...bookValidator, BookController.createBook)
+// router.post('/book/create', BookController.createBook)
 router.get('/book/:bookId', BookController.updateBookForm)
 router.put('/book/:bookId', ...bookValidator, BookController.updateBook)
 router.delete('/book/:bookId', BookController.deleteBook)

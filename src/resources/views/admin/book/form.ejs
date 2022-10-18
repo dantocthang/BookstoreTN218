@@ -1,5 +1,3 @@
-
-
 <div class="app-content content ">
     <div class="content-overlay"></div>
     <div class="header-navbar-shadow"></div>
@@ -7,19 +5,23 @@
         <div class="content-header row">
         </div>
         <div class="content-body">
-            <h1><%= values.id ? 'Update Book' : 'Add new book' %></h1>
-            <form action=<%= values.id ? `/admin/book/${values.id}?_method=PUT` : '/admin/book/create' %> method="POST">
+            <h1>
+                <%= values.id ? 'Update Book' : 'Add new book' %>
+            </h1>
+            <form action=<%=values.id ? `/admin/book/${values.id}?_method=PUT` : '/admin/book/create' %> method="POST"
+                enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="name">Name</label>
-                    <input type="text" name="name" class="form-control" id="name" value="<%=values?.name %>" placeholder="Enter name...">
+                    <input type="text" name="name" class="form-control" id="name" value="<%=values?.name %>"
+                        placeholder="Enter name...">
                     <div class="error">
                         <%= findErrorByParam(errors, 'name' )?.msg %>
                     </div>
                 </div>
                 <div class="form-group mt-2">
                     <label for="description">Description</label>
-                    <input type="text" name="description" value="<%=values?.description %>" class="form-control" id="description"
-                        placeholder="Enter description...">
+                    <input type="text" name="description" value="<%=values?.description %>" class="form-control"
+                        id="description" placeholder="Enter description...">
                     <div class="error">
                         <%= findErrorByParam(errors, 'description' )?.msg %>
                     </div>
@@ -29,8 +31,9 @@
                     <select name="categoryId" id="categoryId" class="form-control">
                         <option value="0">---Choose category---</option>
                         <% categories.forEach(category=>{ %>
-                            <option <%= values?.categoryId==category.id && 'selected="selected"' %> value="<%= category.id %> ">
-                                <%= category.name %>
+                            <option <%=values?.categoryId==category.id && 'selected="selected"' %> value="<%=
+                                    category.id %> ">
+                                    <%= category.name %>
                             </option>
                             <% }) %>
                     </select>
@@ -43,8 +46,9 @@
                     <select name="authorId" id="authorId" class="form-control">
                         <option value="0">---Choose author---</option>
                         <% authors.forEach(author=>{ %>
-                            <option <%= values?.authorId==author.id && 'selected="selected"' %>  value="<%= author.id %> ">
-                                <%= author.name %>
+                            <option <%=values?.authorId==author.id && 'selected="selected"' %> value="<%= author.id %>
+                                    ">
+                                    <%= author.name %>
                             </option>
                             <% }) %>
                     </select>
@@ -54,16 +58,16 @@
                 </div>
                 <div class="form-group mt-2">
                     <label for="price">Price</label>
-                    <input type="number" min="0" name="price" value="<%=values?.price %>" class="form-control" id="price"
-                        placeholder="Enter price...">
+                    <input type="number" min="0" name="price" value="<%=values?.price %>" class="form-control"
+                        id="price" placeholder="Enter price...">
                     <div class="error">
                         <%= findErrorByParam(errors, 'price' )?.msg %>
                     </div>
                 </div>
                 <div class="form-group mt-2">
                     <label for="stock">Stock</label>
-                    <input type="number" min="1" name="stock" value="<%=values?.stock %>" class="form-control" id="stock"
-                        placeholder="Enter stock...">
+                    <input type="number" min="1" name="stock" value="<%=values?.stock %>" class="form-control"
+                        id="stock" placeholder="Enter stock...">
                     <div class="error">
                         <%= findErrorByParam(errors, 'stock' )?.msg %>
                     </div>
@@ -76,9 +80,47 @@
                         <%= findErrorByParam(errors, 'year' )?.msg %>
                     </div>
                 </div>
+                <div id="image-section" class="form-group mt-2">
+                    <label for="images">Images</label>
+                    <input type="file" name="images[]" class="form-control" id="images" />
+                    <div class="error">
+                        <%= findErrorByParam(errors, 'images' )?.msg %>
+                    </div>
 
-                <button type="submit" class="btn btn-primary mt-1"><%= values.id ? 'Update' : 'Create' %></button>
+                </div>
+                <div>
+                    <button id="add-image" type="button" class="btn btn-secondary mt-1">Add image</button>
+                </div>
+
+                <button type="submit" class="btn btn-primary mt-1">
+                    <%= values.id ? 'Update' : 'Create' %>
+                </button>
             </form>
         </div>
     </div>
 </div>
+
+<script>
+    const addBtn = document.querySelector('#add-image')
+    const imageSection = document.querySelector('#image-section')
+    addBtn.addEventListener('click', () => {
+        const div = document.createElement('div')
+        div.className = 'flex'
+        const input = document.createElement('input')
+        input.setAttribute('type', 'file')
+        input.setAttribute('name', 'images[]')
+        input.className = 'form-control mt-2'
+
+        const close = document.createElement('button')
+        close.className = 'btn btn-default'
+        close.setAttribute('type', 'button')
+        close.textContent = 'Remove'
+        close.onclick = () => {
+            input.value = null
+            imageSection.removeChild(div)
+        }
+        div.appendChild(input)
+        div.appendChild(close)
+        imageSection.appendChild(div)
+    })
+</script>

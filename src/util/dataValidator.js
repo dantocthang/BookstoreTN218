@@ -28,5 +28,6 @@ export const bookValidator = [
     body('price').isInt({ min: 1 }).withMessage('Price must greater than 0'),
     body('stock').isInt({ min: 1 }).withMessage('Invalid stock value'),
     body('description').not().isEmpty().withMessage('Please provide book description'),
-    body('year').isInt({ min: 1000, max: new Date().getFullYear }).withMessage('Invalid year')
+    body('year').isInt({ min: 1000, max: new Date().getFullYear }).withMessage('Invalid year'),
+    // body('images').notEmpty().withMessage('Upload at least one image'),
 ]

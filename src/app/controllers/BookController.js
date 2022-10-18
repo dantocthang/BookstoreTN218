@@ -1,7 +1,9 @@
 import { validationResult } from 'express-validator';
+
 import Book from '../models/book.js';
 import Category from '../models/category.js';
 import Author from '../models/author.js';
+import Image from '../models/image.js'
 
 class BookController {
     async getBooksList(req, res, next) {
@@ -20,7 +22,8 @@ class BookController {
     // [GET] /admin/book
     async adminBooks(req, res, next) {
         const books = await Book.findAll({ include: ['author', 'category', 'images'] })
-        return res.render('admin/book', { layout: 'admin/layouts/main', books });
+        const images = await Image.findOne()
+        return res.render('admin/book', { layout: 'admin/layouts/main', books, images });
     }
 
     // [GET /admin/book/create
@@ -35,9 +38,17 @@ class BookController {
         const categories = await Category.findAll()
         const authors = await Author.findAll()
         const errors = validationResult(req)
+        // console.log(errors)
+        console.log(req.files)
         if (!errors.isEmpty()) return res.render('admin/book/form', { layout: 'admin/layouts/main', errors: errors.array(), categories, authors, values: req.body });
         try {
-            await Book.create(req.body)
+            const book = await Book.create(req.body)
+
+            for (const image of req.files) {
+                const tail = image.originalname.split('.')[1]
+                const fileName = image.filename
+                await Image.create({ path: `files/${fileName}`, bookId: book.id })
+            }
             return res.redirect('/admin/book')
         } catch (error) {
             next(error)
