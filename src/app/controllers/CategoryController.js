@@ -15,7 +15,8 @@ class CategoryController {
     
             res.render('admin/category', {
                 layout: 'admin/layouts/main',
-                categories
+                categories,
+                message: req.flash(),
             });
         } catch(error) {
             next(error);
@@ -35,6 +36,7 @@ class CategoryController {
                 name: req.body.name,
             });
 
+            req.flash('success', 'Đăng ký thành công!');
             res.redirect('/admin/categories');
             
         } catch(error) {
@@ -76,6 +78,7 @@ class CategoryController {
                 }
             );
 
+            req.flash('success', 'Chỉnh sửa thành công!');
             res.redirect('/admin/categories');
             
         } catch(error) {
@@ -108,11 +111,13 @@ class CategoryController {
                         },
                     },
                 });
+
+                req.flash('success', 'Xóa thành công!');
             } catch(error) {
                 next(error);
             }
         } else {
-            console.log('da co sach');
+            req.flash('error', 'Không thể xóa! Đã có sách thuộc danh mục này!');
         }
 
         res.redirect('/admin/categories');

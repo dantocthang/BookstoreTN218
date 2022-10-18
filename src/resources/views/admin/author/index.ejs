@@ -156,6 +156,14 @@
 
 <form name="delete-form" method="POST"></form>
 
+<!-- toast message -->
+<script>
+    <% if (message) { %>
+        toastr['<%= Object.keys(message)[0] %>']('<%= message[Object.keys(message)[0]] %>', 'Thông báo');
+        toastr.clear(4000);
+    <% } %>
+</script>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var authorId;
@@ -173,7 +181,9 @@
             deleteForm.action = '/admin/authors/' + authorId + '/delete?_method=DELETE';
             deleteForm.submit();
         }
+        
     });
+    
 </script>
 
 

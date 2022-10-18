@@ -14,7 +14,8 @@ class PublisherController {
     
             res.render('admin/publisher', {
                 layout: 'admin/layouts/main',
-                publishers
+                publishers,
+                message: req.flash(),
             });
         } catch(error) {
             next(error);
@@ -34,6 +35,7 @@ class PublisherController {
                 name: req.body.name,
             });
 
+            req.flash('success', 'Đăng ký thành công!');
             res.redirect('/admin/publishers');
             
         } catch(error) {
@@ -75,6 +77,7 @@ class PublisherController {
                 }
             );
 
+            req.flash('success', 'Chỉnh sửa thành công!');
             res.redirect('/admin/publishers');
             
         } catch(error) {
@@ -107,11 +110,13 @@ class PublisherController {
                         },
                     },
                 });
+
+                req.flash('success', 'Xóa thành công!');
             } catch(error) {
                 next(error);
             }
         } else {
-            console.log('da co sach');
+            req.flash('error', 'Không thể xóa! Đã có sách thuộc nhà xuất bản này!');
         }
 
         res.redirect('/admin/publishers');

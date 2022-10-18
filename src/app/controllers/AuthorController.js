@@ -8,15 +8,19 @@ class AuthorController {
 
     // [GET] /admin/authors
     async index(req, res, next) {
-        // Find all users
-        const authors = await Author.findAll({
-            attributes: ['id', 'name', 'description']
-        });
-        
-        res.render('admin/author', {
-            layout: 'admin/layouts/main',
-            authors
-        });
+        try {
+            const authors = await Author.findAll({
+                attributes: ['id', 'name', 'description']
+            });
+    
+            res.render('admin/author', {
+                layout: 'admin/layouts/main',
+                authors,
+                message: req.flash(),
+            });
+        } catch(error) {
+            next(error);
+        }
     }
 
     // [GET] /admin/authors/create
@@ -33,6 +37,7 @@ class AuthorController {
                 description: req.body.description,
             });
 
+            req.flash('success', 'Đăng ký thành công!');
             res.redirect('/admin/authors');
             
         } catch(error) {
@@ -60,7 +65,6 @@ class AuthorController {
             next(error);
         }
     }
-
     // [PUT] /admin/authors/:id/edit
     async editPut(req, res, next) {
         try {
@@ -75,6 +79,7 @@ class AuthorController {
                 }
             );
 
+            req.flash('success', 'Chỉnh sửa thành công!');
             res.redirect('/admin/authors');
             
         } catch(error) {
@@ -107,11 +112,13 @@ class AuthorController {
                         },
                     },
                 });
+
+                req.flash('success', 'Xóa thành công!');
             } catch(error) {
                 next(error);
             }
         } else {
-            console.log('da co sach');
+            req.flash('error', 'Không thể xóa! Đã có sách thuộc tác giả này!');
         }
 
         res.redirect('/admin/authors');
