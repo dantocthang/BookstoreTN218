@@ -73,15 +73,17 @@
                   <h6 class="text-secondary">Totle = $500</h6>
                 </li>
                 <li class="text-center d-flex">
-                  <a href="shop-cart.html" class="btn btn-sm btn-primary me-2 btnhover w-100">View Cart</a>
-                  <a href="shop-checkout.html" class="btn btn-sm btn-outline-primary btnhover w-100">Checkout</a>
+                  <a href="/cart" class="btn btn-sm btn-primary me-2 btnhover w-100">View Cart</a>
+                  <a href="/cart/checkout" class="btn btn-sm btn-outline-primary btnhover w-100">Checkout</a>
                 </li>
               </ul>
             </li>
             
             <li class="nav-item dropdown profile-dropdown  ms-4">
+
+              <!-- User authenticated -->
               <a class="nav-link" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="images/profile1.jpg" alt="/">
+                <img src="http://localhost:3003/images/profile1.jpg" alt="/">
                 <div class="profile-info">
                   <h6 class="title">Brian</h6>
                   <span>info@gmail.com</span>
@@ -116,6 +118,7 @@
                   <a class="btn btn-primary w-100 btnhover btn-sm" href="shop-login.html">Log Out</a>
                 </div>
               </div>
+              <!-- End User Authenticated -->
             </li>
             
 
@@ -137,14 +140,14 @@
               <option>Movies</option>
               <option>Comics</option>
               <option>Biographies</option>
-              <option>Children’s Books</option>
+              <option>Children's Books</option>
               <option>Historical</option>
               <option>Contemporary</option>
               <option>Classics</option>
               <option>Education</option>
             </select>
             <input type="text" class="form-control" aria-label="Text input with dropdown button" placeholder="Search Books Here">
-            <button class="btn" type="button"><i class="flaticon-loupe"></i></button>
+            <button class="btn" type="button"><i class="fa-solid fa-magnifying-glass"></i></button>
           </div>
         </form>
       </div>
@@ -156,12 +159,12 @@
   <div class="sticky-header main-bar-wraper navbar-expand-lg">
     <div class="main-bar clearfix">
       <div class="container clearfix">
-        <!-- Website Logo -->
+        <!-- Website Logo display in mobile mode -->
         <div class="logo-header logo-dark">
-          <a href="index.html"><img src="images/logo.png" alt="logo"></a>
+          <a href="index.html"><img src="http://localhost:3003/images/logo.png" alt="logo"></a>
         </div>
         
-        <!-- Nav Toggle Button -->
+        <!-- Nav Toggle Button display in mobile mode -->
         <button class="navbar-toggler collapsed navicon justify-content-end" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
           <span></span>
           <span></span>
@@ -178,58 +181,45 @@
         <!-- Main Nav -->
         <div class="header-nav navbar-collapse collapse justify-content-start" id="navbarNavDropdown">
           <div class="logo-header logo-dark">
-            <a href="index.html"><img src="images/logo.png" alt=""></a>
+            <a href="/"><img src="images/logo.png" alt=""></a>
           </div>
           <form class="search-input">
             <div class="input-group">
               <input type="text" class="form-control" aria-label="Text input with dropdown button" placeholder="Search Books Here">
-              <button class="btn" type="button"><i class="flaticon-loupe"></i></button>
+              <button class="btn" type="button"><i class="fa-solid fa-magnifying-glass"></i></button>
             </div>
           </form>
           <ul class="nav navbar-nav">
-            <li class="sub-menu-down"><a href="javascript:void(0);"><span>Home</span></a>
+            <li>
+              <a href="/"><span>Home</span></a>
+            </li>
+            <li>
+              <a href="#"><span>About Us</span></a>
+            </li>
+
+            <!-- Menu for authenticated user -->
+            <li>
+              <a href="/user/profile"><span>My profile</span></a>
+            </li>
+
+            <!-- Menu for unauthenticated user-->
+            <li class="sub-menu-down"><a href="javascript:void(0);"><span>Account</span></a>
               <ul class="sub-menu">
-                <li><a href="index.html">Home 1</a></li>
-                <li><a href="index-2.html">Home 2</a></li>
+                <li><a href="/auth/login">Log in</a></li>
+                <li><a href="/auth/register">Register account</a></li>
               </ul>
             </li>
-            <li><a href="about-us.html"><span>About Us</span></a></li>
-            <li class="sub-menu-down"><a href="javascript:void(0);"><span>Pages</span></a>
-              <ul class="sub-menu">
-                <li><a href="my-profile.html">My Profile</a></li>
-                <li><a href="services.html">Services</a></li>
-                <li><a href="faq.html">FAQ's</a></li>
-                <li><a href="help-desk.html">Help Desk</a></li>
-                <li><a href="coming-soon.html">Coming Soon</a></li>
-                <li><a href="pricing.html">Pricing</a></li>
-                <li><a href="privacy-policy.html">Privacy Policy</a></li>
-                <li><a href="under-construction.html">Under Construction</a></li>
-                <li><a href="error-404.html">Error 404</a></li>
-              </ul>
-            </li>
+
             <li class="sub-menu-down"><a href="javascript:void(0);"><span>Shop</span></a>
               <ul class="sub-menu">
-                <li><a href="books-grid-view.html">Shop Grid</a></li>
-                <li><a href="books-grid-view-sidebar.html">Shop Grid Sidebar</a></li>
-                <li><a href="books-list.html">Shop List</a></li>
-                <li><a href="books-list-view-sidebar.html">Shop List Sidebar</a></li>
-                <li><a href="books-detail.html">Shop Detail</a></li>
-                <li><a href="shop-cart.html">Cart</a></li>
-                <li><a href="shop-checkout.html">Checkout</a></li>
-                <li><a href="wishlist.html">Wishlist</a></li>
-                <li><a href="shop-login.html">Login</a></li>
-                <li><a href="shop-registration.html">Registration</a></li>
+                <li><a href="#">Book list</a></li>
+                <li><a href="/cart">Cart</a></li>
+                <li><a href="/cart/checkout">Checkout</a></li>
+                <li><a href="#">Wishlist</a></li>
               </ul>
             </li>
-            <li class="sub-menu-down"><a href="javascript:void(0);"><span>Blog</span></a>
-              <ul class="sub-menu">
-                <li><a href="blog-grid.html">Blog Grid</a></li>
-                <li><a href="blog-large-sidebar.html">Blog Large Sidebar</a></li>
-                <li><a href="blog-list-sidebar.html">Blog List Sidebar</a></li>
-                <li><a href="blog-detail.html">Blog Details</a></li>
-              </ul>
-            </li>
-            <li><a href="contact-us.html"><span>Contact Us</span></a></li>
+            
+            <li><a href="#"><span>Contact Us</span></a></li>
           </ul>
           <div class="dz-social-icon">
             <ul>
