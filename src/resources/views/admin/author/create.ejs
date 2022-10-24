@@ -9,14 +9,23 @@
             <form action="/admin/authors/create" method="POST" id="create-form">
                 <div class="form-group">
                     <label for="name">Name</label>
-                    <input type="text" name="name" rules="required|max:255" class="form-control" id="name" placeholder="Enter name...">
-                    <span class="form-message"></span>
+                    <input type="text" name="name" rules="required|max:255" class="form-control" id="name" placeholder="Enter name..." value="<%= data.length > 0 ? data[name] : '' %>">
+
+                        <% errors.forEach(error => { %>
+                            <span class="form-message"><%= error.param === 'name' ? error.msg : '' %></span>
+                            <br/>
+                        <% }) %>
+                
                 </div>
                 <div class="form-group mt-1">
                     <label for="description">Description</label>
                     <br />
-                    <textarea name="description" rules="max:255" class="form-control" id="description" rows="5" placeholder="Enter description..."></textarea>
-                    <span class="form-message"></span>
+                    <textarea name="description" rules="max:255" class="form-control" id="description" rows="5" placeholder="Enter description..." value="<%= data.length > 0 ? data[description] : '' %>"></textarea>
+                    
+                    <% errors.forEach(error => { %>
+                        <span class="form-message"><%= error.param === 'description' ? error.msg : '' %></span>
+                        <br/>
+                    <% }) %>
                 </div>
                 <button type="submit" class="btn btn-primary mt-1">Create</button>
                 <a href="/admin/authors" class="btn btn-outline-primary mt-1">Cancel</a>
@@ -29,5 +38,6 @@
 <script>
 
     const form = new Validator('#create-form');
+
 
 </script>

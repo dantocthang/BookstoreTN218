@@ -1,5 +1,6 @@
 
 import { Op } from 'sequelize';
+import { validationResult } from 'express-validator';
 
 import Author from '../models/author.js';
 import Book from '../models/book.js';
@@ -27,10 +28,19 @@ class AuthorController {
     createGet(req, res, next) {
         res.render('admin/author/create', {
             layout: 'admin/layouts/main',
+            data: [],
+            errors: [],
         });
     }
     // [POST] /admin/authors/create
     async createPost(req, res, next) {
+        const errors = validationResult(req);
+        if (!errors.isEmpty())
+        return res.render("admin/author/create", {
+            layout: 'admin/layouts/main',
+            data: req.body,
+            errors: errors.array(),
+        });
         try {
             const author = await Author.create({
                 name: req.body.name,

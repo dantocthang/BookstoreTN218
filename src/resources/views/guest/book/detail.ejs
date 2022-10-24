@@ -188,7 +188,8 @@
           <div class="widget">
             <h4 class="widget-title">Related Books</h4>
             <div class="row">
-                <% for(let i=0; i < 3; i++) { %>
+                <% const NUMBER_OF_BOOK_RELATE = bookList.length >= 3 ? 3 : bookList.length; %>
+                <% for(let i=0; i < NUMBER_OF_BOOK_RELATE; i++) { %>
                     <div class="col-xl-12 col-lg-6">
                         <div class="dz-shop-card style-5">
                         <div class="dz-media">

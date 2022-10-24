@@ -34,3 +34,7 @@ export const bookValidator = [
     body('year').isInt({ min: 1000, max: new Date().getFullYear }).withMessage('Invalid year'),
     // body('images').notEmpty().withMessage('Upload at least one image'),
 ]
+
+export const authorValidator = [
+    body('name').isLength({ min: 1, max: 100 }).withMessage('Book name length must be between 5 - 100 characters'),
+]

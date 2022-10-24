@@ -10,6 +10,7 @@ import publisherController from '../app/controllers/PublisherController.js';
 import BookController from '../app/controllers/BookController.js';
 
 import { bookValidator } from '../util/dataValidator.js';
+import { authorValidator } from '../util/dataValidator.js';
 
 const router = express.Router();
 
@@ -20,10 +21,10 @@ router.get('[/]', adminController.index);
 router.get('/authors', authorController.index);
 
 router.get('/authors/create', authorController.createGet);
-router.post('/authors/create', authorController.createPost);
+router.post('/authors/create', ...authorValidator, authorController.createPost);
 
 router.get('/authors/:id/edit', authorController.editGet);
-router.put('/authors/:id/edit', authorController.editPut);
+router.put('/authors/:id/edit',...authorValidator, authorController.editPut);
 
 router.delete('/authors/:id/delete', authorController.delete);
 
