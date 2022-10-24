@@ -7,6 +7,7 @@ import Book from "../models/book.js";
 import Category from "../models/category.js";
 import Author from "../models/author.js";
 import Image from "../models/image.js";
+import Publisher from "../models/publisher.js";
 
 class BookController {
   async getBooksList(req, res, next) {
@@ -56,12 +57,14 @@ class BookController {
   async createBookForm(req, res, next) {
     const categories = await Category.findAll();
     const authors = await Author.findAll();
+    const publishers = await Publisher.findAll();
     return res.render("admin/book/form", {
       layout: "admin/layouts/main",
       errors: [],
       values: {},
       categories,
       authors,
+      publishers
     });
   }
 
@@ -69,6 +72,7 @@ class BookController {
   async createBook(req, res, next) {
     const categories = await Category.findAll();
     const authors = await Author.findAll();
+    const publishers = await Publisher.findAll();
     const errors = validationResult(req);
     if (!errors.isEmpty())
       return res.render("admin/book/form", {
@@ -76,6 +80,7 @@ class BookController {
         errors: errors.array(),
         categories,
         authors,
+        publishers,
         values: req.body,
       });
     try {
@@ -92,21 +97,24 @@ class BookController {
     }
   }
 
-  // [PUT] /admin/book/:bookId
+  // [GET] /admin/book/:bookId
   async updateBookForm(req, res, next) {
     try {
       const book = await Book.findByPk(req.params.bookId, {
-        include: ["images"],
+        include: ["images", "publisher"],
       });
+      console.log(book.toJSON())
       if (!book) return res.status(404).render("404", { layout: "404" });
       const categories = await Category.findAll();
       const authors = await Author.findAll();
+      const publishers = await Publisher.findAll();
       return res.render("admin/book/form", {
         layout: "admin/layouts/main",
         errors: [],
         values: book,
         categories,
         authors,
+        publishers,
       });
     } catch (error) {
       next(error);
@@ -118,6 +126,7 @@ class BookController {
     console.log(req.body);
     const categories = await Category.findAll();
     const authors = await Author.findAll();
+    const publishers = await Publisher.findAll();
     const errors = validationResult(req);
     if (!errors.isEmpty())
       return res.render("admin/book/form", {
@@ -125,6 +134,7 @@ class BookController {
         errors: errors.array(),
         categories,
         authors,
+        publishers,
         values: req.body,
       });
     try {

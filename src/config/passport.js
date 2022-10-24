@@ -60,7 +60,7 @@ function initializePassport(passport) {
                             } else {
                                 const user = await User.create({
                                     facebookId: profile.id,
-                                    email: profile.emails[0].value,
+                                    // email: profile.emails[0].value,
                                     fullName: profile.displayName,
                                     image: profile.photos[0].value
                                 })

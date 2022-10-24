@@ -25,6 +25,9 @@ export const bookValidator = [
     body('categoryId').customSanitizer(value => {
         return parseInt(value);
     }).isInt({ min: 1 }).withMessage('Invalid category'),
+    body('publisherId').customSanitizer(value => {
+        return parseInt(value);
+    }).isInt({ min: 1 }).withMessage('Invalid publisher'),
     body('price').isInt({ min: 1 }).withMessage('Price must greater than 0'),
     body('stock').isInt({ min: 1 }).withMessage('Invalid stock value'),
     body('description').not().isEmpty().withMessage('Please provide book description'),
