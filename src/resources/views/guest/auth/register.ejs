@@ -97,6 +97,7 @@
                                         <input name="email" value="<%= data && data.email %>" class="form-control"
                                             placeholder="Your Email address" type="email">
                                         <%=findErrorByParam(errors, 'email' )?.msg || '' %>
+                                        <span style="color: red;"><%= (typeof(err) !== 'undefined') ? err : "" %></span>
                                     </div>
                                     <div class="mb-4">
                                         <label class="label-title">Password *</label>
