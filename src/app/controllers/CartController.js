@@ -78,9 +78,7 @@ class CartController {
             req.connection.remoteAddress ||
             req.socket.remoteAddress ||
             req.connection.socket.remoteAddress;
-
-        // var dateFormat = require('dateformat');
-
+            
         var tmnCode = vnPayParams.vnp_TmnCode;
         var secretKey = vnPayParams.vnp_HashSecret;
         var vnpUrl = vnPayParams.vnp_Url;
