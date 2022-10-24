@@ -1,4 +1,5 @@
 import { Op } from 'sequelize';
+import { validationResult } from 'express-validator';
 
 import Publisher from '../models/publisher.js';
 import Book from '../models/book.js';
@@ -26,10 +27,20 @@ class PublisherController {
     createGet(req, res, next) {
         res.render('admin/publisher/create', {
             layout: 'admin/layouts/main',
+            data: [],
+            errors: [],
         });
     }
     // [POST] /admin/publishers/create
     async createPost(req, res, next) {
+        const errors = validationResult(req);
+        if (!errors.isEmpty())
+            return res.render("admin/publisher/create", {
+                layout: 'admin/layouts/main',
+                data: req.body,
+                errors: errors.array(),
+            });
+
         try {
             const publisher = await Publisher.create({
                 name: req.body.name,
@@ -57,6 +68,7 @@ class PublisherController {
             res.render('admin/publisher/edit', {
                 layout: 'admin/layouts/main',
                 publisher: publisher.dataValues,
+                errors: [],
             });
 
         } catch(error) {
@@ -65,6 +77,14 @@ class PublisherController {
     }
     // [PUT] /admin/publishers/:id/edit
     async editPut(req, res, next) {
+        const errors = validationResult(req);
+        if (!errors.isEmpty())
+            return res.render("admin/publisher/edit", {
+                layout: 'admin/layouts/main',
+                publisher: req.body,
+                errors: errors.array(),
+            });
+
         try {
             const publisher = await Publisher.update(
                 { ...req.body },

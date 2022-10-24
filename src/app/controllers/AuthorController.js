@@ -36,11 +36,12 @@ class AuthorController {
     async createPost(req, res, next) {
         const errors = validationResult(req);
         if (!errors.isEmpty())
-        return res.render("admin/author/create", {
-            layout: 'admin/layouts/main',
-            data: req.body,
-            errors: errors.array(),
-        });
+            return res.render("admin/author/create", {
+                layout: 'admin/layouts/main',
+                data: req.body,
+                errors: errors.array(),
+            });
+
         try {
             const author = await Author.create({
                 name: req.body.name,
@@ -69,6 +70,7 @@ class AuthorController {
             res.render('admin/author/edit', {
                 layout: 'admin/layouts/main',
                 author: author.dataValues,
+                errors: [],
             });
 
         } catch(error) {
@@ -77,6 +79,14 @@ class AuthorController {
     }
     // [PUT] /admin/authors/:id/edit
     async editPut(req, res, next) {
+        const errors = validationResult(req);
+        if (!errors.isEmpty())
+            return res.render("admin/author/edit", {
+                layout: 'admin/layouts/main',
+                author: req.body,
+                errors: errors.array(),
+            });
+
         try {
             const author = await Author.update(
                 { ...req.body },

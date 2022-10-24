@@ -36,5 +36,13 @@ export const bookValidator = [
 ]
 
 export const authorValidator = [
-    body('name').isLength({ min: 1, max: 100 }).withMessage('Book name length must be between 5 - 100 characters'),
+    body('name').isLength({ min: 1, max: 100 }).withMessage('Author name length must be between 1 - 100 characters'),
+]
+
+export const categoryValidator = [
+    body('name').isLength({ min: 1, max: 100 }).withMessage('Category name length must be between 1 - 100 characters'),
+]
+
+export const publisherValidator = [
+    body('name').isLength({ min: 1, max: 100 }).withMessage('Publisher name length must be between 1 - 100 characters'),
 ]
