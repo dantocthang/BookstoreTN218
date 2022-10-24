@@ -44,8 +44,38 @@ class AuthController {
               mailer(
                 user.email,
                 "Verify Email",
-                `<h1 style="color:blue;text-align:center;">This is a heading</h1>
-                <a href="${process.env.APP_URL}/auth/verify?email=${user.email}&token=${hashedEmail}"> Verify </a>`
+                `<div style="text-align: center">
+                <div>
+                  <img
+                    src="${process.env.IMAGE_MAIL}"
+                    width="100px"
+                    height="100px"
+                  />
+                </div>
+                <h2>Xác nhận email cho tài khoản</h2>
+                <p>xin chào <span style="color: #00aff0">${user.fullName}!</span></p>
+                <p>Bạn vừa đăng ký tài khoản</p>
+                <div>
+                  <p>
+                    vui lòng xác nhận:
+                    <button
+                      style="
+                        padding: 10px 20px;
+                        background-color: #00aff0;
+                        border: none;
+                        border-radius: 10px;
+                      "
+                    >
+                      <a
+                        href="${process.env.APP_URL}/auth/verify?email=${user.email}&token=${hashedEmail}"
+                        style="text-decoration: none; color: white; font-weight: bold"
+                      >
+                        xác nhận
+                      </a>
+                    </button>
+                  </p>
+                </div>
+              </div>`
               );
             });
           return res.redirect("/auth/login");
