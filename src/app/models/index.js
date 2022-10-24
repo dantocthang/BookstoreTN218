@@ -10,6 +10,7 @@ import OrderDetail from './order-detail.js'
 import Wishlist from './wishlist.js'
 import CartDetail from './cart-detail.js'
 import Review from './review.js'
+import Transcation from './transaction.js'
 
 
 const associationDefiner = () => {
@@ -65,7 +66,13 @@ const associationDefiner = () => {
     Book.hasMany(CartDetail, {foreignKey: 'bookId', as: 'cartDetails'})
     CartDetail.belongsTo(Book, { foreignKey: 'bookId', as: 'book' })
 
+    // User x Transcation: One to Many
+    User.hasMany(Transcation, {foreignKey: 'userId', as: 'transcation'})
+    Transcation.belongsTo(User, { foreignKey: 'userId', as: 'user' })
 
+    // Order x Transcation: One to One
+    Order.hasOne(Transcation, {foreignKey: 'orderId', as: 'transcation'})
+    Transcation.belongsTo(Order, { foreignKey: 'orderId', as: 'order' })
 }
 
 export default associationDefiner
