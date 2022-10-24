@@ -35,7 +35,7 @@
               <form id="login" action="/auth/login" method="POST" class="tab-pane active col-12">
                 <h4 class="text-secondary">LOGIN</h4>
                 <p class="font-weight-600">If you have an account with us, please log in.</p>
-                <%=errors?.verified %>
+                <%=errors?.verified  %>
                 <div class="mb-4">
                   <label class="label-title">E-MAIL *</label>
                   <input name="email" required="" value="<%= data && data?.email %>" class="form-control"

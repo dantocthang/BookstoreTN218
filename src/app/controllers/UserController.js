@@ -21,8 +21,6 @@ class UserController {
         if (!errors.isEmpty()) return res.render('guest/auth/profile', { errors: errors.toArray() })
         try {
             await User.update(req.body, { where: { id: req.body.id } })
-
-
             return res.redirect(`/user/profile?id=${req.body.id}`);
         } catch (e) {
             next(e)
@@ -37,7 +35,7 @@ class UserController {
         if (!errors.isEmpty()) return res.render('guest/auth/profile', { errors: errors.toArray() })
 
         try {
-            await Address.update({name: req.body.address_name, address: req.body.address}, { where: { id: req.query.id } })
+            await Address.update({name: req.body.address_name, address: req.body.address, phone: req.body.phone}, { where: { id: req.query.id } })
             return res.redirect(`/user/profile?id=${req.body.id}`);
         } catch (error) {
             next(error)
