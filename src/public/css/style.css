@@ -24843,3 +24843,13 @@ footer {
 
 .social__link i {
   margin-left: 1rem; }
+
+.image-list{
+  display: flex;
+  gap: 20px;
+}
+
+.book-image{
+  width: 48px;
+  height: 48px;
+}

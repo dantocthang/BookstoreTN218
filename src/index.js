@@ -71,7 +71,7 @@ try {
 app.use(methodOverride('_method'))
 
 // set static folder
-app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.static(path.join(__dirname, './public')))
 
 // Custom helpers
 helpers(app);

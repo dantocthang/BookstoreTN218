@@ -2,6 +2,7 @@
 import { Op } from 'sequelize';
 
 import Category from '../models/category.js';
+import Book from '../models/book.js';
 
 class CategoryController {
 
@@ -14,7 +15,8 @@ class CategoryController {
     
             res.render('admin/category', {
                 layout: 'admin/layouts/main',
-                categories
+                categories,
+                message: req.flash(),
             });
         } catch(error) {
             next(error);
@@ -34,6 +36,7 @@ class CategoryController {
                 name: req.body.name,
             });
 
+            req.flash('success', 'Đăng ký thành công!');
             res.redirect('/admin/categories');
             
         } catch(error) {
@@ -75,6 +78,7 @@ class CategoryController {
                 }
             );
 
+            req.flash('success', 'Chỉnh sửa thành công!');
             res.redirect('/admin/categories');
             
         } catch(error) {
@@ -84,20 +88,39 @@ class CategoryController {
 
     // [DELETE] /admin/categories/:id/delete
     async delete(req, res, next) {
+        var book;
         try {
-            const category = await Category.destroy({
+            book = await Book.findOne({
                 where: {
-                    id: {
+                    categoryId: {
                         [Op.eq]: req.params.id,
                     },
                 },
             });
 
-            res.redirect('/admin/categories');
-            
         } catch(error) {
             next(error);
         }
+
+        if (!book) {
+            try {
+                const category = await Category.destroy({
+                    where: {
+                        id: {
+                            [Op.eq]: req.params.id,
+                        },
+                    },
+                });
+
+                req.flash('success', 'Xóa thành công!');
+            } catch(error) {
+                next(error);
+            }
+        } else {
+            req.flash('error', 'Không thể xóa! Đã có sách thuộc danh mục này!');
+        }
+
+        res.redirect('/admin/categories');
     }
 }
 

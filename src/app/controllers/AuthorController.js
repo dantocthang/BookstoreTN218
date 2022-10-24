@@ -2,20 +2,25 @@
 import { Op } from 'sequelize';
 
 import Author from '../models/author.js';
+import Book from '../models/book.js';
 
 class AuthorController {
 
     // [GET] /admin/authors
     async index(req, res, next) {
-        // Find all users
-        const authors = await Author.findAll({
-            attributes: ['id', 'name', 'description']
-        });
-
-        res.render('admin/author', {
-            layout: 'admin/layouts/main',
-            authors
-        });
+        try {
+            const authors = await Author.findAll({
+                attributes: ['id', 'name', 'description']
+            });
+    
+            res.render('admin/author', {
+                layout: 'admin/layouts/main',
+                authors,
+                message: req.flash(),
+            });
+        } catch(error) {
+            next(error);
+        }
     }
 
     // [GET] /admin/authors/create
@@ -32,6 +37,7 @@ class AuthorController {
                 description: req.body.description,
             });
 
+            req.flash('success', 'Đăng ký thành công!');
             res.redirect('/admin/authors');
             
         } catch(error) {
@@ -73,6 +79,7 @@ class AuthorController {
                 }
             );
 
+            req.flash('success', 'Chỉnh sửa thành công!');
             res.redirect('/admin/authors');
             
         } catch(error) {
@@ -82,20 +89,39 @@ class AuthorController {
 
     // [DELETE] /admin/authors/:id/delete
     async delete(req, res, next) {
+        var book;
         try {
-            const author = await Author.destroy({
+            book = await Book.findOne({
                 where: {
-                    id: {
+                    authorId: {
                         [Op.eq]: req.params.id,
                     },
                 },
             });
 
-            res.redirect('/admin/authors');
-            
         } catch(error) {
             next(error);
         }
+
+        if (!book) {
+            try {
+                const author = await Author.destroy({
+                    where: {
+                        id: {
+                            [Op.eq]: req.params.id,
+                        },
+                    },
+                });
+
+                req.flash('success', 'Xóa thành công!');
+            } catch(error) {
+                next(error);
+            }
+        } else {
+            req.flash('error', 'Không thể xóa! Đã có sách thuộc tác giả này!');
+        }
+
+        res.redirect('/admin/authors');
     }
 
 }

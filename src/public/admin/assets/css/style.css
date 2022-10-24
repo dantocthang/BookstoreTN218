@@ -9,3 +9,37 @@ NOTE:
 ------
 PLACE HERE YOUR OWN SCSS CODES AND IF NEEDED, OVERRIDE THE STYLES FROM THE OTHER STYLESHEETS.
 WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BETTER LIKE THIS.  */
+
+.image-list {
+	margin-block: 20px;
+    display: flex;
+    gap: 20px;
+}
+
+.image-wrapper{
+	width: 60px;
+    height: 60px;
+	position: relative;
+}
+
+.book-image {
+   width: 100%;
+   height: 100%;
+}
+
+.remove-image{
+	border: none;
+	background: rgba(255,255,255,.5);
+	padding: 6px;
+	position: absolute;
+	top: 0;
+	right:0;
+}
+
+.remove-image > i{
+	font-size: 1.5rem;
+}
+
+.remove-image:hover{
+	color: red;
+}

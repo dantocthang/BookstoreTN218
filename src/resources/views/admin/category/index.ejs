@@ -27,11 +27,17 @@
                 </thead>
 
                 <tbody>
-                    <% categories.forEach((category) => { %>
+                    <% if (categories.length === 0) { %>
+                        <tr>
+                            <td colspan="3"><h3 class="text-center">Không có thể loại sách</h3></td>
+                        </tr>
+                    <% } %>
+
+                    <% categories.forEach((category, index) => { %>
                         <% if (category.id % 2 === 0) { %>
                         <tr class="even">
                             <td class=" control" tabindex="0" style="display: none;"></td>
-                            <td class="sorting_1"><%= category.id%></td>
+                            <td class="sorting_1"><%= index + 1 %></td>
     
                             <td>
                                 <h6 class="user-name text-truncate mb-0"><%= category.name %>
@@ -73,7 +79,7 @@
                         <% } else { %>
                             <tr class="odd">
                                 <td class=" control" tabindex="0" style="display: none;"></td>
-                                <td class="sorting_1"><%= category.id%></td>
+                                <td class="sorting_1"><%= index + 1 %></td>
         
                                 <td>
                                     <h6 class="user-name text-truncate mb-0"><%= category.name %>
@@ -145,6 +151,9 @@
   </div>
 
 <form name="delete-form" method="POST"></form>
+
+<!-- toast message -->
+<%- include('../partials/toastr.ejs') %>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {

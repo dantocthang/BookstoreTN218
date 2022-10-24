@@ -1,0 +1,191 @@
+<div class="app-content content ">
+    <div class="content-overlay"></div>
+    <div class="header-navbar-shadow"></div>
+    <div class="content-wrapper container-xxl p-0">
+        <div class="content-header row">
+        </div>
+        <div class="content-body">
+            <h1>
+                <%= values.id ? 'Update Book' : 'Add new book' %>
+            </h1>
+            <form action=<%=values.id ? `/admin/book/${values.id}?_method=PUT` : '/admin/book/create' %> method="POST"
+                enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" name="name" class="form-control" id="name" value="<%=values?.name %>"
+                        placeholder="Enter name...">
+                    <div class="error">
+                        <%= findErrorByParam(errors, 'name' )?.msg %>
+                    </div>
+                </div>
+                <div class="form-group mt-2">
+                    <label for="description">Description</label>
+                    <input type="text" name="description" value="<%=values?.description %>" class="form-control"
+                        id="description" placeholder="Enter description...">
+                    <div class="error">
+                        <%= findErrorByParam(errors, 'description' )?.msg %>
+                    </div>
+                </div>
+                <div class="form-group mt-2">
+                    <label for="categoryId">Category</label>
+                    <select name="categoryId" id="categoryId" class="form-control">
+                        <option value="0">---Choose category---</option>
+                        <% categories.forEach(category=>{ %>
+                            <option <%=values?.categoryId==category.id && 'selected="selected"' %> value="<%=
+                                    category.id %> ">
+                                    <%= category.name %>
+                            </option>
+                            <% }) %>
+                    </select>
+                    <div class="error">
+                        <%= findErrorByParam(errors, 'categoryId' )?.msg %>
+                    </div>
+                </div>
+                <div class="form-group mt-2">
+                    <label for="authorId">Author</label>
+                    <select name="authorId" id="authorId" class="form-control">
+                        <option value="0">---Choose author---</option>
+                        <% authors.forEach(author=>{ %>
+                            <option <%=values?.authorId==author.id && 'selected="selected"' %> value="<%= author.id %>
+                                    ">
+                                    <%= author.name %>
+                            </option>
+                            <% }) %>
+                    </select>
+                    <div class="error">
+                        <%= findErrorByParam(errors, 'authorId' )?.msg %>
+                    </div>
+                </div>
+                <div class="form-group mt-2">
+                    <label for="price">Price</label>
+                    <input type="number" min="0" name="price" value="<%=values?.price %>" class="form-control"
+                        id="price" placeholder="Enter price...">
+                    <div class="error">
+                        <%= findErrorByParam(errors, 'price' )?.msg %>
+                    </div>
+                </div>
+                <div class="form-group mt-2">
+                    <label for="stock">Stock</label>
+                    <input type="number" min="1" name="stock" value="<%=values?.stock %>" class="form-control"
+                        id="stock" placeholder="Enter stock...">
+                    <div class="error">
+                        <%= findErrorByParam(errors, 'stock' )?.msg %>
+                    </div>
+                </div>
+                <div class="form-group mt-2">
+                    <label for="year">Publish year</label>
+                    <input type="number" min="0" name="year" value="<%=values?.year %>" class="form-control" id="year"
+                        placeholder="Enter publish year...">
+                    <div class="error">
+                        <%= findErrorByParam(errors, 'year' )?.msg %>
+                    </div>
+                </div>
+                <div id="image-section" class="form-group mt-2">
+                    <label for="images">Images</label>
+                    <div class="image-list">
+                        <% values?.images?.forEach(img=> { %>
+                            <div class="image-wrapper">
+                                <img src="/<%= img.path %>" alt="images" class="book-image">
+                                <button type="button" data-toggle="modal" data-target="#delete-modal"
+                                    data-id="<%= img.id %>" class="remove-image" data-book-id="<%= values?.id %> ">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </button>
+                            </div>
+                            <% }) %>
+                    </div>
+                    <input type="file" name="images[]" class="form-control" id="images" />
+                    <div class="error">
+                        <%= findErrorByParam(errors, 'images' )?.msg %>
+                    </div>
+                </div>
+                <div>
+                    <button id="add-image" type="button" class="btn btn-secondary mt-1">Add image</button>
+                </div>
+
+                <button type="submit" class="btn btn-primary mt-1">
+                    <%= values.id ? 'Update' : 'Create' %>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="delete-modal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete this image?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure to delete this image?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                <button id="btn-delete" type="button" class="btn btn-danger">Xóa</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const addBtn = document.querySelector('#add-image')
+        const imageSection = document.querySelector('#image-section')
+        const imageRemoveBtns = document.querySelector('.remove-image')
+
+        let imageId;
+        let button;
+        let bookId;
+        const deleteForm = document.forms['delete-form'];
+        const btnDelete = document.getElementById('btn-delete');
+
+
+        addBtn.addEventListener('click', () => {
+            const div = document.createElement('div')
+            div.className = 'flex'
+            const input = document.createElement('input')
+            input.setAttribute('type', 'file')
+            input.setAttribute('name', 'images[]')
+            input.className = 'form-control mt-2'
+
+            const close = document.createElement('button')
+            close.className = 'btn btn-default'
+            close.setAttribute('type', 'button')
+            close.textContent = 'Remove'
+            close.onclick = () => {
+                input.value = null
+                imageSection.removeChild(div)
+            }
+            div.appendChild(input)
+            div.appendChild(close)
+            imageSection.appendChild(div)
+        })
+
+        $('#delete-modal').on('show.bs.modal', function (event) {
+            button = $(event.relatedTarget);
+            imageId = button.data('id');
+            bookId =  button.data('book-id')
+        });
+
+        // When delete course btn clicked
+        btnDelete.onclick = function () {
+            //deleteForm.action = '/admin/book/image/' + imageId + '?_method=DELETE';
+            //deleteForm.submit();
+            $.ajax({
+                url: `/admin/book/${bookId}/image/${imageId}?_method=DELETE`,
+                method: 'POST',
+                dataType: 'json',
+                success: function (data) {
+                    console.log('Deleted')
+                    window.location.reload()
+                    //button.parentElement.remove()
+                }
+            })
+        }
+    })
+
+</script>

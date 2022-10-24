@@ -1,0 +1,5 @@
+<script>
+    <% if (message) { %>
+        toastr['<%= Object.keys(message)[0] %>']('<%= message[Object.keys(message)[0]] %>', 'Thông báo', { timeOut: 2000 });
+    <% } %>
+</script>

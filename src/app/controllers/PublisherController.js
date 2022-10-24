@@ -1,6 +1,7 @@
 import { Op } from 'sequelize';
 
 import Publisher from '../models/publisher.js';
+import Book from '../models/book.js';
 
 class PublisherController {
 
@@ -13,7 +14,8 @@ class PublisherController {
     
             res.render('admin/publisher', {
                 layout: 'admin/layouts/main',
-                publishers
+                publishers,
+                message: req.flash(),
             });
         } catch(error) {
             next(error);
@@ -33,6 +35,7 @@ class PublisherController {
                 name: req.body.name,
             });
 
+            req.flash('success', 'Đăng ký thành công!');
             res.redirect('/admin/publishers');
             
         } catch(error) {
@@ -74,6 +77,7 @@ class PublisherController {
                 }
             );
 
+            req.flash('success', 'Chỉnh sửa thành công!');
             res.redirect('/admin/publishers');
             
         } catch(error) {
@@ -83,20 +87,39 @@ class PublisherController {
 
     // [DELETE] /admin/publishers/:id/delete
     async delete(req, res, next) {
+        var book;
         try {
-            const publisher = await Publisher.destroy({
+            book = await Book.findOne({
                 where: {
-                    id: {
+                    publisherId: {
                         [Op.eq]: req.params.id,
                     },
                 },
             });
 
-            res.redirect('/admin/publishers');
-            
         } catch(error) {
             next(error);
         }
+
+        if (!book) {
+            try {
+                const publisher = await Publisher.destroy({
+                    where: {
+                        id: {
+                            [Op.eq]: req.params.id,
+                        },
+                    },
+                });
+
+                req.flash('success', 'Xóa thành công!');
+            } catch(error) {
+                next(error);
+            }
+        } else {
+            req.flash('error', 'Không thể xóa! Đã có sách thuộc nhà xuất bản này!');
+        }
+
+        res.redirect('/admin/publishers');
     }
 }
 
