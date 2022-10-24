@@ -13,7 +13,7 @@ class AuthController {
     return res.render("guest/auth/register", {
       layout: "guest/layouts/main",
       data: {},
-      errors: [],
+      errors: {},
     });
   }
 

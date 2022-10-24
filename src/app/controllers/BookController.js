@@ -27,7 +27,7 @@ class BookController {
   async getBookDetail(req, res, next) {
     const { bookId } = req.params;
     const book = await Book.findOne({
-      include: ["author", "category", "publisher"],
+      include: ["author", "category", "publisher", "images"],
       where: { id: bookId },
     });
 
