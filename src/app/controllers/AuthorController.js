@@ -4,21 +4,41 @@ import { validationResult } from 'express-validator';
 
 import Author from '../models/author.js';
 import Book from '../models/book.js';
+import { PER_PAGE } from '../../config/pagination.js';
 
 class AuthorController {
 
     // [GET] /admin/authors
     async index(req, res, next) {
         try {
-            const authors = await Author.findAll({
-                attributes: ['id', 'name', 'description']
+            const currentPage = parseInt(req.query.page || 1);
+
+            const authors = await Author.findAndCountAll({
+                attributes: ['id', 'name', 'description'],
+                offset: (currentPage - 1) * PER_PAGE,
+                limit: PER_PAGE,
             });
-    
+
+            const numberOfRecords = authors.count;
+            const numberOfPages = Math.ceil(numberOfRecords / PER_PAGE);
+            const startIndex = (currentPage - 1) * PER_PAGE + 1;
+            let endIndex = startIndex + PER_PAGE - 1;
+            if (endIndex > numberOfRecords) {
+                endIndex = numberOfRecords;
+            }
+            
             res.render('admin/author', {
                 layout: 'admin/layouts/main',
-                authors,
+                authors: authors.rows,
                 message: req.flash(),
+                numberOfPages,
+                startIndex,
+                endIndex,
+                numberOfRecords,
+                currentPage,
+                PER_PAGE,
             });
+
         } catch(error) {
             next(error);
         }
