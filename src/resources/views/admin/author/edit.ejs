@@ -1,29 +1,50 @@
-<div class="app-content content ">
+<div class="app-content content">
     <div class="content-overlay"></div>
     <div class="header-navbar-shadow"></div>
     <div class="content-wrapper container-xxl p-0">
-        <div class="content-header row">
-        </div>
+        <div class="content-header row"></div>
         <div class="content-body">
             <h1>Edit author</h1>
             <form action="/admin/authors/<%= author.id %>/edit?_method=PUT" method="POST" id="edit-form">
+                <input type="text" name="id" value="<%= author.id %>" hidden>
                 <div class="form-group">
-                  <label for="name">Name</label>
-                  <input type="text" name="name" rules="required|max:255" class="form-control" id="name" placeholder="Enter name..."
-                    value="<%= author.name %>"
-                  />
-                  <span class="form-message"></span>
+                    <label for="name">Name</label>
+                    <input
+                        type="text"
+                        name="name"
+                        rules="required|max:255"
+                        class="form-control"
+                        id="name"
+                        placeholder="Enter name..."
+                        value="<%= author.name %>"
+                    />
+
+                    <% if (errors.length > 0) { %>
+                        <% errors.forEach(error => { %>
+                            <span class="form-message"><%= error.param ==='name' ? error.msg : '' %></span>
+                            <br />
+                        <% }) %>
+                    <% } else { %>
+                        <span class="form-message"></span>
+                    <% } %>
                 </div>
                 <div class="form-group mt-1">
-                  <label for="description">Description</label>
-                  <br />
-                  <textarea name="description" rules="max:255" class="form-control" id="description" rows="5"><%= author.description %></textarea>
-                  <span class="form-message"></span>
+                    <label for="description">Description</label>
+                    <br />
+                    <textarea name="description" rules="max:255" class="form-control" id="description" rows="5"><%= author.description %></textarea>
+                    
+                    <% if (errors.length > 0) { %>
+                        <% errors.forEach(error => { %>
+                            <span class="form-message"><%= error.param ==='description' ? error.msg : '' %></span>
+                            <br />
+                        <% }) %>
+                    <% } else { %>
+                        <span class="form-message"></span>
+                    <% } %>
                 </div>
                 <button type="submit" class="btn btn-primary mt-1">Edit</button>
                 <a href="/admin/authors" class="btn btn-outline-primary mt-1">Cancel</a>
             </form>
-
         </div>
     </div>
 </div>

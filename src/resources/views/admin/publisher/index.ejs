@@ -37,7 +37,7 @@
                         <% if (publisher.id % 2 === 0) { %>
                         <tr class="even">
                             <td class=" control" tabindex="0" style="display: none;"></td>
-                            <td class="sorting_1"><%= index + 1 %></td>
+                            <td class="sorting_1"><%= startIndex + index %></td>
     
                             <td>
                                 <h6 class="user-name text-truncate mb-0"><%= publisher.name %>
@@ -79,7 +79,7 @@
                         <% } else { %>
                             <tr class="odd">
                                 <td class=" control" tabindex="0" style="display: none;"></td>
-                                <td class="sorting_1"><%= index + 1 %></td>
+                                <td class="sorting_1"><%= startIndex + index %></td>
         
                                 <td>
                                     <h6 class="user-name text-truncate mb-0"><%= publisher.name %>
@@ -124,6 +124,11 @@
                 </tbody>
             </table>
 
+            <!-- Paginator -->
+            <% if (publishers.length > 0) { %>
+            <div id="paginator">
+            </div>
+            <% } %>
         </div>
     </div>
 
@@ -154,6 +159,9 @@
 
 <!-- toast message -->
 <%- include('../partials/toastr.ejs') %>
+
+<!--  Paginator -->
+<%- include('../partials/paginator.ejs') %>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {

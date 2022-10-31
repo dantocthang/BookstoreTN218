@@ -1,21 +1,41 @@
 import { Op } from 'sequelize';
+import { validationResult } from 'express-validator';
 
 import Publisher from '../models/publisher.js';
 import Book from '../models/book.js';
+import { PER_PAGE } from '../../config/pagination.js';
 
 class PublisherController {
 
     // [GET] /admin/publishers
     async index(req, res, next) {
         try {
-            const publishers = await Publisher.findAll({
-                attributes: ['id', 'name']
+            const currentPage = parseInt(req.query.page || 1);
+
+            const publishers = await Publisher.findAndCountAll({
+                attributes: ['id', 'name'],
+                offset: (currentPage - 1) * PER_PAGE,
+                limit: PER_PAGE,
             });
+
+            const numberOfRecords = publishers.count;
+            const numberOfPages = Math.ceil(numberOfRecords / PER_PAGE);
+            const startIndex = (currentPage - 1) * PER_PAGE + 1;
+            let endIndex = startIndex + PER_PAGE - 1;
+            if (endIndex > numberOfRecords) {
+                endIndex = numberOfRecords;
+            }
     
             res.render('admin/publisher', {
                 layout: 'admin/layouts/main',
-                publishers,
+                publishers: publishers.rows,
                 message: req.flash(),
+                numberOfPages,
+                startIndex,
+                endIndex,
+                numberOfRecords,
+                currentPage,
+                PER_PAGE,
             });
         } catch(error) {
             next(error);
@@ -26,10 +46,20 @@ class PublisherController {
     createGet(req, res, next) {
         res.render('admin/publisher/create', {
             layout: 'admin/layouts/main',
+            data: [],
+            errors: [],
         });
     }
     // [POST] /admin/publishers/create
     async createPost(req, res, next) {
+        const errors = validationResult(req);
+        if (!errors.isEmpty())
+            return res.render("admin/publisher/create", {
+                layout: 'admin/layouts/main',
+                data: req.body,
+                errors: errors.array(),
+            });
+
         try {
             const publisher = await Publisher.create({
                 name: req.body.name,
@@ -57,6 +87,7 @@ class PublisherController {
             res.render('admin/publisher/edit', {
                 layout: 'admin/layouts/main',
                 publisher: publisher.dataValues,
+                errors: [],
             });
 
         } catch(error) {
@@ -65,6 +96,14 @@ class PublisherController {
     }
     // [PUT] /admin/publishers/:id/edit
     async editPut(req, res, next) {
+        const errors = validationResult(req);
+        if (!errors.isEmpty())
+            return res.render("admin/publisher/edit", {
+                layout: 'admin/layouts/main',
+                publisher: req.body,
+                errors: errors.array(),
+            });
+
         try {
             const publisher = await Publisher.update(
                 { ...req.body },
