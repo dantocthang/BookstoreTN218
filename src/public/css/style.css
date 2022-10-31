@@ -24870,3 +24870,83 @@ footer {
   color: #7d7afa!important;
   background-color: #7d7afa!important;
 }
+
+.book-name{
+  font-size: 1.15rem;
+  height: 52px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+}
+
+.my-book-image{
+  aspect-ratio: 5 / 7;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Rating stars */
+.rate {
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: row-reverse;
+  float: left;
+  height: 46px;
+  padding: 0 10px;
+}
+.rate:not(:checked) > input {
+  opacity: 0;
+  position:absolute;
+  /* top:-9999px; */
+}
+.rate:not(:checked) > label {
+  float:right;
+  width:1em;
+  overflow:hidden;
+  white-space:nowrap;
+  cursor:pointer;
+  font-size:30px;
+  color:#ccc;
+}
+.rate:not(:checked) > label:before {
+  content: '★ ';
+}
+.rate > input:checked ~ label {
+  color: #ffc700;    
+}
+.rate:not(:checked) > label:hover,
+.rate:not(:checked) > label:hover ~ label {
+  color: #deb217;  
+}
+.rate > input:checked + label:hover,
+.rate > input:checked + label:hover ~ label,
+.rate > input:checked ~ label:hover,
+.rate > input:checked ~ label:hover ~ label,
+.rate > label:hover ~ input:checked ~ label {
+  color: #c59b08;
+}
+
+.reviews{
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.review-item{
+  padding: 8px;
+  border-radius: 4px;
+  background-color: #fff;
+}
+
+.review-item__name{
+  font-weight: 500;
+  color: #1b3774;
+  font-size: 1.05rem;
+}
+
+.review-item__stars{
+
+}

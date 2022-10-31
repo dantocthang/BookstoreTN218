@@ -13,25 +13,29 @@ class CartController {
     async cart(req, res, next) {
         const user = req.session.user || req.user
         try {
-            const cartDetails = await CartDetail.findAll({ where: { userId: user.id }, include: ['book'] })
+            const cartDetails = await CartDetail.findAll({
+                where: { userId: user.id }, include: [
+                    { model: Book, as: 'book', include: ['images'] }
+                ]
+            })
             return res.render('guest/cart/cart', { layout: null, cartDetails })
         } catch (error) {
             next(error)
         }
     }
 
-    // [POST] /cart?replace&bookId=&quantity=?
+    // [POST] /cart?replace
     async addToCart(req, res, next) {
         const user = req.session.user || req.user
+        if (!user) return res.json({ success: false })
         const quantity = req.body?.quantity || 1
         try {
             if (req.query.hasOwnProperty('replace')) {
                 await CartDetail.update({ quantity: quantity }, { where: { id: req.body.id } })
             }
             else {
-                const item = await CartDetail.findOne({ where: { userId: user.id, quantity: quantity } })
+                const item = await CartDetail.findOne({ where: { userId: user.id, bookId: req.body.bookId } })
                 if (item) {
-                    const item = await CartDetail.findOne({ where: { userId: user.id, bookId: req.body.bookId } })
                     item.quantity += parseInt(quantity)
                     await item.save()
                 } else {
@@ -39,7 +43,7 @@ class CartController {
                 }
             }
 
-            return res.json({ success: true, message: 'Cart updated' })
+            return res.json({ success: true })
         } catch (error) {
             next(error)
         }

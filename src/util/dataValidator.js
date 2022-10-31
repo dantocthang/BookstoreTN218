@@ -46,3 +46,8 @@ export const categoryValidator = [
 export const publisherValidator = [
     body('name').isLength({ min: 1, max: 100 }).withMessage('Publisher name length must be between 1 - 100 characters'),
 ]
+
+export const reviewValidator = [
+    body('content').isLength({ min: 1, max: 100 }).withMessage('Review content must not be between 1 - 100 characters'),
+    body('stars').isInt({ min: 1, max: 5 }).withMessage('Invalid rating'),
+]

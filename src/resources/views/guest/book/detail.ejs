@@ -186,7 +186,48 @@
                 </table>
               </div>
             </div>
-          </div>review
+          </div>
+          <div class="review mt-4 ">
+            <form action="/book/<%= book.id %>/review" method="post" class="d-flex flex-column gap-2">
+              <div class="rate">
+                <input type="radio" id="star5" name="stars" value="5" />
+                <label for="star5" title="text">5 stars</label>
+                <input type="radio" id="star4" name="stars" value="4" />
+                <label for="star4" title="text">4 stars</label>
+                <input type="radio" id="star3" name="stars" value="3" />
+                <label for="star3" title="text">3 stars</label>
+                <input type="radio" id="star2" name="stars" value="2" />
+                <label for="star2" title="text">2 stars</label>
+                <input type="radio" id="star1" name="stars" value="1" />
+                <label for="star1" title="text">1 star</label>
+              </div>
+              <small>
+                <%= findErrorByParam(errors, 'stars' )?.msg %>
+              </small>
+              <textarea style="padding: 6px;" name="content" placeholder="Comment" class="d-block"></textarea>
+              <small>
+                <%= findErrorByParam(errors, 'content' )?.msg %>
+              </small>
+              <button style="width: fit-content; padding: 8px 20px;" class="btn btn-outline-primary"
+                type="submit">Submit</button>
+            </form>
+
+            <div class="reviews">
+              <% for (const reviewItem of book.reviews){ %>
+                <div class="review-item">
+                  <div class="review-item__name">
+                    <%= reviewItem.user.fullName %>
+                  </div>
+                  <div class="review-item__stars">
+                    <% for (let i=1; i<=reviewItem.stars; i++){ %>
+                      <i class="fa-solid fa-star text-yellow"></i>
+                      <% } %>
+                  </div>
+                  <div class="review-item__content"><%= reviewItem.content %></div>
+                </div>
+                <% } %>
+            </div>
+          </div>
         </div>
         <div class="col-xl-4 mt-5 mt-xl-0">
           <div class="widget">
