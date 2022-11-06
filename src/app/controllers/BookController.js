@@ -9,6 +9,7 @@ import Category from "../models/category.js";
 import Author from "../models/author.js";
 import Image from "../models/image.js";
 import Publisher from "../models/publisher.js";
+import Review from "../models/review.js";
 
 class BookController {
   async getBooksList(req, res, next) {
@@ -28,16 +29,18 @@ class BookController {
   async getBookDetail(req, res, next) {
     const { bookId } = req.params;
     const book = await Book.findOne({
-      include: ["author", "category", "publisher", "images"],
+      include: ["author", "category", "publisher", "images", {
+        model: Review, as: 'reviews', include: ['user']
+      }],
       where: { id: bookId },
     });
 
     let bookList = await Book.findAll({
-      include: ["author", "category", "publisher"],
+      include: ["author", "category", "publisher", 'reviews'],
     });
 
     // console.log("chi tiet sach:", bookList);
-    return res.render("guest/book/detail", { book: book, bookList: bookList });
+    return res.render("guest/book/detail", { book: book, bookList: bookList, errors: [] });
     return res.json(bookList);
   }
 
@@ -195,6 +198,31 @@ class BookController {
     })
     res.json(result);
   }
+  // [POST] /book/:bookId/review
+  async review(req, res, next) {
+    const user = req.session.user || req.user
+    if (!user) return res.redirect('/auth/login')
+    const errors = validationResult(req)
+    const book = await Book.findOne({
+      include: ["author", "category", "publisher", "images"],
+      where: { id: req.params.bookId },
+    });
+
+    let bookList = await Book.findAll({
+      include: ["author", "category", "publisher", 'reviews'],
+    });
+    if (!errors.isEmpty()) return res.render('guest/book/detail', { errors: errors.array(), book, bookList })
+    try {
+      const review = await Review.findOne({ where: { userId: user.id, bookId: req.params.bookId } })
+      if (!review)
+        await Review.create({ ...req.body, userId: user.id, bookId: req.params.bookId })
+      else review.update(req.body)
+      return res.redirect(`/book/${req.params.bookId}`)
+    } catch (error) {
+      next(error)
+    }
+  }
+
 }
 
 const a = new BookController();

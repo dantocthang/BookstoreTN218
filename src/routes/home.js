@@ -16,6 +16,8 @@ router.get('/get_session', (req, res) => {
 })
 // END FOR TESTING
 
+router.get('/category', homeController.getCategories)
+
 router.use('[/]', homeController.index)
 
 export default router
