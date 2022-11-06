@@ -188,10 +188,6 @@ class BookController {
         name: {
           [Op.like]: '%' + searchData + '%',
 
-        },
-        description:
-        {
-          [Op.like]: '%' + searchData + '%',
         }
       }
 
