@@ -183,8 +183,9 @@
               <option>Classics</option>
               <option>Education</option>
             </select>
-            <input type="text" class="form-control" aria-label="Text input with dropdown button"
-              placeholder="Search Books Here">
+            <input type="text" id="search-bar" class="form-control search-bar"
+              aria-label="Text input with dropdown button" placeholder="Search Books Here">
+            <span id="search-result"></span>
             <button class="btn" type="button"><i class="fa-solid fa-magnifying-glass"></i></button>
           </div>
         </form>
@@ -279,6 +280,45 @@
   <!-- Main Header End -->
 
 </header>
+<script>
+  var searchData = document.getElementById('search-bar');
+  var searchResult = document.getElementById('search-result');
+  console.log('Check searchData: ', searchData);
+
+  function load_data(data) {
+    var html = '<ul class="list-group">';
+    if (data && data.length > 0) {
+      for (var count = 0; count < data.length; count++) {
+        html += '<a href="#" class="list-group-item list-group-item-action" onclick="get_text(this)">' + data[count].name + '</a>';
+      }
+    }
+    else {
+      html += '<a href="#" class="list-group-item list-group-item-action disabled">No Data Found</a>';
+    }
+
+    html += '</ul>';
+
+    searchResult.innerHTML = html;
+  }
+
+  searchData.onkeyup = function () {
+    console.log('Search data: ', searchData.value);
+    if (searchData.value.length === 0) {
+      searchResult.style.display = "none";
+    } else {
+      searchResult.style.display = "block";
+
+      $.ajax({
+        type: "GET",
+        url: "/book/get_search_data",
+        data: "search_query=" + searchData.value,    // multiple data sent using ajax
+        success: function (data) {
+          load_data(data);
+        }
+      });
+    }
+  }
+</script>
 
 
 <!-- ================= -->
