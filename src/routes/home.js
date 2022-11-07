@@ -6,15 +6,14 @@ import paginator from '../util/paginate.js'
 
 const router = express.Router()
 
-
 // FOR TESTING 
 router.get('/get_session', (req, res) => {
-    //check session
-    if (req.session.User) {
-      return res.status(200).json({ status: 'success', session: req.session.User })
-    }
-    return res.status(200).json({ status: 'error', session: 'No session' })
-  })
+  //check session
+  if (req.session.User) {
+    return res.status(200).json({ status: 'success', session: req.session.User })
+  }
+  return res.status(200).json({ status: 'error', session: 'No session' })
+})
 // END FOR TESTING
 
 router.get('/category', homeController.getCategories)

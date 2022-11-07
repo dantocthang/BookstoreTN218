@@ -13,8 +13,7 @@ function route(app) {
     app.use('/cart', cartRouter)
     app.use('/book', bookRouter)
     app.use('/user', userRouter)
-    app.use('/', homeRouter)   
-      
+    app.use('/', homeRouter)
     // 404
     app.use((req, res) => res.status(404).render('404', { layout: '404' }));
 }

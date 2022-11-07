@@ -1,6 +1,7 @@
 import { validationResult } from "express-validator";
 import fs from "fs";
 import { promisify } from "util";
+import sequelize from "sequelize";
 const unlinkAsync = promisify(fs.unlink);
 
 import Book from "../models/book.js";
@@ -179,6 +180,20 @@ class BookController {
     }
   }
 
+  async searchBook(req, res, next) {
+    let searchData = req.query.search_query;
+    const Op = sequelize.Op;
+    let result = await Book.findAll({
+      where: {
+        name: {
+          [Op.like]: '%' + searchData + '%',
+
+        }
+      }
+
+    })
+    res.json(result);
+  }
   // [POST] /book/:bookId/review
   async review(req, res, next) {
     const user = req.session.user || req.user

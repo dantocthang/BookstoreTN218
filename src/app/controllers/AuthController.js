@@ -33,7 +33,7 @@ class AuthController {
         password: hashedPassword,
         fullName: req.body.fullName,
       });
-      
+
       /* mail check */
       emailExistence.check(user.email, function (error, response) {
         const mailcheck = response;
