@@ -1,5 +1,10 @@
 import { check, body } from 'express-validator'
+import fs from "fs";
+import { promisify } from "util";
+const unlinkAsync = promisify(fs.unlink);
+
 import User from '../app/models/user.js'
+import Book from '../app/models/book.js'
 
 export const userValidator = [
     body('email').isEmail().withMessage('Email không hợp lệ').custom(async (value) => {
@@ -32,8 +37,20 @@ export const bookValidator = [
     body('stock').isInt({ min: 1 }).withMessage('Invalid stock value'),
     body('description').not().isEmpty().withMessage('Please provide book description'),
     body('year').isInt({ min: 1000, max: new Date().getFullYear }).withMessage('Invalid year'),
-    // body('images').notEmpty().withMessage('Upload at least one image'),
 ]
+
+export const createBookImageValidator = body('images').custom(async (value, { req }) => {
+    if (req.files.length < 1) throw new Error('Please upload at least one image for the book')
+    return true
+})
+export const updateBookImageValidator = body('images').custom(async (value, { req }) => {
+    const book = await Book.findByPk(req.params.bookId, { include: ['images'] })
+    console.log(req.files)
+    if (book.images.length === 0 && req.files.length < 1) {
+        throw new Error('Please upload at least one image for the book')
+    }
+    return true
+})
 
 export const authorValidator = [
     body('name').isLength({ min: 1, max: 100 }).withMessage('Author name length must be between 1 - 100 characters'),

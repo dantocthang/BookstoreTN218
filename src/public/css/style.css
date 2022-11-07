@@ -34891,6 +34891,7 @@ footer.footer-dark .footer-category .toggle-items ul li a:hover {
 }
 
 .custom-image {
+  max-width: 400px;
   width: 100%;
   aspect-ratio: 3 / 4;
 }
@@ -34990,3 +34991,8 @@ footer.footer-dark .footer-category .toggle-items ul li a:hover {
 }
 
 .review-item__stars {}
+
+/* Custom search items */
+.custom-search-item{
+  text-indent: 1rem;
+}

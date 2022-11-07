@@ -1,7 +1,7 @@
 import { validationResult } from "express-validator";
+import sequelize from "sequelize";
 import fs from "fs";
 import { promisify } from "util";
-import sequelize from "sequelize";
 const unlinkAsync = promisify(fs.unlink);
 
 import Book from "../models/book.js";
@@ -39,7 +39,6 @@ class BookController {
       include: ["author", "category", "publisher", 'reviews'],
     });
 
-    // console.log("chi tiet sach:", bookList);
     return res.render("guest/book/detail", { book: book, bookList: bookList, errors: [] });
     return res.json(bookList);
   }
@@ -66,6 +65,7 @@ class BookController {
       layout: "admin/layouts/main",
       errors: [],
       values: {},
+      update: false,
       categories,
       authors,
       publishers
@@ -78,15 +78,19 @@ class BookController {
     const authors = await Author.findAll();
     const publishers = await Publisher.findAll();
     const errors = validationResult(req);
-    if (!errors.isEmpty())
+    if (!errors.isEmpty()) {
+      for (const image of req.files)
+        await unlinkAsync(image.path);
       return res.render("admin/book/form", {
         layout: "admin/layouts/main",
         errors: errors.array(),
+        update: false,
         categories,
         authors,
         publishers,
         values: req.body,
       });
+    }
     try {
       const book = await Book.create(req.body);
 
@@ -107,7 +111,6 @@ class BookController {
       const book = await Book.findByPk(req.params.bookId, {
         include: ["images", "publisher"],
       });
-      console.log(book.toJSON())
       if (!book) return res.status(404).render("404", { layout: "404" });
       const categories = await Category.findAll();
       const authors = await Author.findAll();
@@ -116,6 +119,7 @@ class BookController {
         layout: "admin/layouts/main",
         errors: [],
         values: book,
+        update: true,
         categories,
         authors,
         publishers,
@@ -127,24 +131,26 @@ class BookController {
 
   // [PUT] /admin/book/:bookId
   async updateBook(req, res, next) {
-    console.log(req.body);
     const categories = await Category.findAll();
     const authors = await Author.findAll();
     const publishers = await Publisher.findAll();
     const errors = validationResult(req);
-    if (!errors.isEmpty())
+    if (!errors.isEmpty()) {
+      for (const image of req.files)
+        await unlinkAsync(image.path);
       return res.render("admin/book/form", {
         layout: "admin/layouts/main",
         errors: errors.array(),
         categories,
         authors,
+        update: true,
         publishers,
-        values: req.body,
+        values: { ...req.body, id: req.params.bookId },
       });
+    }
     try {
       await Book.update(req.body, { where: { id: req.params.bookId } });
       for (const image of req.files) {
-        // const tail = image.originalname.split('.')[1]
         const fileName = image.filename;
         await Image.create({
           path: `files/${fileName}`,
@@ -183,15 +189,27 @@ class BookController {
   async searchBook(req, res, next) {
     let searchData = req.query.search_query;
     const Op = sequelize.Op;
-    let result = await Book.findAll({
+    let books = await Book.findAll({
       where: {
-        name: {
-          [Op.like]: '%' + searchData + '%',
-
-        }
+        [Op.or]: [
+          { name: { [Op.like]: '%' + searchData + '%' } },
+          { description: { [Op.like]: '%' + searchData + '%' } },
+        ],
       }
-
     })
+    let categories = await Category.findAll({
+      where: { name: { [Op.like]: '%' + searchData + '%' } }
+    })
+    let authors = await Author.findAll({
+      where: { name: { [Op.like]: '%' + searchData + '%' } }
+    })
+    let publishers = await Publisher.findAll({ where: { name: { [Op.like]: '%' + searchData + '%' } } })
+    let result = {
+      books,
+      categories,
+      authors,
+      publishers
+    }
     res.json(result);
   }
   // [POST] /book/:bookId/review
