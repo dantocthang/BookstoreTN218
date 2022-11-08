@@ -9,11 +9,13 @@ import categoryController from '../app/controllers/CategoryController.js';
 import publisherController from '../app/controllers/PublisherController.js';
 import BookController from '../app/controllers/BookController.js';
 
-import { 
-    bookValidator, 
-    authorValidator, 
-    categoryValidator, 
+import {
+    bookValidator,
+    authorValidator,
+    categoryValidator,
     publisherValidator,
+    createBookImageValidator,
+    updateBookImageValidator
 } from '../util/dataValidator.js';
 
 const router = express.Router();
@@ -57,9 +59,9 @@ router.delete('/publishers/:id/delete', publisherController.delete);
 // Book
 router.get('/book', BookController.adminBooks)
 router.get('/book/create', BookController.createBookForm)
-router.post('/book/create', upload.array('images[]', 10), ...bookValidator, BookController.createBook)
+router.post('/book/create', upload.array('images[]', 10), ...bookValidator, createBookImageValidator, BookController.createBook)
 router.get('/book/:bookId', BookController.updateBookForm)
-router.put('/book/:bookId', upload.array('images[]', 10), ...bookValidator, BookController.updateBook)
+router.put('/book/:bookId', upload.array('images[]', 10), ...bookValidator, updateBookImageValidator, BookController.updateBook)
 router.delete('/book/:bookId', BookController.deleteBook)
 router.delete('/book/:bookId/image/:imageId', BookController.deleteImage)
 
