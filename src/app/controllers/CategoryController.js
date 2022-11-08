@@ -21,6 +21,10 @@ class CategoryController {
 
             const numberOfRecords = categories.count;
             const numberOfPages = Math.ceil(numberOfRecords / PER_PAGE);
+            if (currentPage > numberOfPages && numberOfPages > 0) {
+                return res.redirect('/admin/categories');
+            }
+
             const startIndex = (currentPage - 1) * PER_PAGE + 1;
             let endIndex = startIndex + PER_PAGE - 1;
             if (endIndex > numberOfRecords) {

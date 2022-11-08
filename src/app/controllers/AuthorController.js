@@ -18,9 +18,13 @@ class AuthorController {
                 offset: (currentPage - 1) * PER_PAGE,
                 limit: PER_PAGE,
             });
-
+            
             const numberOfRecords = authors.count;
             const numberOfPages = Math.ceil(numberOfRecords / PER_PAGE);
+            if (currentPage > numberOfPages && numberOfPages > 0) {
+                return res.redirect('/admin/authors');
+            }
+
             const startIndex = (currentPage - 1) * PER_PAGE + 1;
             let endIndex = startIndex + PER_PAGE - 1;
             if (endIndex > numberOfRecords) {
@@ -68,7 +72,7 @@ class AuthorController {
                 description: req.body.description,
             });
 
-            req.flash('success', 'Đăng ký thành công!');
+            req.flash('success', 'Thêm thành công!');
             res.redirect('/admin/authors');
             
         } catch(error) {
