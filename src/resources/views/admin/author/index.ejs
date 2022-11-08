@@ -35,7 +35,7 @@
                         </tr>
                     <% } %>
                     <% authors.forEach((author, index) => { %>
-                        <% if (author.id % 2 === 0) { %>
+                        <% if (index % 2 === 0) { %>
                         <tr class="even">
                             <td class=" control" tabindex="0" style="display: none;"></td>
                             <td class="sorting_1"><%= startIndex + index %></td>

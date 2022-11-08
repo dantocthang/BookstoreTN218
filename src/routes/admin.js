@@ -8,6 +8,7 @@ import authorController from '../app/controllers/AuthorController.js';
 import categoryController from '../app/controllers/CategoryController.js';
 import publisherController from '../app/controllers/PublisherController.js';
 import BookController from '../app/controllers/BookController.js';
+import orderController from '../app/controllers/OrderController.js';
 
 import {
     bookValidator,
@@ -64,5 +65,9 @@ router.get('/book/:bookId', BookController.updateBookForm)
 router.put('/book/:bookId', upload.array('images[]', 10), ...bookValidator, updateBookImageValidator, BookController.updateBook)
 router.delete('/book/:bookId', BookController.deleteBook)
 router.delete('/book/:bookId/image/:imageId', BookController.deleteImage)
+
+// Order
+router.get('/orders', orderController.index);
+router.get('/order/:orderId', orderController.view);
 
 export default router;

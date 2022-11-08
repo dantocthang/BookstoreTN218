@@ -46,11 +46,16 @@
                 </thead>
 
                 <tbody>
+                    <% if (books.length === 0) { %>
+                        <tr>
+                            <td colspan="9"><h3 class="text-center">Không có sách</h3></td>
+                        </tr>
+                    <% } %>
                     <% books.forEach((book, index)=> { %>
                         <tr class="even">
                             <td class=" control" tabindex="0" style="display: none;"></td>
                             <td class="sorting_1">
-                                <%= index + 1%>
+                                <%= startIndex + index %>
                             </td>
                             <td>
                                 <h6 class="user-name text-truncate mb-0">
@@ -124,6 +129,12 @@
                 </tbody>
             </table>
 
+            <!-- Paginator -->
+            <% if (books.length > 0) { %>
+            <div id="paginator">
+            </div>
+            <% } %>
+
         </div>
     </div>
 
@@ -151,6 +162,12 @@
 </div>
 
 <form name="delete-form" method="POST"></form>
+
+<!-- toast message -->
+<%- include('../partials/toastr.ejs') %>
+
+<!--  Paginator -->
+<%- include('../partials/paginator.ejs') %>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {

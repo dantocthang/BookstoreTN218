@@ -4,11 +4,13 @@ import cartRouter from './cart.js'
 import adminRouter from './admin.js'
 import bookRouter from './book.js'
 import userRouter from './user.js'
+import authMiddleware from '../app/middlewares/auth.middleware.js';
+
 // import { checkAuthenticated, checkNotAuthenticated } from '../util/checkAuthenticated.js'
 // import authRole from '../util/authRole.js'
 
 function route(app) {
-    app.use('/admin', adminRouter)
+    app.use('/admin', authMiddleware, adminRouter)
     app.use('/auth', authRouter)
     app.use('/cart', cartRouter)
     app.use('/book', bookRouter)

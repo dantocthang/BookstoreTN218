@@ -20,6 +20,10 @@ class PublisherController {
 
             const numberOfRecords = publishers.count;
             const numberOfPages = Math.ceil(numberOfRecords / PER_PAGE);
+            if (currentPage > numberOfPages && numberOfPages > 0) {
+                return res.redirect('/admin/publishers');
+            }
+
             const startIndex = (currentPage - 1) * PER_PAGE + 1;
             let endIndex = startIndex + PER_PAGE - 1;
             if (endIndex > numberOfRecords) {
