@@ -8,6 +8,7 @@ import * as crypto from 'crypto';
 import Address from '../models/address.js'
 import Book from '../models/book.js'
 import Order from '../models/order.js';
+import OrderDetail from '../models/order-detail.js';
 
 class CartController {
     // [GET] /cart
@@ -70,17 +71,9 @@ class CartController {
                     model: Book, as: 'book', include: ['images']
                 }]
             })
+            if (cartItems.length === 0) return res.redirect('/cart')
             const addresses = await Address.findAll({ where: { userId: user.id } })
             return res.render('guest/cart/checkout', { cartItems, addresses })
-        } catch (error) {
-            next(error)
-        }
-    }
-
-    // [POST] /cart/checkout
-    async checkout(req, res, next) {
-        try {
-
         } catch (error) {
             next(error)
         }
@@ -96,10 +89,7 @@ class CartController {
     }
 
     async processPayment(req, res, next) {
-        var ipAddr = req.headers['x-forwarded-for'] ||
-            req.connection.remoteAddress ||
-            req.socket.remoteAddress ||
-            req.connection.socket.remoteAddress;
+        var ipAddr = req.headers['x-forwarded-for'] || req.socket.remoteAddress
 
         const user = req.session.user || req.user
         const cartItems = await CartDetail.findAll({ where: { userId: user.id }, include: ['book'] })
@@ -108,11 +98,11 @@ class CartController {
         }, 0)
 
         // Create new profile if not exist
-        const profile = await Address.findOne({ where: { address: req.body.address, phone: req.body.phone } })
+        let profile
+        profile = await Address.findOne({ where: { address: req.body.address, phone: req.body.phone } })
         if (!profile) {
-            await Address.create({ address: req.body.address, phone: req.body.phone, userId: user.id, name: 'New profile' })
+            profile = await Address.create({ address: req.body.address, phone: req.body.phone, userId: user.id, name: 'New profile' })
         }
-
 
         var tmnCode = vnPayParams['vnp_TmnCode'];
         var secretKey = vnPayParams['vnp_HashSecret'];
@@ -152,13 +142,31 @@ class CartController {
         }
 
         vnp_Params = sortObject(vnp_Params);
-        console.log(vnp_Params);
 
         var signData = querystring.stringify(vnp_Params, { encode: false });
         var hmac = crypto.createHmac("sha512", secretKey);
-        var signed = hmac.update(new Buffer(signData, 'utf-8')).digest("hex");
+        var signed = hmac.update(Buffer.from(signData, 'utf-8')).digest("hex");
         vnp_Params['vnp_SecureHash'] = signed;
         vnpUrl += '?' + querystring.stringify(vnp_Params, { encode: false });
+
+
+        const newOrder = await Order.create({
+            total: amount,
+            userId: user.id,
+            addressId: profile.id,
+            paymentMethod: 'VNPAY',
+            transactionId: orderId
+        })
+
+        const cartDetails = await CartDetail.findAll({ where: { userId: user.id }, include: ['book'] })
+        for (const item of cartDetails) {
+            await OrderDetail.create({
+                price: item.book.price,
+                quantity: item.quantity,
+                orderId: newOrder.id
+            })
+        }
+
         // console.log(vnpUrl)
         res.redirect(vnpUrl)
     }
@@ -179,21 +187,33 @@ class CartController {
 
         var signData = querystring.stringify(vnp_Params, { encode: false });
         var hmac = crypto.createHmac("sha512", secretKey);
-        var signed = hmac.update(new Buffer(signData, 'utf-8')).digest("hex");
+        var signed = hmac.update(Buffer.from(signData, 'utf-8')).digest("hex");
 
         if (secureHash === signed) {
-            //Kiem tra xem du lieu trong db co hop le hay khong va thong bao ket qua
+            var orderId = vnp_Params['vnp_TxnRef'];
+            var rspCode = vnp_Params['vnp_ResponseCode'];
+            //Kiem tra du lieu co hop le khong, cap nhat trang thai don hang va gui ket qua cho VNPAY theo dinh dang duoi
+            const order = await Order.findOne({ where: { transactionId: orderId } })
+            if (!order) return res.json({ success: false, message: 'Order not exist' })
+            if (rspCode !== '00')
+                // return res.json({ success: false, message: 'Transaction failed' })
+                return res.redirect('/payment/failed')
+            order.transactionId = req.query.vnp_TransactionNo
+            order.paymentStatus = 'paid'
+            order.transdate = req.query.vnp_PayDate
+            await order.save()
 
-            let resData = await Order.create({
-                total: vnp_Params.vnp_Amount,
-                paymentStatus: vnp_Params.vnp_TransactionStatus,
-                transactionId: vnp_Params.vnp_TransactionNo,
-                paymentMethod: vnp_Params.vnp_CardType,
-                transdate: vnp_Params.vnp_PayDate
-            });
+            // let resData = await Order.create({
+            //     total: vnp_Params.vnp_Amount,
+            //     paymentStatus: vnp_Params.vnp_TransactionStatus,
+            //     transactionId: vnp_Params.vnp_TransactionNo,
+            //     paymentMethod: vnp_Params.vnp_CardType,
+            //     transdate: vnp_Params.vnp_PayDate,
 
-            if (resData) {
-            }
+            // });
+
+            // if (resData) {
+            // }
             res.render('guest/cart/payment_infor', { errCode: 0, data: vnp_Params })
         } else {
             res.render('guest/cart/payment_infor', { errCode: -1 })

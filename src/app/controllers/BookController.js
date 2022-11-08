@@ -1,5 +1,5 @@
 import { validationResult } from "express-validator";
-import sequelize from "sequelize";
+import sequelize, { Op } from "sequelize";
 import fs from "fs";
 import { promisify } from "util";
 const unlinkAsync = promisify(fs.unlink);
@@ -36,7 +36,9 @@ class BookController {
     });
 
     let bookList = await Book.findAll({
+      where: { authorId: book.authorId, id: { [Op.ne]: book.id } },
       include: ["author", "category", "publisher", 'reviews'],
+      limit: 3
     });
 
     return res.render("guest/book/detail", { book: book, bookList: bookList, errors: [] });

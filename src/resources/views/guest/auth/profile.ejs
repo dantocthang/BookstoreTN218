@@ -17,8 +17,12 @@
                                     </div>
                                     <div class="account-title">
                                         <div class="">
-                                            <h4 class="m-b5"><a href="javascript:void(0);"><%= user.fullName %></a></h4>
-                                            <p class="m-b0"><a href="javascript:void(0);"><%= user.role.toUpperCase() %></a></p>
+                                            <h4 class="m-b5"><a href="javascript:void(0);">
+                                                    <%= user.fullName %>
+                                                </a></h4>
+                                            <p class="m-b0"><a href="javascript:void(0);">
+                                                    <%= user.role.toUpperCase() %>
+                                                </a></p>
                                         </div>
                                     </div>
                                 </div>
@@ -73,7 +77,7 @@
                                         Profile: <%= address.name %>
                                     </h5>
                                     <input type="text" class="form-control" id="id" placeholder="id" name="id"
-                                    value="<%= user.id %>" hidden>
+                                        value="<%= user.id %>" hidden>
                                     <div class="row">
                                         <div class="col-lg-6 col-md-6">
                                             <div class="mb-3">
@@ -102,12 +106,55 @@
                                     <button class="btn btn-primary btnhover">Save Setting</button>
                                 </form>
                                 <% } %>
+                                    <div class="mt-4">
+                                        <button class="btn btn-secondary" id="add-address-btn">Add address</button>
+                                        <form hidden id="add-address-form" action="/user/profile/address" method="POST">
+                                            <input type="text" class="form-control" id="id" placeholder="id" name="id"
+                                                value="<%= user.id %>" hidden>
+                                            <div class="row">
+                                                <div class="col-lg-6 col-md-6">
+                                                    <div class="mb-3">
+                                                        <label for="formcontrolinput5" class="form-label">Apartment
+                                                            Name:</label>
+                                                        <input type="text" class="form-control" id="address_name"
+                                                            name="address_name" placeholder="Apartment Name" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6 col-md-6">
+                                                    <div class="mb-3">
+                                                        <label for="formcontrolinput6"
+                                                            class="form-label">Address:</label>
+                                                        <input type="text" class="form-control" id="address"
+                                                            name="address" placeholder="Address">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6 col-md-6">
+                                                    <div class="mb-3">
+                                                        <label for="formcontrolinput6" class="form-label">Phone:</label>
+                                                        <input type="number" class="form-control" id="phone"
+                                                            name="phone" placeholder="Phone">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button class="btn btn-primary btnhover">Add</button>
+                                        </form>
+                                    </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
+
+
         <!-- Browse Jobs END -->
     </div>
 </div>
 <!-- Content END-->
+
+<script>
+    const addBtn = document.getElementById('add-address-btn')
+    const form = document.getElementById('add-address-form')
+    addBtn.addEventListener('click', (e) => {
+        form.hidden = !form.hidden
+    })
+</script>

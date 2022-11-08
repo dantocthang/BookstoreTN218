@@ -31,12 +31,16 @@ const associationDefiner = () => {
     Book.belongsTo(Publisher, { foreignKey: 'publisherId', as: 'publisher' })
 
     // User x Addresss: One to Many 
-    User.hasMany(Address, { foreignKey: 'userId', as: 'addresses'})
+    User.hasMany(Address, { foreignKey: 'userId', as: 'addresses' })
     Address.belongsTo(User, { foreignKey: 'userId', as: 'user' })
 
     // User x Order: One to Many 
-    User.hasMany(Order, { foreignKey: 'orderId', as: 'orders' })
-    Order.belongsTo(User, { foreignKey: 'orderId', as: 'user' })
+    User.hasMany(Order, { foreignKey: 'userId', as: 'orders' })
+    Order.belongsTo(User, { foreignKey: 'userId', as: 'user' })
+
+    // Order x Address: Many to One
+    Address.hasMany(Order, { foreignKey: 'addressId', as: 'orders' })
+    Order.belongsTo(Address, { foreignKey: 'addressId', as: 'address' })
 
     // User x Review: One to Many 
     User.hasMany(Review, { foreignKey: 'userId', as: 'reviews' })
@@ -55,24 +59,24 @@ const associationDefiner = () => {
     Wishlist.belongsTo(Book, { foreignKey: 'bookId', as: 'book' })
 
     // Order x OrderDetail: One to Many
-    Order.hasMany(OrderDetail, { foreignKey: 'orderId', as: 'orderDetails' })
+    Order.hasMany(OrderDetail, { foreignKey: 'orderId', as: 'orderDetails', onDelete: 'CASCADE' })
     OrderDetail.belongsTo(Order, { foreignKey: 'orderId', as: 'order' })
 
     // User x CartDetail: One to Many 
-    User.hasMany(CartDetail, { foreignKey: 'userId', as: 'cartDetails'})
+    User.hasMany(CartDetail, { foreignKey: 'userId', as: 'cartDetails' })
     CartDetail.belongsTo(User, { foreignKey: 'userId', as: 'user' })
 
     // Book x CartDetail: One to Many
-    Book.hasMany(CartDetail, {foreignKey: 'bookId', as: 'cartDetails'})
+    Book.hasMany(CartDetail, { foreignKey: 'bookId', as: 'cartDetails' })
     CartDetail.belongsTo(Book, { foreignKey: 'bookId', as: 'book' })
 
     // User x Transcation: One to Many
-    User.hasMany(Transcation, {foreignKey: 'userId', as: 'transcation'})
+    User.hasMany(Transcation, { foreignKey: 'userId', as: 'transcation' })
     Transcation.belongsTo(User, { foreignKey: 'userId', as: 'user' })
 
-    // Order x Transcation: One to One
-    Order.hasOne(Transcation, {foreignKey: 'orderId', as: 'transcation'})
-    Transcation.belongsTo(Order, { foreignKey: 'orderId', as: 'order' })
+    // // Order x Transcation: One to One
+    // Order.hasOne(Transcation, {foreignKey: 'orderId', as: 'transcation'})
+    // Transcation.belongsTo(Order, { foreignKey: 'orderId', as: 'order' })
 }
 
 export default associationDefiner

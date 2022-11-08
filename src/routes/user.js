@@ -7,5 +7,6 @@ const router = express.Router();
 router.get('/profile', UserController.getProfileInfo);
 router.post('/profile', UserController.updateProfileInfo);
 router.put('/profile/address', UserController.updateAddress);
+router.post('/profile/address', UserController.addAddress);
 
 export default router;

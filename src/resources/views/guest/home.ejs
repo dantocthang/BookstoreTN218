@@ -257,10 +257,10 @@
                   <span class="price">
                     <%= book.price %> VND
                   </span>
-                  <a style="display: flex; gap: 10px" href="javascript:void(0);" data-id="<%= book.id %>"
+                  <div style="display: flex; gap: 10px" data-id="<%= book.id %>"
                     class="btn btn-secondary btnhover btnhover2 add-to-cart-btn"><i
                       class="fa-solid fa-cart-shopping"></i> Add to
-                    cart</a>
+                    cart</div>
                 </div>
               </div>
             </div>
@@ -519,7 +519,7 @@
                     <span class="badge">20% OFF</span> -->
                   </div>
                   <div class="bookcard-footer">
-                    <a href="/cart/add-to-cart/<%= book.id %>" class="btn btn-primary btnhover m-t15 m-r10">Buy Now</a>
+                    <div data-id="<%= book.id %>" class="btn btn-primary btnhover m-t15 m-r10 add-to-cart-btn">Buy Now</div>
                     <a href="/book/<%= book.id %>" class="btn btn-outline-secondary btnhover m-t15">See Details</a>
                   </div>
                 </div>

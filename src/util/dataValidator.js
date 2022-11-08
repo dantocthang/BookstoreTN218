@@ -22,6 +22,12 @@ export const userValidator = [
     }).withMessage('Mật khẩu xác nhận không khớp')
 ]
 
+export const addressValidator = [
+    body('address_name').isLength({min: 1}).withMessage('Address name must not be empty'),
+    body('address').isLength({min: 1}).withMessage('Address must not be empty'),
+    body('phone').isLength({min: 1}).withMessage('Phone number must not be empty'),
+]
+
 export const bookValidator = [
     body('name').isLength({ min: 5, max: 100 }).withMessage('Book name length must be between 5 - 100 characters'),
     body('authorId').customSanitizer(value => {

@@ -7,8 +7,6 @@ import User from '../app/models/user.js'
 import { facebookKeys, googleKeys } from '../config/keys.js'
 
 function initializePassport(passport) {
-
-
     // Xác thực user đăng nhập bằng Google
     passport.use(new GoogleStrategy.Strategy({
         clientID: googleKeys.clientID,
@@ -50,7 +48,7 @@ function initializePassport(passport) {
         profileFields: ['id', 'displayName', 'photos']
     },
         function (accessToken, refreshToken, profile, done) {
-            console.log(profile)
+            // console.log(profile)
             process.nextTick(function () {
                 if (profile.id) {
                     User.findOne({ where: { facebookId: profile.id } })
