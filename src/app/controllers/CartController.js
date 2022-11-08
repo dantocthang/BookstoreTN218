@@ -26,6 +26,22 @@ class CartController {
         }
     }
 
+    // [GET] /cart/simple
+    async cartSimple(req, res, next) {
+        const user = req.session.user || req.user
+        if (!user) return res.json([])
+        try {
+            const cartDetails = await CartDetail.findAll({
+                where: { userId: user.id }, include: [
+                    { model: Book, as: 'book', include: ['images'] }
+                ]
+            })
+            return res.json(cartDetails)
+        } catch (error) {
+            next(error)
+        }
+    }
+
     // [POST] /cart?replace
     async addToCart(req, res, next) {
         const user = req.session.user || req.user
@@ -163,7 +179,8 @@ class CartController {
             await OrderDetail.create({
                 price: item.book.price,
                 quantity: item.quantity,
-                orderId: newOrder.id
+                orderId: newOrder.id,
+                bookId: item.book.id
             })
         }
 

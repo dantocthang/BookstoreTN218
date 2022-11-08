@@ -62,6 +62,11 @@ const associationDefiner = () => {
     Order.hasMany(OrderDetail, { foreignKey: 'orderId', as: 'orderDetails', onDelete: 'CASCADE' })
     OrderDetail.belongsTo(Order, { foreignKey: 'orderId', as: 'order' })
 
+    // Book x OderDetail: One to Many
+    Book.hasMany(OrderDetail, { foreignKey: 'bookId', as: 'orderDetails', onDelete: 'RESTRICT' })
+    OrderDetail.belongsTo(Book, { foreignKey: 'bookId', as: 'book' })
+
+
     // User x CartDetail: One to Many 
     User.hasMany(CartDetail, { foreignKey: 'userId', as: 'cartDetails' })
     CartDetail.belongsTo(User, { foreignKey: 'userId', as: 'user' })

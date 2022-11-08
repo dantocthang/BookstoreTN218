@@ -5,6 +5,8 @@ import { promisify } from "util";
 const unlinkAsync = promisify(fs.unlink);
 
 import Book from "../models/book.js";
+import OrderDetail from "../models/order-detail.js";
+import Order from "../models/order.js";
 import Category from "../models/category.js";
 import Author from "../models/author.js";
 import Image from "../models/image.js";
@@ -28,6 +30,15 @@ class BookController {
   /* [GET] /book/:bookId */
   async getBookDetail(req, res, next) {
     const { bookId } = req.params;
+    let ableToReview = false
+    const user = req.session.user || req.user || null
+    if (user) {
+      const isBought = await OrderDetail.findOne({
+        where: { bookId: bookId },
+        include: [{ model: Order, as: 'order', where: { userId: user.id } }]
+      })
+      if (isBought) ableToReview = true;
+    }
     const book = await Book.findOne({
       include: ["author", "category", "publisher", "images", {
         model: Review, as: 'reviews', include: ['user']
@@ -41,7 +52,7 @@ class BookController {
       limit: 3
     });
 
-    return res.render("guest/book/detail", { book: book, bookList: bookList, errors: [] });
+    return res.render("guest/book/detail", { book: book, bookList: bookList, errors: [], ableToReview });
     return res.json(bookList);
   }
 
