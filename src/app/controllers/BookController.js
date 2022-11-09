@@ -19,7 +19,7 @@ class BookController {
     let page = req.query.page || 1;
     let offset = (page - 1) * limit;
     let { count, rows: bookList } = await Book.findAndCountAll({
-      include: ["author"],
+      include: ['author', 'category'],
       offset: offset,
       limit: limit,
     });

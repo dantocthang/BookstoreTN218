@@ -56,6 +56,12 @@ class UserController {
             next(error)
         }
     }
+
+    // [DELETE] /user/profile/address?id=
+    async deleteAddress(req, res, next) {
+        await Address.destroy({ where: { id: req.query.id } })
+        return res.redirect('/user/profile')
+    }
 }
 
 const a = new UserController()

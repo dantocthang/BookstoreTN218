@@ -8,5 +8,6 @@ router.get('/profile', UserController.getProfileInfo);
 router.post('/profile', UserController.updateProfileInfo);
 router.put('/profile/address', UserController.updateAddress);
 router.post('/profile/address', UserController.addAddress);
+router.delete('/profile/address', UserController.deleteAddress);
 
 export default router;

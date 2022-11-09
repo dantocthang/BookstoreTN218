@@ -3,7 +3,7 @@ import Book from '../models/book.js'
 
 class HomeController {
     async index(req, res, next) {
-        const books = await Book.findAll({ include: ['images'] });
+        const books = await Book.findAll({ include: ['images', 'category'] });
         return res.render('guest/home', { layout: 'guest/layouts/main', books })
     }
 

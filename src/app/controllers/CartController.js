@@ -46,15 +46,16 @@ class CartController {
     async addToCart(req, res, next) {
         const user = req.session.user || req.user
         if (!user) return res.json({ success: false })
-        const quantity = req.body?.quantity || 1
+        const quantity = parseInt(req.body?.quantity)
         try {
             if (req.query.hasOwnProperty('replace')) {
-                await CartDetail.update({ quantity: quantity }, { where: { id: req.body.id } })
+                if (quantity === 0) await CartDetail.destroy({ where: { id: req.body.id } })
+                else await CartDetail.update({ quantity: quantity }, { where: { id: req.body.id } })
             }
             else {
                 const item = await CartDetail.findOne({ where: { userId: user.id, bookId: req.body.bookId } })
                 if (item) {
-                    item.quantity += parseInt(quantity)
+                    item.quantity += (quantity || 1)
                     await item.save()
                 } else {
                     await CartDetail.create({ userId: user.id, bookId: req.body.bookId, quantity })

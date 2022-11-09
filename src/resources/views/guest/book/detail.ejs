@@ -94,7 +94,7 @@
                     </div>
                     <div class="product-num">
                       <div class="quantity btn-quantity style-1 me-3">
-                        <input id="demo_vertical2" type="text" value="1" name="demo_vertical2" />
+                        <input id="demo_vertical2" data-quantity type="text" value="1" name="demo_vertical2" />
                       </div>
                       <div data-id="<%= book.id %>" class="btn btn-primary btnhover btnhover2 add-to-cart-btn">Add to cart</div>
                       <!-- <div class="bookmark-btn style-1 d-none d-sm-block">
@@ -344,11 +344,12 @@
 <script>
   window.addEventListener('DOMContentLoaded', (event) => {
     const addToCartBtns = document.querySelectorAll('.add-to-cart-btn')
+    const quantityInput = document.querySelector('[data-quantity]')
 
     addToCartBtns.forEach(btn => {
       btn.addEventListener('click', (event) => {
         const bookId = event.target.dataset.id
-        const quantity = 1
+        const quantity = quantityInput.value || 1
         $.ajax({
           url: '/cart',
           method: 'POST',

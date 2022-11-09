@@ -53,7 +53,7 @@
                             </div>
 
                             <% for (const address of addresses){ %>
-                                <form action="/user/profile/address?id=<%=address.id%>&_method=PUT" method="POST">
+                                <form data-id="<%= address.id %>" action="/user/profile/address?id=<%=address.id%>&_method=PUT" method="POST">
                                     <h5 class="address-name mt-4">
                                         Profile: <%= address.name %>
                                     </h5>
@@ -85,6 +85,7 @@
                                         </div>
                                     </div>
                                     <button class="btn btn-primary btnhover">Save Setting</button>
+                                    <button class="btn btn-danger btnhover delete-address-btn" type="button" data-id="<%= address.id %>">Delete</button>
                                 </form>
                                 <% } %>
                                     <div class="mt-4">
@@ -98,7 +99,7 @@
                                                         <label for="formcontrolinput5" class="form-label">Apartment
                                                             Name:</label>
                                                         <input type="text" class="form-control" id="address_name"
-                                                            name="address_name" placeholder="Apartment Name" />
+                                                            name="address_name" placeholder="Apartment Name" required/>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-6 col-md-6">
@@ -106,14 +107,14 @@
                                                         <label for="formcontrolinput6"
                                                             class="form-label">Address:</label>
                                                         <input type="text" class="form-control" id="address"
-                                                            name="address" placeholder="Address">
+                                                            name="address" placeholder="Address" required>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-6 col-md-6">
                                                     <div class="mb-3">
                                                         <label for="formcontrolinput6" class="form-label">Phone:</label>
                                                         <input type="number" class="form-control" id="phone"
-                                                            name="phone" placeholder="Phone">
+                                                            name="phone" placeholder="Phone" required>
                                                     </div>
                                                 </div>
                                             </div>
@@ -135,6 +136,16 @@
 <script>
     const addBtn = document.getElementById('add-address-btn')
     const form = document.getElementById('add-address-form')
+    const deleteAddressBtns = document.querySelectorAll('.delete-address-btn')
+    console.log(deleteAddressBtns)
+    deleteAddressBtns.forEach(btn=>{
+        btn.addEventListener('click',(e)=>{
+            console.log('click')
+            const form = document.querySelector(`form[data-id="${e.target.dataset.id}"]`)
+            form.action = `/user/profile/address?id=${form.dataset.id}&_method=DELETE`
+            form.submit()
+        })
+    })
     addBtn.addEventListener('click', (e) => {
         form.hidden = !form.hidden
     })
