@@ -1,0 +1,98 @@
+<div class="app-content content ">
+    <div class="content-overlay"></div>
+    <div class="header-navbar-shadow"></div>
+    <div class="content-wrapper container-xxl p-0">
+        <div class="content-header row">
+        </div>
+        <div class="content-body">
+
+            <h1>Order detail</h1>
+            <h4>Customer: <%= userFullname %></h4>
+            <h4>Address: <%= address %></h4>
+            <table class="invoice-list-table table dataTable no-footer dtr-column" id="DataTables_Table_0" role="grid"
+                aria-describedby="DataTables_Table_0_info">
+                <thead>
+                    <tr role="row">
+                        <th class="control sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
+                            colspan="1" aria-label=": activate to sort column ascending" style="display: none;"></th>
+                        <th class="sorting sorting_desc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
+                            colspan="1" aria-label="#: activate to sort column ascending" width="10%"
+                            aria-sort="descending">#</th>
+
+                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                            width="30%" aria-label="Name: activate to sort column ascending">Image
+                        </th>
+
+                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                            width="20%" aria-label="Name: activate to sort column ascending">Book
+                        </th>
+
+                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                            width="20%" aria-label="Name: activate to sort column ascending">Unit price
+                        </th>
+
+                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                            width="20%" aria-label="Name: activate to sort column ascending">Quantity
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <% if (orderDetails.length === 0) { %>
+                        <tr>
+                            <td colspan="4"><h3 class="text-center">Không có chi tiết đơn</h3></td>
+                        </tr>
+                    <% } %>
+                    <% orderDetails.forEach((orderDetail, index) => { %>
+                        <% if (index % 2 === 0) { %>
+                        <tr class="even">
+                            <td class=" control" tabindex="0" style="display: none;"></td>
+                            <td class="sorting_1"><%= startIndex + index %></td>
+    
+                            <td>
+                                <img src="/<%= orderDetail.bookImage %>" alt="book image">
+                            </td>
+
+                            <td><%= orderDetail.bookName %></td>
+
+                            <td><%= orderDetail.price %></td>
+
+                            <td><%= orderDetail.quantity %></td>
+    
+                        </tr>
+                        <% } else { %>
+                            <tr class="odd">
+                                <td class=" control" tabindex="0" style="display: none;"></td>
+                                <td class="sorting_1"><%= startIndex + index %></td>
+        
+                                <td>
+                                    <img src="/<%= orderDetail.bookImage %>" alt="book image">
+                                </td>
+
+                                <td><%= orderDetail.bookName %></td>
+
+                                <td><%= orderDetail.price %></td>
+
+                                <td><%= orderDetail.quantity %></td>
+                            </tr>
+                        <% } %>
+                    <% }) %>
+
+
+                </tbody>
+            </table>
+
+            
+            <!-- Paginator -->
+            <% if (orderDetails.length > 0) { %>
+                <div id="paginator">
+                </div>
+            <% } %>
+            <h4>Total: <%= total %></h4>
+        </div>
+    </div>
+ 
+</div>
+
+<!--  Paginator -->
+<%- include('../partials/paginator.ejs') %>

@@ -1,0 +1,95 @@
+<div class="app-content content ">
+    <div class="content-overlay"></div>
+    <div class="header-navbar-shadow"></div>
+    <div class="content-wrapper container-xxl p-0">
+        <div class="content-header row">
+        </div>
+        <div class="content-body">
+
+            <h1>Order</h1>
+            <table class="invoice-list-table table dataTable no-footer dtr-column" id="DataTables_Table_0" role="grid"
+                aria-describedby="DataTables_Table_0_info">
+                <thead>
+                    <tr role="row">
+                        <th class="control sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
+                            colspan="1" aria-label=": activate to sort column ascending" style="display: none;"></th>
+                        <th class="sorting sorting_desc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
+                            colspan="1" aria-label="#: activate to sort column ascending" width="10%"
+                            aria-sort="descending">#</th>
+
+                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                            width="50%" aria-label="Name: activate to sort column ascending">Customer name
+                        </th>
+
+                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                            width="30%" aria-label="Name: activate to sort column ascending">Total
+                        </th>
+
+                        <th class="cell-fit sorting_disabled" rowspan="1" colspan="1" width="10%" aria-label="Actions">
+                            Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <% if (orders.length === 0) { %>
+                        <tr>
+                            <td colspan="4"><h3 class="text-center">Không có đơn hàng</h3></td>
+                        </tr>
+                    <% } %>
+                    <% orders.forEach((order, index) => { %>
+                        <% if (index % 2 === 0) { %>
+                        <tr class="even">
+                            <td class=" control" tabindex="0" style="display: none;"></td>
+                            <td class="sorting_1"><%= startIndex + index %></td>
+    
+                            <td>
+                                <h6 class="user-name text-truncate mb-0"><%= order.user.fullName %>
+                            </td>
+
+                            <td><span class="d-none"></span><%= order.total %></td>
+    
+                            <td>
+                                <div class="d-flex align-items-center col-actions">
+                                    <a class="me-1" href="/admin/order/<%= order.id %>">View
+                                    </a>
+
+                                </div>
+                            </td>
+                        </tr>
+                        <% } else { %>
+                            <tr class="odd">
+                                <td class=" control" tabindex="0" style="display: none;"></td>
+                                <td class="sorting_1"><%= startIndex + index %></td>
+        
+                                <td>
+                                    <h6 class="user-name text-truncate mb-0"><%= order.user.fullName %>
+                                </td>
+                                <td><span class="d-none"></span><%= order.total %></td>
+        
+                                <td>
+                                    <div class="d-flex align-items-center col-actions">
+                                        <a class="me-1" href="/admin/order/<%= order.id %>">View</a>
+        
+                                    </div>
+                                </td>
+                            </tr>
+                        <% } %>
+                    <% }) %>
+
+
+                </tbody>
+            </table>
+
+            <!-- Paginator -->
+            <% if (orders.length > 0) { %>
+            <div id="paginator">
+            </div>
+            <% } %>
+        </div>
+    </div>
+ 
+</div>
+
+
+<!--  Paginator -->
+<%- include('../partials/paginator.ejs') %>

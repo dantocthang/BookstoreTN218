@@ -58,18 +58,28 @@ class BookController {
 
   // [GET] /admin/book
   async adminBooks(req, res, next) {
-    const books = await Book.findAll({
-      include: ["author", "category", "images"],
-    });
-    const images = await Image.findOne();
+
+    const books = res.paginatedResult.model;
+    const numberOfPages = res.paginatedResult.numberOfPages;
+    const startIndex = res.paginatedResult.startIndex;
+    const endIndex = res.paginatedResult.endIndex;
+    const numberOfRecords = res.paginatedResult.numberOfRecords;
+    const currentPage = res.paginatedResult.currentPage;
+
     return res.render("admin/book", {
       layout: "admin/layouts/main",
+      images: books[0].images[0],
+      message: req.flash(),
       books,
-      images,
+      numberOfPages,
+      startIndex,
+      endIndex,
+      numberOfRecords,
+      currentPage,
     });
   }
 
-  // [GET /admin/book/create
+  // [GET] /admin/book/create
   async createBookForm(req, res, next) {
     const categories = await Category.findAll();
     const authors = await Author.findAll();
@@ -81,7 +91,7 @@ class BookController {
       update: false,
       categories,
       authors,
-      publishers
+      publishers,
     });
   }
 
@@ -112,7 +122,10 @@ class BookController {
         const fileName = image.filename;
         await Image.create({ path: `files/${fileName}`, bookId: book.id });
       }
-      return res.redirect("/admin/book");
+
+        // toast
+        req.flash('success', 'Thêm thành công!');
+        res.redirect('/admin/book');
     } catch (error) {
       next(error);
     }
@@ -170,7 +183,10 @@ class BookController {
           bookId: req.params.bookId,
         });
       }
-      return res.redirect("/admin/book");
+      
+        // toast
+        req.flash('success', 'Chỉnh sửa thành công!');
+        res.redirect('/admin/book');
     } catch (error) {
       next(error);
     }
@@ -180,7 +196,10 @@ class BookController {
   async deleteBook(req, res, next) {
     try {
       await Book.destroy({ where: { id: req.params.bookId } });
-      return res.redirect("/admin/book");
+      
+        //toast
+        req.flash('success', 'Xóa thành công!');
+        res.redirect('/admin/book');
     } catch (error) {
       next(error);
     }

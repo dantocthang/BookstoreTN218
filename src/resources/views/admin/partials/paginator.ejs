@@ -5,8 +5,7 @@ function displayList(
     startIndex, 
     endIndex, 
     numberOfRecords, 
-    currentPage = 1, 
-    PER_PAGE,
+    currentPage = 1,
 ) {
     const paginatorElement = document.querySelector('#paginator');
     
@@ -29,7 +28,7 @@ function displayList(
                     <a href="?page=${currentPage - 1}" aria-controls="DataTables_Table_0" class="page-link">&nbsp;</a>
                 </li>`;
     
-    if (numberOfPages > PER_PAGE) {
+    if (numberOfPages > 4) {
         if (currentPage >= 1 && currentPage <= 3) {
             /**
              * Case: 1 <= currentPage <= 3
@@ -141,7 +140,6 @@ document.addEventListener('DOMContentLoaded', function() {
         <%=endIndex%>, 
         <%=numberOfRecords%>, 
         <%=currentPage%>,
-        <%=PER_PAGE%>,
     );
 });
 
