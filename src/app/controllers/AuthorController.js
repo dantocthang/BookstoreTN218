@@ -4,43 +4,28 @@ import { validationResult } from 'express-validator';
 
 import Author from '../models/author.js';
 import Book from '../models/book.js';
-import { PER_PAGE } from '../../config/pagination.js';
 
 class AuthorController {
 
     // [GET] /admin/authors
     async index(req, res, next) {
         try {
-            const currentPage = parseInt(req.query.page || 1);
+            const authors = res.paginatedResult.model;
+            const numberOfPages = res.paginatedResult.numberOfPages;
+            const startIndex = res.paginatedResult.startIndex;
+            const endIndex = res.paginatedResult.endIndex;
+            const numberOfRecords = res.paginatedResult.numberOfRecords;
+            const currentPage = res.paginatedResult.currentPage;
 
-            const authors = await Author.findAndCountAll({
-                attributes: ['id', 'name', 'description'],
-                offset: (currentPage - 1) * PER_PAGE,
-                limit: PER_PAGE,
-            });
-            
-            const numberOfRecords = authors.count;
-            const numberOfPages = Math.ceil(numberOfRecords / PER_PAGE);
-            if (currentPage > numberOfPages && numberOfPages > 0) {
-                return res.redirect('/admin/authors');
-            }
-
-            const startIndex = (currentPage - 1) * PER_PAGE + 1;
-            let endIndex = startIndex + PER_PAGE - 1;
-            if (endIndex > numberOfRecords) {
-                endIndex = numberOfRecords;
-            }
-            
             res.render('admin/author', {
                 layout: 'admin/layouts/main',
-                authors: authors.rows,
                 message: req.flash(),
+                authors,
                 numberOfPages,
                 startIndex,
                 endIndex,
                 numberOfRecords,
                 currentPage,
-                PER_PAGE,
             });
 
         } catch(error) {

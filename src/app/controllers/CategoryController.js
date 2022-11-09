@@ -4,43 +4,29 @@ import { validationResult } from 'express-validator';
 
 import Category from '../models/category.js';
 import Book from '../models/book.js';
-import { PER_PAGE } from '../../config/pagination.js';
 
 class CategoryController {
 
     // [GET] /admin/categories
     async index(req, res, next) {
         try {
-            const currentPage = parseInt(req.query.page || 1);
-
-            const categories = await Category.findAndCountAll({
-                attributes: ['id', 'name'],
-                offset: (currentPage - 1) * PER_PAGE,
-                limit: PER_PAGE,
-            });
-
-            const numberOfRecords = categories.count;
-            const numberOfPages = Math.ceil(numberOfRecords / PER_PAGE);
-            if (currentPage > numberOfPages && numberOfPages > 0) {
-                return res.redirect('/admin/categories');
-            }
-
-            const startIndex = (currentPage - 1) * PER_PAGE + 1;
-            let endIndex = startIndex + PER_PAGE - 1;
-            if (endIndex > numberOfRecords) {
-                endIndex = numberOfRecords;
-            }
+            
+            const categories = res.paginatedResult.model;
+            const numberOfPages = res.paginatedResult.numberOfPages;
+            const startIndex = res.paginatedResult.startIndex;
+            const endIndex = res.paginatedResult.endIndex;
+            const numberOfRecords = res.paginatedResult.numberOfRecords;
+            const currentPage = res.paginatedResult.currentPage;
     
             res.render('admin/category', {
                 layout: 'admin/layouts/main',
-                categories: categories.rows,
                 message: req.flash(),
+                categories,
                 numberOfPages,
                 startIndex,
                 endIndex,
                 numberOfRecords,
                 currentPage,
-                PER_PAGE,
             });
         } catch(error) {
             next(error);

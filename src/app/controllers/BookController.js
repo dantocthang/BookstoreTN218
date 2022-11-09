@@ -12,7 +12,6 @@ import Author from "../models/author.js";
 import Image from "../models/image.js";
 import Publisher from "../models/publisher.js";
 import Review from "../models/review.js";
-import { PER_PAGE } from "../../config/pagination.js";
 
 class BookController {
   async getBooksList(req, res, next) {
@@ -60,41 +59,27 @@ class BookController {
   // [GET] /admin/book
   async adminBooks(req, res, next) {
 
-    const currentPage = parseInt(req.query.page || 1);
+    const books = res.paginatedResult.model;
+    const numberOfPages = res.paginatedResult.numberOfPages;
+    const startIndex = res.paginatedResult.startIndex;
+    const endIndex = res.paginatedResult.endIndex;
+    const numberOfRecords = res.paginatedResult.numberOfRecords;
+    const currentPage = res.paginatedResult.currentPage;
 
-    const books = await Book.findAndCountAll({
-      include: ["author", "category", "images"],
-      offset: (currentPage - 1) * PER_PAGE, limit: PER_PAGE,
-    });
-
-    const numberOfRecords = books.count;
-    const numberOfPages = Math.ceil(numberOfRecords / PER_PAGE);
-    if (currentPage > numberOfPages && numberOfPages > 0) {
-        return res.redirect('/admin/book');
-    }
-    
-    const startIndex = (currentPage - 1) * PER_PAGE + 1;
-    let endIndex = startIndex + PER_PAGE - 1;
-    if (endIndex > numberOfRecords) {
-        endIndex = numberOfRecords;
-    }
-
-    const images = await Image.findOne();
     return res.render("admin/book", {
       layout: "admin/layouts/main",
-      books: books.rows,
-      images,
+      images: books[0].images[0],
       message: req.flash(),
+      books,
       numberOfPages,
       startIndex,
       endIndex,
       numberOfRecords,
       currentPage,
-      PER_PAGE,
     });
   }
 
-  // [GET /admin/book/create
+  // [GET] /admin/book/create
   async createBookForm(req, res, next) {
     const categories = await Category.findAll();
     const authors = await Author.findAll();

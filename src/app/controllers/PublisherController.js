@@ -3,43 +3,29 @@ import { validationResult } from 'express-validator';
 
 import Publisher from '../models/publisher.js';
 import Book from '../models/book.js';
-import { PER_PAGE } from '../../config/pagination.js';
 
 class PublisherController {
 
     // [GET] /admin/publishers
     async index(req, res, next) {
         try {
-            const currentPage = parseInt(req.query.page || 1);
+            
+            const publishers = res.paginatedResult.model;
+            const numberOfPages = res.paginatedResult.numberOfPages;
+            const startIndex = res.paginatedResult.startIndex;
+            const endIndex = res.paginatedResult.endIndex;
+            const numberOfRecords = res.paginatedResult.numberOfRecords;
+            const currentPage = res.paginatedResult.currentPage;
 
-            const publishers = await Publisher.findAndCountAll({
-                attributes: ['id', 'name'],
-                offset: (currentPage - 1) * PER_PAGE,
-                limit: PER_PAGE,
-            });
-
-            const numberOfRecords = publishers.count;
-            const numberOfPages = Math.ceil(numberOfRecords / PER_PAGE);
-            if (currentPage > numberOfPages && numberOfPages > 0) {
-                return res.redirect('/admin/publishers');
-            }
-
-            const startIndex = (currentPage - 1) * PER_PAGE + 1;
-            let endIndex = startIndex + PER_PAGE - 1;
-            if (endIndex > numberOfRecords) {
-                endIndex = numberOfRecords;
-            }
-    
             res.render('admin/publisher', {
                 layout: 'admin/layouts/main',
-                publishers: publishers.rows,
                 message: req.flash(),
+                publishers,
                 numberOfPages,
                 startIndex,
                 endIndex,
                 numberOfRecords,
                 currentPage,
-                PER_PAGE,
             });
         } catch(error) {
             next(error);

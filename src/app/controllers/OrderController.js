@@ -14,43 +14,22 @@ class OrderController {
     // [GET] /admin/orders
     async index(req, res, next) {
         try {
-            const currentPage = parseInt(req.query.page || 1);
-
-            const orders = await Order.findAndCountAll({
-                attributes: ['id', 'total', 'userId'],
-                offset: (currentPage - 1) * PER_PAGE,
-                limit: PER_PAGE,
-            });
-
-            const ordersRender = { ... orders };
-
-            for (const order of ordersRender.rows) {
-                const user = await User.findByPk(order.userId);
-
-                order.userFullName = user.fullName;
-            }
-
-            const numberOfRecords = ordersRender.count;
-            const numberOfPages = Math.ceil(numberOfRecords / PER_PAGE);
-            if (currentPage > numberOfPages && numberOfPages > 0) {
-                return res.redirect('/admin/orders');
-            }
-
-            const startIndex = (currentPage - 1) * PER_PAGE + 1;
-            let endIndex = startIndex + PER_PAGE - 1;
-            if (endIndex > numberOfRecords) {
-                endIndex = numberOfRecords;
-            }
+            
+            const orders = res.paginatedResult.model;
+            const numberOfPages = res.paginatedResult.numberOfPages;
+            const startIndex = res.paginatedResult.startIndex;
+            const endIndex = res.paginatedResult.endIndex;
+            const numberOfRecords = res.paginatedResult.numberOfRecords;
+            const currentPage = res.paginatedResult.currentPage;
 
             res.render('admin/order', {
                 layout: 'admin/layouts/main',
-                orders: ordersRender.rows,
+                orders,
                 numberOfPages,
                 startIndex,
                 endIndex,
                 numberOfRecords,
                 currentPage,
-                PER_PAGE,
             });
 
         } catch(error) {
@@ -117,7 +96,6 @@ class OrderController {
                 endIndex,
                 numberOfRecords,
                 currentPage,
-                PER_PAGE,
             });
 
         } catch(error) {
