@@ -11,6 +11,7 @@ import authMiddleware from '../app/middlewares/auth.middleware.js';
 
 function route(app) {
     app.use('/admin', authMiddleware, adminRouter)
+    // app.use('/admin', adminRouter)
     app.use('/auth', authRouter)
     app.use('/cart', cartRouter)
     app.use('/book', bookRouter)

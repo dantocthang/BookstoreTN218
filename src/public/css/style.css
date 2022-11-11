@@ -35016,3 +35016,10 @@ footer.footer-dark .footer-category .toggle-items ul li a:hover {
   height: 48px;
   font-size: 1rem;
 }
+
+.my-home-icon{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
