@@ -33,14 +33,34 @@
                 </h3>
                 <div class="shop-item-rating">
                   <div class="d-lg-flex d-sm-inline-flex d-flex align-items-center">
-                    <ul class="dz-rating">
-                      <li><i class="flaticon-star text-yellow"></i></li>
-                      <li><i class="flaticon-star text-yellow"></i></li>
-                      <li><i class="flaticon-star text-yellow"></i></li>
-                      <li><i class="flaticon-star text-yellow"></i></li>
-                      <li><i class="flaticon-star text-muted"></i></li>
-                    </ul>
-                    <h6 class="m-b0">4.0</h6>
+                    
+                      <% if (book.reviews.length > 0){ %>
+                        <div class="rate">
+                          <% let total=0;
+                        for(let i=0; i < book.reviews.length; i++) 
+                        { 
+                          total += book.reviews[i].stars
+                        }
+                        stars = total/book.reviews.length
+                        stars = stars.toFixed(1)
+                        %>
+                        <h6 class="m-b0 ms-2"><%= stars %></h6>
+                        <i class="<%= stars >= 5 && 'fa-solid fa-star ' %> <%= stars < 5 && stars > 4 && 'fa-solid fa-star-half-stroke ' %> <%= stars <= 4 && 'fa-regular fa-star text-muted ' %> text-yellow"></i>
+                        <i class="<%= stars >= 4 && 'fa-solid fa-star ' %> <%= stars < 4 && stars > 3 && 'fa-solid fa-star-half-stroke ' %> <%= stars <= 3 && 'fa-regular fa-star text-muted ' %> text-yellow"></i>
+                        <i class="<%= stars >= 3 && 'fa-solid fa-star ' %> <%= stars < 3 && stars > 2 && 'fa-solid fa-star-half-stroke ' %> <%= stars <= 2 && 'fa-regular fa-star text-muted ' %> text-yellow"></i>
+                        <i class="<%= stars >= 2 && 'fa-solid fa-star ' %> <%= stars < 2 && stars > 1 && 'fa-solid fa-star-half-stroke ' %> <%= stars <= 1 && 'fa-regular fa-star text-muted ' %> text-yellow"></i>
+                        <i class="<%= stars >= 1 && 'fa-solid fa-star ' %> <%= stars < 1 && stars > 0 && 'fa-solid fa-star-half-stroke ' %> <%= stars <= 0 && 'fa-regular fa-star text-muted ' %> text-yellow"></i>
+                    </div>
+                        <% } else { %>
+                          <div class="rate">
+                            <h6 class="m-b0 ms-2">0.0</h6>
+                            <i class="fa-regular fa-star text-muted text-yellow"></i>
+                            <i class="fa-regular fa-star text-muted text-yellow"></i>
+                            <i class="fa-regular fa-star text-muted text-yellow"></i>
+                            <i class="fa-regular fa-star text-muted text-yellow"></i>
+                            <i class="fa-regular fa-star text-muted text-yellow"></i>
+                          </div>
+                          <% } %>
                   </div>
                   <div class="social-area">
                     <ul class="dz-social-icon style-3">
@@ -81,7 +101,7 @@
                       <%= book.year %>
                     </li>
                   </ul>
-                </div <p class="text-1">
+                </div> <p class="text-1">
                 <%= book.description %>
                   </p>
                   <div class="book-footer">
@@ -200,7 +220,10 @@
                   <div class="col-xl-12 col-lg-6">
                     <div class="dz-shop-card style-5">
                       <div class="dz-media">
-                        <img src="../images/books/grid/book15.jpg" alt="" />
+                        <a href="<%= `/book/${bookList[i].id}` %>" class="dz-media"
+                          style="aspect-ratio: 5 / 7; height: 100%; display: block;">
+                          <img class="my-book-image" src="/<%= bookList[i].images?.[0]?.path %>" alt="book">
+                        </a>
                       </div>
                       <div class="dz-content">
                         <h5 class="subtitle">
