@@ -247,7 +247,8 @@
           <% for (const book of books){ %>
             <div class="swiper-slide">
               <div class="books-card style-1 wow fadeInUp" data-wow-delay="0.1s" style="text-align: left">
-                <a href="<%= `/book/${book.id}` %>" class="dz-media" style="aspect-ratio: 5 / 7; height: 100%; display: block;">
+                <a href="<%= `/book/${book.id}` %>" class="dz-media"
+                  style="aspect-ratio: 5 / 7; height: 100%; display: block;">
                   <img class="my-book-image" src="/<%= book.images?.[0]?.path %>" alt="book">
                 </a>
                 <div class="dz-content">
@@ -276,8 +277,9 @@
       <div class="row">
         <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.1s">
           <div class="icon-bx-wraper style-1 m-b20 text-center">
-            <div class="icon-bx-sm m-b10">
-              <i class="flaticon-power icon-cell"></i>
+            <div class="icon-bx-sm m-b10 my-home-icon">
+              <!-- <i class="flaticon-power icon-cell"></i> -->
+              <i class="fa-solid fa-jet-fighter icon-cell "></i>
             </div>
             <div class="icon-content">
               <h5 class="dz-title m-b10">Quick Delivery</h5>
@@ -287,8 +289,9 @@
         </div>
         <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.2s">
           <div class="icon-bx-wraper style-1 m-b20 text-center">
-            <div class="icon-bx-sm m-b10">
-              <i class="flaticon-shield icon-cell"></i>
+            <div class="icon-bx-sm m-b10 my-home-icon">
+              <!-- <i class="flaticon-shield icon-cell"></i> -->
+              <i class="fa-solid fa-shield icon-cell "></i>
             </div>
             <div class="icon-content">
               <h5 class="dz-title m-b10">Secure Payment</h5>
@@ -298,8 +301,9 @@
         </div>
         <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.3s">
           <div class="icon-bx-wraper style-1 m-b20 text-center">
-            <div class="icon-bx-sm m-b10">
-              <i class="flaticon-like icon-cell"></i>
+            <div class="icon-bx-sm m-b10 my-home-icon">
+              <!-- <i class="flaticon-like icon-cell"></i> -->
+              <i class="fa-solid fa-award icon-cell "></i>
             </div>
             <div class="icon-content">
               <h5 class="dz-title m-b10">Best Quality</h5>
@@ -309,8 +313,9 @@
         </div>
         <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.4s">
           <div class="icon-bx-wraper style-1 m-b20 text-center">
-            <div class="icon-bx-sm m-b10">
-              <i class="flaticon-star icon-cell"></i>
+            <div class="icon-bx-sm m-b10 my-home-icon">
+              <!-- <i class="flaticon-star icon-cell"></i> -->
+              <i class="fa-solid fa-arrow-right-arrow-left icon-cell "></i>
             </div>
             <div class="icon-content">
               <h5 class="dz-title m-b10">Return Guarantee</h5>
@@ -505,8 +510,10 @@
                     <%= book.name %>
                   </h2>
                   <ul class="dz-tags">
-                    <li><%= book.category.name %></li>
-                    
+                    <li>
+                      <%= book.category.name %>
+                    </li>
+
                   </ul>
                   <p class="text">
                     <%= book.description %>
@@ -519,7 +526,8 @@
                     <span class="badge">20% OFF</span> -->
                   </div>
                   <div class="bookcard-footer">
-                    <div data-id="<%= book.id %>" class="btn btn-primary btnhover m-t15 m-r10 add-to-cart-btn">Buy Now</div>
+                    <div data-id="<%= book.id %>" class="btn btn-primary btnhover m-t15 m-r10 add-to-cart-btn">Buy Now
+                    </div>
                     <a href="/book/<%= book.id %>" class="btn btn-outline-secondary btnhover m-t15">See Details</a>
                   </div>
                 </div>

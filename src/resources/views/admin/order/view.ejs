@@ -1,3 +1,9 @@
+<style>
+    .order-item-image {
+        max-width: 200px;
+    }
+</style>
+
 <div class="app-content content ">
     <div class="content-overlay"></div>
     <div class="header-navbar-shadow"></div>
@@ -7,8 +13,10 @@
         <div class="content-body">
 
             <h1>Order detail</h1>
-            <h4>Customer: <%= userFullname %></h4>
-            <h4>Address: <%= address %></h4>
+            <h4>Customer: <%= userFullname %>
+            </h4>
+            <h4>Address: <%= address %>
+            </h4>
             <table class="invoice-list-table table dataTable no-footer dtr-column" id="DataTables_Table_0" role="grid"
                 aria-describedby="DataTables_Table_0_info">
                 <thead>
@@ -38,60 +46,80 @@
                 </thead>
 
                 <tbody>
-                    <% if (orderDetails.length === 0) { %>
+                    <% if (orderDetails.length===0) { %>
                         <tr>
-                            <td colspan="4"><h3 class="text-center">Không có chi tiết đơn</h3></td>
-                        </tr>
-                    <% } %>
-                    <% orderDetails.forEach((orderDetail, index) => { %>
-                        <% if (index % 2 === 0) { %>
-                        <tr class="even">
-                            <td class=" control" tabindex="0" style="display: none;"></td>
-                            <td class="sorting_1"><%= startIndex + index %></td>
-    
-                            <td>
-                                <img src="/<%= orderDetail.bookImage %>" alt="book image">
+                            <td colspan="4">
+                                <h3 class="text-center">Không có chi tiết đơn</h3>
                             </td>
-
-                            <td><%= orderDetail.bookName %></td>
-
-                            <td><%= orderDetail.price %></td>
-
-                            <td><%= orderDetail.quantity %></td>
-    
                         </tr>
-                        <% } else { %>
-                            <tr class="odd">
-                                <td class=" control" tabindex="0" style="display: none;"></td>
-                                <td class="sorting_1"><%= startIndex + index %></td>
-        
-                                <td>
-                                    <img src="/<%= orderDetail.bookImage %>" alt="book image">
-                                </td>
-
-                                <td><%= orderDetail.bookName %></td>
-
-                                <td><%= orderDetail.price %></td>
-
-                                <td><%= orderDetail.quantity %></td>
-                            </tr>
                         <% } %>
-                    <% }) %>
+                            <% orderDetails.forEach((orderDetail, index)=> { %>
+                                <% if (index % 2===0) { %>
+                                    <tr class="even">
+                                        <td class=" control" tabindex="0" style="display: none;"></td>
+                                        <td class="sorting_1">
+                                            <%= startIndex + index %>
+                                        </td>
+
+                                        <td>
+                                            <img class="order-item-image" src="/<%= orderDetail.bookImage %>"
+                                                alt="book image">
+                                        </td>
+
+                                        <td>
+                                            <%= orderDetail.bookName %>
+                                        </td>
+
+                                        <td>
+                                            <%= orderDetail.price %>
+                                        </td>
+
+                                        <td>
+                                            <%= orderDetail.quantity %>
+                                        </td>
+
+                                    </tr>
+                                    <% } else { %>
+                                        <tr class="odd">
+                                            <td class=" control" tabindex="0" style="display: none;"></td>
+                                            <td class="sorting_1">
+                                                <%= startIndex + index %>
+                                            </td>
+
+                                            <td>
+                                                <img src="/<%= orderDetail.bookImage %>" alt="book image">
+                                            </td>
+
+                                            <td>
+                                                <%= orderDetail.bookName %>
+                                            </td>
+
+                                            <td>
+                                                <%= orderDetail.price %>
+                                            </td>
+
+                                            <td>
+                                                <%= orderDetail.quantity %>
+                                            </td>
+                                        </tr>
+                                        <% } %>
+                                            <% }) %>
 
 
                 </tbody>
             </table>
 
-            
+
             <!-- Paginator -->
-            <% if (orderDetails.length > 0) { %>
+            <% if (orderDetails.length> 0) { %>
                 <div id="paginator">
                 </div>
-            <% } %>
-            <h4>Total: <%= total %></h4>
+                <% } %>
+                    <h4>Total: <%= total %>
+                    </h4>
         </div>
     </div>
- 
+
 </div>
 
 <!--  Paginator -->

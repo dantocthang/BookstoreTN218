@@ -24,49 +24,6 @@
                 <span class="badge" id="cart-number"></span>
               </button>
               <ul class="dropdown-menu cart-list" id="cart-list">
-                <!-- <li class="cart-item">
-                  <div class="media">
-                    <div class="media-left">
-                      <a href="books-detail.html">
-                        <img alt="" class="media-object" src="images/books/small/pic1.jpg">
-                      </a>
-                    </div>
-                    <div class="media-body">
-                      <h6 class="dz-title"><a href="books-detail.html" class="media-heading">Real Life</a></h6>
-                      <span class="dz-price">$28.00</span>
-                      <span class="item-close">&times;</span>
-                    </div>
-                  </div>
-                </li>
-                <li class="cart-item">
-                  <div class="media">
-                    <div class="media-left">
-                      <a href="books-detail.html">
-                        <img alt="" class="media-object" src="images/books/small/pic2.jpg">
-                      </a>
-                    </div>
-                    <div class="media-body">
-                      <h6 class="dz-title"><a href="books-detail.html" class="media-heading">Home</a></h6>
-                      <span class="dz-price">$28.00</span>
-                      <span class="item-close">&times;</span>
-                    </div>
-                  </div>
-                </li>
-                <li class="cart-item">
-                  <div class="media">
-                    <div class="media-left">
-                      <a href="books-detail.html">
-                        <img alt="" class="media-object" src="images/books/small/pic3.jpg">
-                      </a>
-                    </div>
-                    <div class="media-body">
-                      <h6 class="dz-title"><a href="books-detail.html" class="media-heading">Such a fun age</a></h6>
-                      <span class="dz-price">$28.00</span>
-                      <span class="item-close">&times;</span>
-                    </div>
-                  </div>
-                </li> -->
-
               </ul>
             </li>
 
@@ -206,9 +163,9 @@
             <li>
               <a href="/"><span>Home</span></a>
             </li>
-            <li>
+            <!-- <li>
               <a href="#"><span>About Us</span></a>
-            </li>
+            </li> -->
 
             <!-- Menu for authenticated user -->
             <li>
@@ -216,19 +173,21 @@
             </li>
 
             <!-- Menu for unauthenticated user-->
-            <li class="sub-menu-down"><a href="javascript:void(0);"><span>Account</span></a>
-              <ul class="sub-menu">
-                <li><a href="/auth/login">Log in</a></li>
-                <li><a href="/auth/register">Register account</a></li>
-              </ul>
-            </li>
+            <% if (!user){ %>
+              <li class="sub-menu-down"><a href="javascript:void(0);"><span>Account</span></a>
+                <ul class="sub-menu">
+                  <li><a href="/auth/login">Log in</a></li>
+                  <li><a href="/auth/register">Register account</a></li>
+                </ul>
+              </li>
+              <% } %>
 
-            <li class="sub-menu-down"><a href="javascript:void(0);"><span>Category</span></a>
-              <ul class="sub-menu" id="category-list">
-              </ul>
-            </li>
+                <li class="sub-menu-down"><a href="javascript:void(0);"><span>Category</span></a>
+                  <ul class="sub-menu" id="category-list">
+                  </ul>
+                </li>
 
-            <li><a href="#"><span>Contact Us</span></a></li>
+                <li><a href="#"><span>Contact Us</span></a></li>
           </ul>
           <div class="dz-social-icon">
             <ul>
