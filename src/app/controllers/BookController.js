@@ -1,10 +1,12 @@
 import { validationResult } from "express-validator";
-import sequelize from "sequelize";
+import sequelize, { Op } from "sequelize";
 import fs from "fs";
 import { promisify } from "util";
 const unlinkAsync = promisify(fs.unlink);
 
 import Book from "../models/book.js";
+import OrderDetail from "../models/order-detail.js";
+import Order from "../models/order.js";
 import Category from "../models/category.js";
 import Author from "../models/author.js";
 import Image from "../models/image.js";
@@ -17,7 +19,7 @@ class BookController {
     let page = req.query.page || 1;
     let offset = (page - 1) * limit;
     let { count, rows: bookList } = await Book.findAndCountAll({
-      include: ["author"],
+      include: ['author', 'category'],
       offset: offset,
       limit: limit,
     });
@@ -28,6 +30,15 @@ class BookController {
   /* [GET] /book/:bookId */
   async getBookDetail(req, res, next) {
     const { bookId } = req.params;
+    let ableToReview = false
+    const user = req.session.user || req.user || null
+    if (user) {
+      const isBought = await OrderDetail.findOne({
+        where: { bookId: bookId },
+        include: [{ model: Order, as: 'order', where: { userId: user.id } }]
+      })
+      if (isBought) ableToReview = true;
+    }
     const book = await Book.findOne({
       include: ["author", "category", "publisher", "images", {
         model: Review, as: 'reviews', include: ['user']
@@ -36,27 +47,39 @@ class BookController {
     });
 
     let bookList = await Book.findAll({
+      where: { authorId: book.authorId, id: { [Op.ne]: book.id } },
       include: ["author", "category", "publisher", 'reviews'],
+      limit: 3
     });
 
-    return res.render("guest/book/detail", { book: book, bookList: bookList, errors: [] });
+    return res.render("guest/book/detail", { book: book, bookList: bookList, errors: [], ableToReview });
     return res.json(bookList);
   }
 
   // [GET] /admin/book
   async adminBooks(req, res, next) {
-    const books = await Book.findAll({
-      include: ["author", "category", "images"],
-    });
-    const images = await Image.findOne();
+
+    const books = res.paginatedResult.model;
+    const numberOfPages = res.paginatedResult.numberOfPages;
+    const startIndex = res.paginatedResult.startIndex;
+    const endIndex = res.paginatedResult.endIndex;
+    const numberOfRecords = res.paginatedResult.numberOfRecords;
+    const currentPage = res.paginatedResult.currentPage;
+
     return res.render("admin/book", {
       layout: "admin/layouts/main",
+      images: books[0].images[0],
+      message: req.flash(),
       books,
-      images,
+      numberOfPages,
+      startIndex,
+      endIndex,
+      numberOfRecords,
+      currentPage,
     });
   }
 
-  // [GET /admin/book/create
+  // [GET] /admin/book/create
   async createBookForm(req, res, next) {
     const categories = await Category.findAll();
     const authors = await Author.findAll();
@@ -68,7 +91,7 @@ class BookController {
       update: false,
       categories,
       authors,
-      publishers
+      publishers,
     });
   }
 
@@ -99,7 +122,10 @@ class BookController {
         const fileName = image.filename;
         await Image.create({ path: `files/${fileName}`, bookId: book.id });
       }
-      return res.redirect("/admin/book");
+
+        // toast
+        req.flash('success', 'Thêm thành công!');
+        res.redirect('/admin/book');
     } catch (error) {
       next(error);
     }
@@ -157,7 +183,10 @@ class BookController {
           bookId: req.params.bookId,
         });
       }
-      return res.redirect("/admin/book");
+      
+        // toast
+        req.flash('success', 'Chỉnh sửa thành công!');
+        res.redirect('/admin/book');
     } catch (error) {
       next(error);
     }
@@ -167,7 +196,10 @@ class BookController {
   async deleteBook(req, res, next) {
     try {
       await Book.destroy({ where: { id: req.params.bookId } });
-      return res.redirect("/admin/book");
+      
+        //toast
+        req.flash('success', 'Xóa thành công!');
+        res.redirect('/admin/book');
     } catch (error) {
       next(error);
     }

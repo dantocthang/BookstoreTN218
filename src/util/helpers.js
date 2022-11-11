@@ -23,7 +23,15 @@ function helpers(app) {
     app.locals.findErrorByParam = (errors, paramName) => {
         return errors?.find(x => x.param == paramName)
     }
+
+    app.locals.avatarByName = (fullName) =>{
+        const arr = fullName.split(' ')
+        if (arr.length<2) return arr[0][0]
+        return `${arr[arr.length-2][0]}${arr[arr.length-1][0]}`
+    }
 }
+
+
 
 export default helpers
 

@@ -1,2 +1,2 @@
 
-export const PER_PAGE = 10;  // so ban ghi tren 1 trang
+export const PER_PAGE = 2;  // so ban ghi tren 1 trang

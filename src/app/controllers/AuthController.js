@@ -114,7 +114,7 @@ class AuthController {
         user.password
       );
       if (!isCorrectPassword)
-        return res.render("auth/login", {
+        return res.render("guest/auth/login", {
           errors: { password: "Password is not correct" },
           data: req.body,
         });

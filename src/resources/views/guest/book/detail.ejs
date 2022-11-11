@@ -94,17 +94,15 @@
                     </div>
                     <div class="product-num">
                       <div class="quantity btn-quantity style-1 me-3">
-                        <input id="demo_vertical2" type="text" value="1" name="demo_vertical2" />
+                        <input id="demo_vertical2" data-quantity type="text" value="1" name="demo_vertical2" />
                       </div>
-                      <a href="shop-cart.html" class="btn btn-primary btnhover btnhover2"><i
-                          class="flaticon-shopping-cart-1"></i>
-                        <span>Add to cart</span></a>
-                      <div class="bookmark-btn style-1 d-none d-sm-block">
+                      <div data-id="<%= book.id %>" class="btn btn-primary btnhover btnhover2 add-to-cart-btn">Add to cart</div>
+                      <!-- <div class="bookmark-btn style-1 d-none d-sm-block">
                         <input class="form-check-input" type="checkbox" id="flexCheckDefault1" />
                         <label class="form-check-label" for="flexCheckDefault1">
                           <i class="flaticon-heart"></i>
                         </label>
-                      </div>
+                      </div> -->
                     </div>
                   </div>
               </div>
@@ -136,97 +134,61 @@
                       <%= book.author.name %>
                     </td>
                   </tr>
-                  <!-- <tr>
-                    <th>ISBN</th>
-                    <td>121341381648 (ISBN13: 121341381648)</td>
-                  </tr> -->
-                  <!-- <tr>
-                    <th>Ediiton Language</th>
-                    <td>English</td>
-                  </tr> -->
-                  <!-- <tr>
-                    <th>Book Format</th>
-                    <td>Paperback, 450 Pages</td>
-                  </tr>
-                  <tr>
-                    <th>Date Published</th>
-                    <td>August 10th 2019</td>
-                  </tr> -->
                   <tr>
                     <th>Publisher</th>
                     <td>
                       <%= book.publisher.name %>
                     </td>
                   </tr>
-                  <!-- <tr>
-                    <th>Pages</th>
-                    <td>520</td>
-                  </tr> -->
-                  <!-- <tr>
-                    <th>Lesson</th>
-                    <td>7</td>
-                  </tr> -->
-                  <!-- <tr>
-                    <th>Topic</th>
-                    <td>360</td>
-                  </tr> -->
-                  <!-- <tr class="tags">
-                    <th>Tags</th>
-                    <td>
-                      <a href="javascript:void(0);" class="badge">Drama</a>
-                      <a href="javascript:void(0);" class="badge">Advanture</a>
-                      <a href="javascript:void(0);" class="badge">Survival</a>
-                      <a href="javascript:void(0);" class="badge">Biography</a>
-                      <a href="javascript:void(0);" class="badge"
-                        >Trending2022</a
-                      >
-                      <a href="javascript:void(0);" class="badge">Bestseller</a>
-                    </td>
-                  </tr> -->
                 </table>
               </div>
             </div>
           </div>
           <div class="review mt-4 ">
-            <form action="/book/<%= book.id %>/review" method="post" class="d-flex flex-column gap-2">
-              <div class="rate">
-                <input type="radio" id="star5" name="stars" value="5" />
-                <label for="star5" title="text">5 stars</label>
-                <input type="radio" id="star4" name="stars" value="4" />
-                <label for="star4" title="text">4 stars</label>
-                <input type="radio" id="star3" name="stars" value="3" />
-                <label for="star3" title="text">3 stars</label>
-                <input type="radio" id="star2" name="stars" value="2" />
-                <label for="star2" title="text">2 stars</label>
-                <input type="radio" id="star1" name="stars" value="1" />
-                <label for="star1" title="text">1 star</label>
-              </div>
-              <small>
-                <%= findErrorByParam(errors, 'stars' )?.msg %>
-              </small>
-              <textarea style="padding: 6px;" name="content" placeholder="Comment" class="d-block"></textarea>
-              <small>
-                <%= findErrorByParam(errors, 'content' )?.msg %>
-              </small>
-              <button style="width: fit-content; padding: 8px 20px;" class="btn btn-outline-primary"
-                type="submit">Submit</button>
-            </form>
-
-            <div class="reviews">
-              <% for (const reviewItem of book.reviews){ %>
-                <div class="review-item">
-                  <div class="review-item__name">
-                    <%= reviewItem.user.fullName %>
-                  </div>
-                  <div class="review-item__stars">
-                    <% for (let i=1; i<=reviewItem.stars; i++){ %>
-                      <i class="fa-solid fa-star text-yellow"></i>
-                      <% } %>
-                  </div>
-                  <div class="review-item__content"><%= reviewItem.content %></div>
+            <% if (ableToReview){ %>
+              <form action="/book/<%= book.id %>/review" method="post" class="d-flex flex-column gap-2">
+                <div class="rate">
+                  <input type="radio" id="star5" name="stars" value="5" />
+                  <label for="star5" title="text">5 stars</label>
+                  <input type="radio" id="star4" name="stars" value="4" />
+                  <label for="star4" title="text">4 stars</label>
+                  <input type="radio" id="star3" name="stars" value="3" />
+                  <label for="star3" title="text">3 stars</label>
+                  <input type="radio" id="star2" name="stars" value="2" />
+                  <label for="star2" title="text">2 stars</label>
+                  <input type="radio" id="star1" name="stars" value="1" />
+                  <label for="star1" title="text">1 star</label>
                 </div>
-                <% } %>
-            </div>
+                <small>
+                  <%= findErrorByParam(errors, 'stars' )?.msg %>
+                </small>
+                <textarea style="padding: 6px;" name="content" placeholder="Comment" class="d-block"></textarea>
+                <small>
+                  <%= findErrorByParam(errors, 'content' )?.msg %>
+                </small>
+                <button style="width: fit-content; padding: 8px 20px;" class="btn btn-outline-primary"
+                  type="submit">Submit</button>
+              </form>
+              <% } %>
+
+                <div class="reviews">
+                  <h4 class="">Customer reviews</h4>
+                  <% for (const reviewItem of book.reviews){ %>
+                    <div class="review-item">
+                      <div class="review-item__name">
+                        <%= reviewItem.user.fullName %>
+                      </div>
+                      <div class="review-item__stars">
+                        <% for (let i=1; i<=reviewItem.stars; i++){ %>
+                          <i class="fa-solid fa-star text-yellow"></i>
+                          <% } %>
+                      </div>
+                      <div class="review-item__content">
+                        <%= reviewItem.content %>
+                      </div>
+                    </div>
+                    <% } %>
+                </div>
           </div>
         </div>
         <div class="col-xl-4 mt-5 mt-xl-0">
@@ -256,9 +218,8 @@
                           <span class="price-num">$<%= bookList[i].price %></span>
                           <del>$<%= bookList[i].price + 10 %></del>
                         </div>
-                        <a href="shop-cart.html" class="btn btn-outline-primary btn-sm btnhover btnhover2"><i
-                            class="flaticon-shopping-cart-1 me-2"></i> Add to
-                          cart</a>
+                        <div data-id="<%= book.id %>"class="btn btn-outline-primary btn-sm btnhover btnhover2 add-to-cart-btn">Add to
+                          cart</div>
                       </div>
                     </div>
                   </div>
@@ -379,3 +340,26 @@
   </section>
   <!-- Newsletter End -->
 </div>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const addToCartBtns = document.querySelectorAll('.add-to-cart-btn')
+    const quantityInput = document.querySelector('[data-quantity]')
+
+    addToCartBtns.forEach(btn => {
+      btn.addEventListener('click', (event) => {
+        const bookId = event.target.dataset.id
+        const quantity = quantityInput.value || 1
+        $.ajax({
+          url: '/cart',
+          method: 'POST',
+          data: { bookId, quantity },
+          success: (data) => {
+            if (data.success) window.location.href = '/cart'
+            else window.location.href = '/auth/login'
+          }
+        })
+      })
+    })
+  })
+</script>

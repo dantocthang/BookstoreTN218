@@ -5,6 +5,7 @@ import { checkAuthenticated } from '../util/checkAuthenticated.js'
 const router = express.Router()
 
 router.get('/', checkAuthenticated, CartController.cart)
+router.get('/simple', CartController.cartSimple)
 router.post('/', checkAuthenticated, CartController.addToCart)
 router.delete('/', checkAuthenticated, CartController.deleteCartItem)
 router.get('/checkout', checkAuthenticated, CartController.checkoutForm)
