@@ -52,12 +52,12 @@ class AuthController {
                     height="100px"
                   />
                 </div>
-                <h2>Xác nhận email cho tài khoản</h2>
-                <p>xin chào <span style="color: #00aff0">${user.fullName}!</span></p>
-                <p>Bạn vừa đăng ký tài khoản</p>
+                <h2>Confirm email for account!</h2>
+                <p>Hello <span style="color: #00aff0">${user.fullName}!</span></p>
+                <p>You just signed up for an account</p>
                 <div>
                   <p>
-                    vui lòng xác nhận:
+                    Please confirm:
                     <button
                       style="
                         padding: 10px 20px;
@@ -70,14 +70,14 @@ class AuthController {
                         href="${process.env.APP_URL}/auth/verify?email=${user.email}&token=${hashedEmail}"
                         style="text-decoration: none; color: white; font-weight: bold"
                       >
-                        xác nhận
+                        Confirm
                       </a>
                     </button>
                   </p>
                 </div>
               </div>`
               );
-            });
+          });
           return res.redirect("/auth/login");
         } else {
           User.destroy({ where: { email: user.email } });
@@ -109,10 +109,7 @@ class AuthController {
           errors: { email: "User with that email does not exist" },
           data: req.body,
         });
-      const isCorrectPassword = await bcrypt.compare(
-        req.body.password,
-        user.password
-      );
+      const isCorrectPassword = await bcrypt.compare(req.body.password, user.password);
       if (!isCorrectPassword)
         return res.render("guest/auth/login", {
           errors: { password: "Password is not correct" },
@@ -140,10 +137,7 @@ class AuthController {
     console.log(req.query.email + " " + req.query.token);
     bcrypt.compare(req.query.email, req.query.token, (err, result) => {
       if (result == true) {
-        const user = User.update(
-          { email_verified: 1 },
-          { where: { email: req.query.email } }
-        );
+        const user = User.update({ email_verified: 1 }, { where: { email: req.query.email } });
         return res.redirect("/auth/login");
       } else {
         return res.render("auth/login", { errors: {}, data: {} });

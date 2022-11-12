@@ -48,12 +48,12 @@ class BookController {
 
     let bookList = await Book.findAll({
       where: { authorId: book.authorId, id: { [Op.ne]: book.id } },
-      include: ["author", "category", "publisher", 'reviews'],
+      include: ["author", "category", "publisher", 'reviews', "images"],
       limit: 3
     });
 
     return res.render("guest/book/detail", { book: book, bookList: bookList, errors: [], ableToReview });
-    return res.json(bookList);
+    // return res.json(bookList);
   }
 
   // [GET] /admin/book
