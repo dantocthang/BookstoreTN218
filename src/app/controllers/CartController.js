@@ -137,8 +137,8 @@ class CartController {
 
     var date = new Date();
 
-    var createDate = dateFormat(date, "yyyymmddHHmmss");
-    var orderId = dateFormat(date, "HHmmss");
+    var createDate = dateFormat(date, "yyyymmddHHMMss");
+    var orderId = dateFormat(date, "HHMMss");
     // var amount = req.body.amount;
     var bankCode = "";
 
