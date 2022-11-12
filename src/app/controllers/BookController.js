@@ -18,13 +18,33 @@ class BookController {
     let limit = req.query.limit || 2;
     let page = req.query.page || 1;
     let offset = (page - 1) * limit;
-    let { count, rows: bookList } = await Book.findAndCountAll({
-      include: ['author', 'category'],
-      offset: offset,
-      limit: limit,
-    });
+    let filter = req.query.filter;
 
-    return res.render("guest/list", { bookList: bookList, count: count });
+    if (filter == 'newest' || filter == 'oldest') {
+      if (filter == 'newest') {
+        var { count, rows: bookList } = await Book.findAndCountAll({
+          include: ['author', 'category', 'images'],
+          offset: offset,
+          limit: limit,
+          order: [['updatedAt', 'DESC']]
+        });
+      } else {
+        var { count, rows: bookList } = await Book.findAndCountAll({
+          include: ['author', 'category', 'images'],
+          offset: offset,
+          limit: limit,
+          order: [['updatedAt', 'ASC']]
+        });
+      }
+    } else {
+      var { count, rows: bookList } = await Book.findAndCountAll({
+        include: ['author', 'category', 'images'],
+        offset: offset,
+        limit: limit,
+      });
+    }
+    let pageCount = count / limit;
+    return res.render("guest/list", { bookList: bookList, count: count, limit: limit, pageCount: pageCount, filter: filter });
   }
 
   /* [GET] /book/:bookId */
@@ -123,9 +143,9 @@ class BookController {
         await Image.create({ path: `files/${fileName}`, bookId: book.id });
       }
 
-        // toast
-        req.flash('success', 'Thêm thành công!');
-        res.redirect('/admin/book');
+      // toast
+      req.flash('success', 'Thêm thành công!');
+      res.redirect('/admin/book');
     } catch (error) {
       next(error);
     }
@@ -183,10 +203,10 @@ class BookController {
           bookId: req.params.bookId,
         });
       }
-      
-        // toast
-        req.flash('success', 'Chỉnh sửa thành công!');
-        res.redirect('/admin/book');
+
+      // toast
+      req.flash('success', 'Chỉnh sửa thành công!');
+      res.redirect('/admin/book');
     } catch (error) {
       next(error);
     }
@@ -196,10 +216,10 @@ class BookController {
   async deleteBook(req, res, next) {
     try {
       await Book.destroy({ where: { id: req.params.bookId } });
-      
-        //toast
-        req.flash('success', 'Xóa thành công!');
-        res.redirect('/admin/book');
+
+      //toast
+      req.flash('success', 'Xóa thành công!');
+      res.redirect('/admin/book');
     } catch (error) {
       next(error);
     }
