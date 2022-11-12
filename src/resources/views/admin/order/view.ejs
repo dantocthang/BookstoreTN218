@@ -13,10 +13,12 @@
         <div class="content-body">
 
             <h1>Order detail</h1>
-            <h4>Customer: <%= userFullname %>
-            </h4>
-            <h4>Address: <%= address %>
-            </h4>
+            <h5>Customer: <%= userFullname %>
+            </h5>
+            <h5>Address: <%= address %>
+            </h5>
+            <h5>Status: <%= paymentStatus %>
+            </h5>
             <table class="invoice-list-table table dataTable no-footer dtr-column" id="DataTables_Table_0" role="grid"
                 aria-describedby="DataTables_Table_0_info">
                 <thead>
@@ -117,6 +119,7 @@
                 <% } %>
                     <h4>Total: <%= total %>
                     </h4>
+            <a href="/admin/orders" class="btn btn-outline-primary mt-1">Back</a>
         </div>
     </div>
 
