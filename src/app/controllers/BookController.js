@@ -19,10 +19,19 @@ class BookController {
     let page = req.query.page || 1;
     let offset = (page - 1) * limit;
     let filter = req.query.filter;
+    const categories = await Category.findAll()
+    const authors = await Author.findAll()
+    const publishers = await Publisher.findAll()
+
+    let queryParams = {}
+    if (req.query.categoryId) queryParams.categoryId = req.query.categoryId
+    if (req.query.authorId) queryParams.authorId = req.query.authorId
+    if (req.query.publisherId) queryParams.publisherId = req.query.publisherId
 
     if (filter == 'newest' || filter == 'oldest') {
       if (filter == 'newest') {
         var { count, rows: bookList } = await Book.findAndCountAll({
+          where: { ...queryParams },
           include: ['author', 'category', 'images'],
           offset: offset,
           limit: limit,
@@ -30,6 +39,7 @@ class BookController {
         });
       } else {
         var { count, rows: bookList } = await Book.findAndCountAll({
+          where: { ...queryParams },
           include: ['author', 'category', 'images'],
           offset: offset,
           limit: limit,
@@ -38,13 +48,14 @@ class BookController {
       }
     } else {
       var { count, rows: bookList } = await Book.findAndCountAll({
+        where: { ...queryParams },
         include: ['author', 'category', 'images'],
         offset: offset,
         limit: limit,
       });
     }
     let pageCount = count / limit;
-    return res.render("guest/list", { bookList: bookList, count: count, limit: limit, pageCount: pageCount, filter: filter });
+    return res.render("guest/list", { bookList: bookList, count: count, limit: limit, pageCount: pageCount, filter: filter, categories, authors, publishers, query: req.query });
   }
 
   /* [GET] /book/:bookId */

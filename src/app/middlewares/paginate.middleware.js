@@ -7,25 +7,25 @@ export default function paginate(Model) {
 
         try {
             const currentPage = parseInt(req.query.page || 1);
-        
+
             const model = await Model.findAndCountAll({
-                include: { all: true },
+                include: { all: true, required: true },
                 offset: (currentPage - 1) * PER_PAGE,
                 limit: PER_PAGE,
             });
-            
+
             const numberOfRecords = model.count;
             const numberOfPages = Math.ceil(numberOfRecords / PER_PAGE);
             if (currentPage > numberOfPages && numberOfPages > 0) {
                 return res.redirect(`${req.originalUrl.split('?')[0]}`);
             }
-        
+
             const startIndex = (currentPage - 1) * PER_PAGE + 1;
             let endIndex = startIndex + PER_PAGE - 1;
             if (endIndex > numberOfRecords) {
                 endIndex = numberOfRecords;
             }
-    
+
             res.paginatedResult = {
                 model: model.rows,
                 numberOfPages,
@@ -36,11 +36,11 @@ export default function paginate(Model) {
             }
 
             next();
-    
-        } catch(error) {
+
+        } catch (error) {
             throw new Error(error);
         }
-    
+
     }
-    
+
 }

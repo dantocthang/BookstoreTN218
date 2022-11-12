@@ -239,14 +239,14 @@ class CartController {
 
       // if (resData) {
       // }
-      const usermail = await User.findOne({ where: { id: order.userId  } });
-      const orderdetailmail = await OrderDetail.findAll({ where: { orderId: order.id }, include: ["book"]});
+      const usermail = await User.findOne({ where: { id: order.userId } });
+      const orderdetailmail = await OrderDetail.findAll({ where: { orderId: order.id }, include: ["book"] });
       let strmail = `<div>
         <h3 style="margin-left: 35%; color: #00aff0">Order Information</h2>
         <div style="margin-left: 10%; color: red;">
             <p>Code orders: ${order.transactionId}</p>
-            <p>Order date: ${order.createdAt.getDate()+"/"+order.createdAt.getMonth()+"/"+order.createdAt.getFullYear()}</p>
-            <p>Shop: Nhom 3</p>
+            <p>Order date: ${order.createdAt.getDate() + "/" + order.createdAt.getMonth() + "/" + order.createdAt.getFullYear()}</p>
+            
         </div>
         <h4 style="margin-left: 35%;">Order details</div>
         <table style="text-align: center; margin-left: auto; margin-right: auto">
@@ -257,13 +257,13 @@ class CartController {
             </tr>`;
       orderdetailmail.forEach(
         (element) =>
-          (strmail = strmail.concat(
-            `<tr>  
+        (strmail = strmail.concat(
+          `<tr>  
                 <td>${element.book.name}</td> 
                 <td>${element.quantity}</td> 
                 <td>${element.price * element.quantity}</td> 
             </tr>`
-          ))
+        ))
       );
       strmail = strmail.concat(
         `</table>
