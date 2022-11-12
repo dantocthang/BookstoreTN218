@@ -121,6 +121,12 @@ class AuthController {
           data: {},
         });
       req.session.user = user.dataValues;
+
+      // check account admin
+      if (user.role === 'admin') {
+        return res.redirect('/admin');
+      }
+      
       return res.redirect("/");
     } catch (error) {
       next(error);

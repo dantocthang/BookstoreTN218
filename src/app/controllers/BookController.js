@@ -13,12 +13,15 @@ import Image from "../models/image.js";
 import Publisher from "../models/publisher.js";
 import Review from "../models/review.js";
 
+import { PER_PAGE } from '../../config/pagination.js';
+
 class BookController {
   async getBooksList(req, res, next) {
-    let limit = req.query.limit || 2;
+    let limit = PER_PAGE;
     let page = req.query.page || 1;
     let offset = (page - 1) * limit;
     let filter = req.query.filter;
+
     const categories = await Category.findAll()
     const authors = await Author.findAll()
     const publishers = await Publisher.findAll()
@@ -54,8 +57,20 @@ class BookController {
         limit: limit,
       });
     }
-    let pageCount = count / limit;
-    return res.render("guest/list", { bookList: bookList, count: count, limit: limit, pageCount: pageCount, filter: filter, categories, authors, publishers, query: req.query });
+    let pageCount = Math.ceil(count / limit);
+
+    return res.render("guest/list", { 
+        bookList: bookList, 
+        count: count, 
+        limit: limit, 
+        pageCount: pageCount, 
+        filter: filter, 
+        categories, 
+        authors, 
+        publishers, 
+        query: req.query ,
+        currentPage: page,
+    });
   }
 
   /* [GET] /book/:bookId */

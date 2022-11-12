@@ -44,7 +44,7 @@ class OrderController {
             const orderId = req.params.orderId;
 
             const order = await Order.findByPk(orderId, {
-                attributes: ['id', 'total', 'userId', 'addressId']
+                attributes: ['id', 'total', 'userId', 'addressId', 'paymentStatus']
             });
 
             const user = await User.findByPk(order.userId);
@@ -91,6 +91,7 @@ class OrderController {
                 address: address.address,
                 orderDetails: orderDetails.rows,
                 total: order.total,
+                paymentStatus: order.paymentStatus,
                 numberOfPages,
                 startIndex,
                 endIndex,

@@ -9,7 +9,8 @@ export default function paginate(Model) {
             const currentPage = parseInt(req.query.page || 1);
 
             const model = await Model.findAndCountAll({
-                include: { all: true, required: true },
+                include: { all: true },
+                distinct: true,
                 offset: (currentPage - 1) * PER_PAGE,
                 limit: PER_PAGE,
             });
