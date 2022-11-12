@@ -245,7 +245,7 @@ class CartController {
         <h3 style="margin-left: 35%; color: #00aff0">Order Information</h2>
         <div style="margin-left: 10%; color: red;">
             <p>Code orders: ${order.transactionId}</p>
-            <p>Order date: ${order.createdAt.getDate() + "/" + order.createdAt.getMonth() + "/" + order.createdAt.getFullYear()}</p>
+            <p>Order date: ${order.createdAt.getDate() + "/" + (order.createdAt.getMonth() + 1) + "/" + order.createdAt.getFullYear()}</p>
             
         </div>
         <h4 style="margin-left: 35%;">Order details</div>
@@ -272,7 +272,11 @@ class CartController {
       );
       mailer(usermail.email, "Information Order", strmail);
 
-      res.render("guest/cart/payment_infor", { errCode: 0, data: vnp_Params });
+      await CartDetail.destroy({ 
+        where: { userId: order.userId } 
+      });
+
+      res.render("guest/cart/payment_infor", { errCode: 0, data: vnp_Params, payDate: order.updatedAt });
     } else {
       res.render("guest/cart/payment_infor", { errCode: -1 });
     }
