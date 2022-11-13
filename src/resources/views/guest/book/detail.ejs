@@ -7,8 +7,8 @@
             <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
               <div class="carousel-inner">
                 <% for (const i in book.images){ %>
-                  <div class="carousel-item dz-media custom-image <%= i==0 ? 'active' : ''%>">
-                    <img src="/<%= book.images[i].path %>" alt="book" />
+                  <div class="carousel-item dz-media  <%= i==0 ? 'active' : ''%>">
+                    <img class="custom-image" src="/<%= book.images[i].path %>" alt="book" />
                   </div>
                   <% } %>
               </div>

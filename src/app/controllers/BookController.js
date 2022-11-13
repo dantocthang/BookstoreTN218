@@ -35,7 +35,7 @@ class BookController {
       if (filter == 'newest') {
         var { count, rows: bookList } = await Book.findAndCountAll({
           where: { ...queryParams },
-          include: ['author', 'category', 'images'],
+          include: ['author', 'category', 'images', 'reviews'],
           offset: offset,
           limit: limit,
           order: [['updatedAt', 'DESC']]
@@ -43,7 +43,7 @@ class BookController {
       } else {
         var { count, rows: bookList } = await Book.findAndCountAll({
           where: { ...queryParams },
-          include: ['author', 'category', 'images'],
+          include: ['author', 'category', 'images', 'reviews'],
           offset: offset,
           limit: limit,
           order: [['updatedAt', 'ASC']]
@@ -52,24 +52,24 @@ class BookController {
     } else {
       var { count, rows: bookList } = await Book.findAndCountAll({
         where: { ...queryParams },
-        include: ['author', 'category', 'images'],
+        include: ['author', 'category', 'images', 'reviews'],
         offset: offset,
         limit: limit,
       });
     }
     let pageCount = Math.ceil(count / limit);
 
-    return res.render("guest/list", { 
-        bookList: bookList, 
-        count: count, 
-        limit: limit, 
-        pageCount: pageCount, 
-        filter: filter, 
-        categories, 
-        authors, 
-        publishers, 
-        query: req.query ,
-        currentPage: page,
+    return res.render("guest/list", {
+      bookList: bookList,
+      count: count,
+      limit: limit,
+      pageCount: pageCount,
+      filter: filter,
+      categories,
+      authors,
+      publishers,
+      query: req.query,
+      currentPage: page,
     });
   }
 

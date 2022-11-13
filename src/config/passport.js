@@ -1,5 +1,3 @@
-import LocalStrategy from 'passport-local'
-import bcrypt from 'bcrypt'
 import GoogleStrategy from 'passport-google-oauth20'
 import FacebookStrategy from 'passport-facebook'
 
@@ -26,13 +24,6 @@ function initializePassport(passport) {
                             fullName: profile.name.familyName + ' ' + profile.name.givenName,
                         })
                         done(null, user)
-                        // new User({
-                        //     googleId: profile.id,
-                        //     email: profile.emails[0].value,
-                        //     fullName: profile.name.familyName + ' ' + profile.name.givenName,
-                        // })
-                        //     .save()
-                        //     .then(user => done(null, user));
                     }
                 })
         }
@@ -58,18 +49,9 @@ function initializePassport(passport) {
                             } else {
                                 const user = await User.create({
                                     facebookId: profile.id,
-                                    // email: profile.emails[0].value,
                                     fullName: profile.displayName,
                                     image: profile.photos[0].value
                                 })
-                                // new User({
-                                //     facebookId: profile.id,
-                                //     username: profile.displayName,
-                                //     password: hashedPassword,
-                                //     image: profile.photos[0].value
-                                // })
-                                //     .save()
-                                //     .then(user => done(null, user));
                             }
                         })
                 }
