@@ -14,11 +14,23 @@ function displayList(
     // add css class
     paginatorElement.classList.add('d-flex', 'justify-content-between', 'row');
 
+    const href = window.location.href;
+    const [ link , queryArray ] = href.split('?');
+    const queryArrayNotPage = queryArray?.split('&').filter((query) => !query.includes('page')) || [];
+
+    let strHref = link;
+    if (queryArrayNotPage.length > 0) {
+        strHref += '?' + queryArrayNotPage.join('&') + '&';
+    } else {
+        strHref += '?';
+    }
+    console.log(strHref);
+
     // innerHTML of paginator
     let html = `
         <ul class="pagination style-1 p-t20">
             <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
-                <a class="page-link" href="?page=${currentPage - 1}&filter=<%= filter %>"><</a>
+                <a class="page-link" href="${strHref}page=${currentPage - 1}"><</a>
             </li>`;
     
     if (numberOfPages > 5) {
@@ -34,18 +46,18 @@ function displayList(
             for (let i = 1; i <= 4; i++) {
                 html += `
                 <li class="page-item">
-                    <a href="?page=${i}&filter=<%= filter %>" class="page-link ${currentPage === i ? 'active' : ''}">${i}</a>
+                    <a href="${strHref}page=${i}" class="page-link ${currentPage === i ? 'active' : ''}">${i}</a>
                 </li>`;
             }
 
             html += `
             <li class="page-item">
-                <a href="?page=5&filter=<%= filter %>" class="page-link">...</a>
+                <a href="${strHref}page=5" class="page-link">...</a>
             </li>`;
 
             html += `
             <li class="page-item">
-                <a href="?page=${numberOfPages}&filter=<%= filter %>" class="page-link ${currentPage === numberOfPages ? 'active' : ''}">${numberOfPages}</a>
+                <a href="${strHref}page=${numberOfPages}" class="page-link ${currentPage === numberOfPages ? 'active' : ''}">${numberOfPages}</a>
             </li>`;
             
         } else if (currentPage >= 4 && currentPage <= numberOfPages - 3) {
@@ -59,27 +71,27 @@ function displayList(
 
             html += `
             <li class="page-item">
-                <a href="?page=1&filter=<%= filter %>" class="page-link ${ currentPage === 1 ? 'active' : ''}">1</a>
+                <a href="${strHref}page=1" class="page-link ${ currentPage === 1 ? 'active' : ''}">1</a>
             </li>`;
             html += `
             <li class="page-item">
-                <a href="?page=${currentPage - 2}&filter=<%= filter %>" class="page-link">...</a>
+                <a href="${strHref}page=${currentPage - 2}" class="page-link">...</a>
             </li>`;
 
             for (let i = -1; i <= 1; i++) {
                 html += `
                 <li class="page-item">
-                    <a href="?page=${currentPage + i}&filter=<%= filter %>" class="page-link ${ i === 0 ? 'active' : ''}">${currentPage + i}</a>
+                    <a href="${strHref}page=${currentPage + i}" class="page-link ${ i === 0 ? 'active' : ''}">${currentPage + i}</a>
                 </li>`;
             }
             
             html += `
             <li class="page-item">
-                <a href="?page=${currentPage + 2}&filter=<%= filter %>" class="page-link">...</a>
+                <a href="${strHref}page=${currentPage + 2}" class="page-link">...</a>
             </li>`;
             html += `
             <li class="page-item">
-                <a href="?page=${numberOfPages}&filter=<%= filter %>" class="page-link ${ currentPage === numberOfPages ? 'active' : ''}">${numberOfPages}</a>
+                <a href="${strHref}page=${numberOfPages}" class="page-link ${ currentPage === numberOfPages ? 'active' : ''}">${numberOfPages}</a>
             </li>`;
         } else if (currentPage >= numberOfPages - 2 && currentPage <= numberOfPages) {
             /**
@@ -92,17 +104,17 @@ function displayList(
 
             html += `
             <li class="page-item">
-                <a href="?page=1&filter=<%= filter %>" class="page-link ${ currentPage === 1 ? 'active' : ''}">1</a>
+                <a href="${strHref}page=1" class="page-link ${ currentPage === 1 ? 'active' : ''}">1</a>
             </li>`;
             html += `
             <li class="page-item">
-                <a href="?page=${numberOfPages - 4}&filter=<%= filter %>" class="page-link">...</a>
+                <a href="${strHref}page=${numberOfPages - 4}" class="page-link">...</a>
             </li>`;
 
             for (let i = 3; i >= 0; i--) {
                 html += `
                 <li class="page-item">
-                    <a href="?page=${numberOfPages - i}&filter=<%= filter %>" class="page-link ${ currentPage === numberOfPages - i ? 'active' : ''}">${numberOfPages - i}</a>
+                    <a href="${strHref}page=${numberOfPages - i}" class="page-link ${ currentPage === numberOfPages - i ? 'active' : ''}">${numberOfPages - i}</a>
                 </li>`;
             }
         }
@@ -110,14 +122,14 @@ function displayList(
         for (let i = 1; i <= numberOfPages; i++) {
             html += `
             <li class="page-item">
-                <a href="?page=${i}&filter=<%= filter %>" class="page-link ${currentPage === i ? 'active' : ''}">${i}</a>
+                <a href="${strHref}page=${i}" class="page-link ${currentPage === i ? 'active' : ''}">${i}</a>
             </li>`;
         }
     }
 
     html += `
                 <li class="paginate_button page-item next ${currentPage === numberOfPages ? 'disabled' : ''}">
-                    <a href="?page=${currentPage + 1}&filter=<%= filter %>" class="page-link">></a>
+                    <a href="${strHref}page=${currentPage + 1}" class="page-link">></a>
                 </li>
             </ul>`;
 

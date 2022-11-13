@@ -43,7 +43,7 @@ color: black;">
         <div class="form-group">
             <label>Thời gian thanh toán:</label>
             <label>
-                <%= data.vnp_PayDate %>
+                <%= payDate.getDate() + '/' + (payDate.getMonth() + 1) + '/' + payDate.getFullYear() + ' ' + payDate.getHours() + ':' + (payDate.getMinutes() < 10 ? '0' + payDate.getMinutes() : payDate.getMinutes()) + ':' + payDate.getSeconds() %>
             </label>
         </div>
         <br>
