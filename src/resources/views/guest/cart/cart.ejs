@@ -41,7 +41,7 @@
                                     </td>
                                     <td class="product-item-quantity">
                                         <div class="quantity btn-quantity style-1 me-3">
-                                            <input data-id="<%= item.id %>" data-field="quantity" class="quantity"
+                                            <input data-book_id="<%= item.book.id %>" data-id="<%= item.id %>" data-field="quantity" class="quantity"
                                                 type="number" value="<%=item.quantity %>" name="quantity" />
                                         </div>
                                     </td>
@@ -100,6 +100,14 @@
     const quantityInputs = $(`[data-field='quantity']`)
     const deleteButtons = $('.product-item-close')
     quantityInputs.blur(function (e) {
+        
+        const cartDetails = <%- JSON.stringify(cartDetails)%>;
+        const stock = cartDetails.find((cartDetail) => cartDetail.book.id == e.target.dataset.book_id).book.stock;
+        if (e.target.value > stock) {
+            alert('Số lượng vượt quá hàng tồn');
+            this.value = stock;
+        }
+
         $.ajax({
             url: '/cart?replace',
             type: 'POST',
