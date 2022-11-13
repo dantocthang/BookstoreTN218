@@ -27,9 +27,9 @@ class BookController {
     const publishers = await Publisher.findAll()
 
     let queryParams = {}
-    if (req.query.categoryId) queryParams.categoryId = req.query.categoryId
-    if (req.query.authorId) queryParams.authorId = req.query.authorId
-    if (req.query.publisherId) queryParams.publisherId = req.query.publisherId
+    if (req.query.categoryId && req.query.categoryId !== '0') queryParams.categoryId = req.query.categoryId
+    if (req.query.authorId && req.query.authorId !== '0') queryParams.authorId = req.query.authorId
+    if (req.query.publisherId && req.query.publisherId !== '0') queryParams.publisherId = req.query.publisherId
 
     if (filter == 'newest' || filter == 'oldest') {
       if (filter == 'newest') {

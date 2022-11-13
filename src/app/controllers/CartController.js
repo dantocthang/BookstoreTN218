@@ -1,6 +1,7 @@
 import CartDetail from "../models/cart-detail.js";
 import vnPayParams from "../../util/vnPayParams.js";
 import dateFormat, { masks } from "dateformat";
+import { Op, Sequelize } from 'sequelize'
 // import sortObject from 'sort-object';
 import sortObject from "../../util/sortObject.js";
 import mailer from "../../util/mailer.js";
@@ -11,6 +12,12 @@ import Book from "../models/book.js";
 import Order from "../models/order.js";
 import OrderDetail from "../models/order-detail.js";
 import User from "../models/user.js";
+
+function deleteZombieOrder(orderId) {
+  setTimeout(async function () {
+    await Order.destroy({ where: { id: orderId, paymentStatus: 'pending' } })
+  }, 16 * 60 * 1000)
+}
 
 class CartController {
   // [GET] /cart
@@ -183,6 +190,8 @@ class CartController {
       transactionId: orderId,
     });
 
+    deleteZombieOrder(newOrder.id)
+
     const cartDetails = await CartDetail.findAll({ where: { userId: user.id }, include: ["book"] });
     for (const item of cartDetails) {
       await OrderDetail.create({
@@ -191,6 +200,8 @@ class CartController {
         orderId: newOrder.id,
         bookId: item.book.id,
       });
+      const thisBook = await Book.findByPk(item.bookId)
+      await thisBook.update({ stock: thisBook.stock - item.quantity })
     }
 
     // console.log(vnpUrl)
@@ -219,7 +230,7 @@ class CartController {
       var orderId = vnp_Params["vnp_TxnRef"];
       var rspCode = vnp_Params["vnp_ResponseCode"];
       //Kiem tra du lieu co hop le khong, cap nhat trang thai don hang va gui ket qua cho VNPAY theo dinh dang duoi
-      const order = await Order.findOne({ where: { transactionId: orderId } });
+      const order = await Order.findOne({ where: { transactionId: orderId }, include: ['orderDetails'] });
       if (!order) return res.json({ success: false, message: "Order not exist" });
       if (rspCode !== "00")
         // return res.json({ success: false, message: 'Transaction failed' })
@@ -241,6 +252,13 @@ class CartController {
       // }
       const usermail = await User.findOne({ where: { id: order.userId } });
       const orderdetailmail = await OrderDetail.findAll({ where: { orderId: order.id }, include: ["book"] });
+
+      const boughtItems = order.orderDetails.map(x => x.id)
+      const bookmail = await Book.findAll({
+        limit: 3, where: {
+          id: { [Op.notIn]: boughtItems }
+        }, order: Sequelize.literal('rand()')
+      })
       let strmail = `<div>
         <h3 style="margin-left: 35%; color: #00aff0">Order Information</h2>
         <div style="margin-left: 10%; color: red;">
@@ -265,15 +283,42 @@ class CartController {
             </tr>`
         ))
       );
+
       strmail = strmail.concat(
         `</table>
-          <div style="margin-left: 35%; margin-top: 20px; color: #00aff0">The total amount: ${order.total}</div>
-        </div>`
+  
+        </div>
+        <div style="margin-left: 35%;  margin-top: 40px;">
+        <h2>Maybe you are interested</h2>
+        <table style="text-align: center;">
+            <tr>
+                <th style="width: 20%;">Name</th>
+                <th>Price</th>
+            </tr>`
       );
+      for (let b = 0; b <= 2; b++) {
+        strmail = strmail.concat(
+          `<tr>  
+                <td>
+                  <a href="${process.env.APP_URL}/book/${bookmail[b].id}">
+                    ${bookmail[b].name}
+                  </a>
+                </td> 
+                <td>${bookmail[b].price}</td> 
+            </tr>`
+        );
+      }
+      strmail = strmail.concat(`</table> </div>`);
+
+      // strmail = strmail.concat(
+      //   `</table>
+      //     <div style="margin-left: 35%; margin-top: 20px; color: #00aff0">The total amount: ${order.total}</div>
+      //   </div>`
+      // );
       mailer(usermail.email, "Information Order", strmail);
 
-      await CartDetail.destroy({ 
-        where: { userId: order.userId } 
+      await CartDetail.destroy({
+        where: { userId: order.userId }
       });
 
       res.render("guest/cart/payment_infor", { errCode: 0, data: vnp_Params, payDate: order.updatedAt });

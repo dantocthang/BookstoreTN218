@@ -18,7 +18,8 @@ router.get('/google', passport.authenticate('google', {
 }))
 router.get('/google/callback', passport.authenticate('google'), (req, res) => {
     // return res.redirect('/')
-    req.flash('success','Đăng nhập thành công'); 
+    req.flash('success', 'Đăng nhập thành công');
+    if (req.user.role === 'admin') res.redirect('/admin')
     res.redirect('/')
 });
 router.get('/get-user', (req, res) => {
@@ -29,19 +30,20 @@ router.get('/get-user', (req, res) => {
 router.get('/facebook', passport.authenticate('facebook', { scope: 'email' }));
 
 router.get('/facebook/callback',
-    passport.authenticate('facebook', { 
-        // successRedirect: '/', 
-        failureRedirect: '/auth/login' 
+    passport.authenticate('facebook', {
+        successRedirect: '/',
+        failureRedirect: '/auth/login'
     }),
     function (req, res) {
         // res.redirect('/');
-        req.flash('success','Đăng nhập thành công');
+        req.flash('success', 'Đăng nhập thành công');
+        if (req.user.role === 'admin') res.redirect('/admin')
         res.redirect('/')
     });
 
 
-router.get('/register',checkNotAuthenticated, authController.register)
-router.post('/register',checkNotAuthenticated, ...userValidator, authController.addUser)
+router.get('/register', checkNotAuthenticated, authController.register)
+router.post('/register', checkNotAuthenticated, ...userValidator, authController.addUser)
 router.get('/verify', authController.verify)
 router.get('/logout', authController.logout)
 

@@ -77,7 +77,7 @@ class AuthController {
                 </div>
               </div>`
               );
-          });
+            });
           return res.redirect("/auth/login");
         } else {
           User.destroy({ where: { email: user.email } });
@@ -126,7 +126,7 @@ class AuthController {
       if (user.role === 'admin') {
         return res.redirect('/admin');
       }
-      
+
       return res.redirect("/");
     } catch (error) {
       next(error);

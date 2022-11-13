@@ -258,10 +258,11 @@
                   <span class="price">
                     <%= book.price %> VND
                   </span>
-                  <div style="display: flex; gap: 10px" data-id="<%= book.id %>"
-                    class="btn btn-secondary btnhover btnhover2 add-to-cart-btn"><i
-                      class="fa-solid fa-cart-shopping"></i> Add to
-                    cart</div>
+                  <button <% if (parseInt(book.stock)<1){ %> disabled <% } %> style="display: flex; gap: 10px" data-id="
+                      <%= book.id %>"
+                        class="btn btn-secondary btnhover btnhover2 add-to-cart-btn"><i
+                          class="fa-solid fa-cart-shopping"></i> Add to
+                        cart</button>
                 </div>
               </div>
             </div>

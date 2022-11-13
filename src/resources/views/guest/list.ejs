@@ -118,7 +118,7 @@
                             <div class="widget widget_services style-2">
                                 <% for (const category of categories){ %>
                                     <div class="form-check search-content">
-                                        <input class="form-check-input" name="categoryId" type="checkbox"
+                                        <input class="form-check-input" name="categoryId" type="radio"
                                             <%=query?.categoryId==category.id ? 'checked' : '' %> value="<%= category.id
                                             %>"
                                             id="productCheckBox01">
@@ -127,13 +127,20 @@
                                             </label>
                                     </div>
                                     <% } %>
+                                        <div class="form-check search-content">
+                                            <input class="form-check-input" name="categoryId" type="radio"
+                                                value="<%= 0 %>" id="productCheckBox01" checked>
+                                            <label class="form-check-label" for="productCheckBox01">
+                                                All
+                                            </label>
+                                        </div>
                             </div>
                         </div>
                         <div class="acod-content collapse " id="collapseExampleAuthor">
                             <div class="widget widget_services style-2">
                                 <% for (const author of authors){ %>
                                     <div class="form-check search-content">
-                                        <input class="form-check-input" name="authorId" type="checkbox"
+                                        <input class="form-check-input" name="authorId" type="radio"
                                             <%=query?.authorId==author.id ? 'checked' : '' %> value="<%= author.id %>"
                                             id="productCheckBox01">
                                             <label class="form-check-label" for="productCheckBox01">
@@ -141,13 +148,20 @@
                                             </label>
                                     </div>
                                     <% } %>
+                                        <div class="form-check search-content">
+                                            <input class="form-check-input" name="authorId" type="radio"
+                                                value="<%= 0 %>" id="productCheckBox01" checked>
+                                            <label class="form-check-label" for="productCheckBox01">
+                                                All
+                                            </label>
+                                        </div>
                             </div>
                         </div>
                         <div class="acod-content collapse " id="collapseExamplePublisher">
                             <div class="widget widget_services style-2">
                                 <% for (const publisher of publishers){ %>
                                     <div class="form-check search-content">
-                                        <input class="form-check-input" name="publisherId" type="checkbox"
+                                        <input class="form-check-input" name="publisherId" type="radio"
                                             <%=query?.publisherId==publisher.id ? 'checked' : '' %> value="<%=
                                             publisher.id %>"
                                             id="productCheckBox01">
@@ -156,6 +170,13 @@
                                             </label>
                                     </div>
                                     <% } %>
+                                        <div class="form-check search-content">
+                                            <input class="form-check-input" name="publisherId" type="radio"
+                                                value="<%= 0 %>" id="productCheckBox01" checked>
+                                            <label class="form-check-label" for="productCheckBox01">
+                                                All
+                                            </label>
+                                        </div>
                             </div>
                         </div>
                     </form>
@@ -185,43 +206,49 @@
                                                     </a></li>
                                             </ul>
                                             <ul class="dz-rating">
-                                               
-                                                <% if (bookList[i].reviews.length > 0){ %>
-                                                  <div class="rate">
-                                                    <% let total=0;
-                                                  for(let j=0; j < bookList[i].reviews.length; j++) 
-                                                  { 
-                                                    total += bookList[i].reviews[j].stars
-                                                  }
-                                                  stars = total/bookList[i].reviews.length
-                                                  stars = stars.toPrecision(2)
-                                                  %>
-                                                  <h6 class="m-b0 ms-2"><%= stars %></h6>
-                                                  <i class="<%= stars >= 5 && 'fa-solid fa-star ' %> <%= stars < 5 && stars > 4 && 'fa-solid fa-star-half-stroke ' %> <%= stars <= 4 && 'fa-regular fa-star text-muted ' %> text-yellow"></i>
-                                                  <i class="<%= stars >= 4 && 'fa-solid fa-star ' %> <%= stars < 4 && stars > 3 && 'fa-solid fa-star-half-stroke ' %> <%= stars <= 3 && 'fa-regular fa-star text-muted ' %> text-yellow"></i>
-                                                  <i class="<%= stars >= 3 && 'fa-solid fa-star ' %> <%= stars < 3 && stars > 2 && 'fa-solid fa-star-half-stroke ' %> <%= stars <= 2 && 'fa-regular fa-star text-muted ' %> text-yellow"></i>
-                                                  <i class="<%= stars >= 2 && 'fa-solid fa-star ' %> <%= stars < 2 && stars > 1 && 'fa-solid fa-star-half-stroke ' %> <%= stars <= 1 && 'fa-regular fa-star text-muted ' %> text-yellow"></i>
-                                                  <i class="<%= stars >= 1 && 'fa-solid fa-star ' %> <%= stars < 1 && stars > 0 && 'fa-solid fa-star-half-stroke ' %> <%= stars <= 0 && 'fa-regular fa-star text-muted ' %> text-yellow"></i>
-                                              </div>
-                                                  <% } else { %>
+
+                                                <% if (bookList[i].reviews.length> 0){ %>
                                                     <div class="rate">
-                                                      <h6 class="m-b0 ms-2">0.0</h6>
-                                                      <i class="fa-regular fa-star text-muted text-yellow"></i>
-                                                      <i class="fa-regular fa-star text-muted text-yellow"></i>
-                                                      <i class="fa-regular fa-star text-muted text-yellow"></i>
-                                                      <i class="fa-regular fa-star text-muted text-yellow"></i>
-                                                      <i class="fa-regular fa-star text-muted text-yellow"></i>
+                                                        <% let total=0; for(let j=0; j < bookList[i].reviews.length;
+                                                            j++) { total +=bookList[i].reviews[j].stars }
+                                                            stars=total/bookList[i].reviews.length
+                                                            stars=stars.toPrecision(2) %>
+                                                            <h6 class="m-b0 ms-2">
+                                                                <%= stars %>
+                                                            </h6>
+                                                            <i
+                                                                class="<%= stars >= 5 && 'fa-solid fa-star ' %> <%= stars < 5 && stars > 4 && 'fa-solid fa-star-half-stroke ' %> <%= stars <= 4 && 'fa-regular fa-star text-muted ' %> text-yellow"></i>
+                                                            <i
+                                                                class="<%= stars >= 4 && 'fa-solid fa-star ' %> <%= stars < 4 && stars > 3 && 'fa-solid fa-star-half-stroke ' %> <%= stars <= 3 && 'fa-regular fa-star text-muted ' %> text-yellow"></i>
+                                                            <i
+                                                                class="<%= stars >= 3 && 'fa-solid fa-star ' %> <%= stars < 3 && stars > 2 && 'fa-solid fa-star-half-stroke ' %> <%= stars <= 2 && 'fa-regular fa-star text-muted ' %> text-yellow"></i>
+                                                            <i
+                                                                class="<%= stars >= 2 && 'fa-solid fa-star ' %> <%= stars < 2 && stars > 1 && 'fa-solid fa-star-half-stroke ' %> <%= stars <= 1 && 'fa-regular fa-star text-muted ' %> text-yellow"></i>
+                                                            <i
+                                                                class="<%= stars >= 1 && 'fa-solid fa-star ' %> <%= stars < 1 && stars > 0 && 'fa-solid fa-star-half-stroke ' %> <%= stars <= 0 && 'fa-regular fa-star text-muted ' %> text-yellow"></i>
                                                     </div>
-                                                    <% } %>
+                                                    <% } else { %>
+                                                        <div class="rate">
+                                                            <h6 class="m-b0 ms-2">0.0</h6>
+                                                            <i class="fa-regular fa-star text-muted text-yellow"></i>
+                                                            <i class="fa-regular fa-star text-muted text-yellow"></i>
+                                                            <i class="fa-regular fa-star text-muted text-yellow"></i>
+                                                            <i class="fa-regular fa-star text-muted text-yellow"></i>
+                                                            <i class="fa-regular fa-star text-muted text-yellow"></i>
+                                                        </div>
+                                                        <% } %>
                                             </ul>
                                             <div class="book-footer">
                                                 <div class="price">
                                                     <span class="price-num">$<%= bookList[i].price %></span>
 
                                                 </div>
-                                                <a href="#" data-id="<%= bookList[i].id %>"
-                                                    class="btn btn-secondary box-btn btnhover btnhover2 add-to-cart-btn"><i
-                                                        class="fa-solid fa-cart-plus m-r10"></i> Add to cart</a>
+                                                <button <% if (parseInt(bookList[i].stock)<1){ %> disabled <% } %>
+                                                        href="#"
+                                                        data-id="<%= bookList[i].id %>"
+                                                            class="btn btn-secondary box-btn btnhover btnhover2
+                                                            add-to-cart-btn"><i class="fa-solid fa-cart-plus m-r10"></i>
+                                                            Add to cart</button>
                                             </div>
                                         </div>
 
